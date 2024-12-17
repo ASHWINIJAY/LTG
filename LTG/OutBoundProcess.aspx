@@ -1,0 +1,391 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="OutBoundProcess.aspx.cs" Inherits="LTG.OutBoundProcess" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+     <main id="main" class="main">
+ 
+     <style>
+        /* Basic styling for the page */
+       
+
+        /* Popup styling */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            z-index: 1000;
+        }
+
+        /* Close button styling */
+        .close-popup-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            float: right;
+        }
+
+        /* Background overlay */
+        .popup-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+    </style>
+             <script>
+function myFunction() {
+    var c = confirm("Are you sure complete the OutBound Scan !");
+    if (c == true) {
+        document.getElementById("popup").style.display = "block";
+    }
+    return c;
+}
+             </script>
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     <script type="text/javascript">
+         <%--   $(document).ready(function () {
+     $('#<%= txtHU.ClientID %>').on({
+         keypress: function () { typed_into = true; },
+         input: function () {
+             if (typed_into) {
+                 alert('type');
+                 typed_into = false; //reset type listener
+             } else {
+                 alert('not type');
+             }
+         }
+     });
+     });
+         $(document).ready(function () {
+
+             var type = false;
+             $('#<%= txtHU.ClientID %>').on('input', function () {
+             var inputLength = $('#<%= txtHU.ClientID %>').val().length;
+               if (inputLength == 1 || inputLength == 2) {
+                   type = true;
+               }
+               if (type == false)
+                   autoSave();
+           });
+         $('#<%= txtHU.ClientID %>').on('blur', function () {
+             
+              if (type == true)
+                  autoSave();
+          });
+         $('#<%= txtHU.ClientID %>').on('keydown', function (event) {
+             
+             if (event.which == 13) { // 13 is the Enter key
+                 if (type == true)
+                     autoSave();
+             }
+         });
+
+            function autoSave() {
+                $('#<%= btnSave.ClientID %>').click();
+         }
+     });--%>
+         </script>
+         <script>
+             function openPopup() {
+                 document.getElementById("popup").style.display = "block";
+             }
+
+             function closePopup() {
+                 document.getElementById("popup").style.display = "none";
+             }
+    </script>
+         <script type="text/javascript">
+             function openNewWindow(url) {
+                 window.open(url, '_blank');
+             }
+             function openTransport() {
+                 
+                 var transportUrl = '<%= ResolveUrl("Transport.aspx") %>';
+                 window.open(transportUrl, "_blank");
+             }
+         </script>
+          <style type="text/css">
+             tbody, td, tfoot, th, thead, tr {
+                 border:1px solid black;
+             }
+         </style>
+         
+    <section class="section dashboard">
+      <div class="row">
+
+       <div class="popup" id="popup" style="height:600px;overflow-x:scroll;" visible="false" runat="server" >
+        <asp:Button ID="btnClse" runat="server" class="close-popup-btn" Text="X" OnClick="btnClse_Click"></asp:Button>
+        <h2>Transport Details</h2>
+        <div class="row">
+
+       
+
+        <!-- Right side columns -->
+        <div class="col">
+
+          <!-- Recent Activity -->
+          <div class="card">
+           
+
+           <section class="section error-404 d-flex flex-column align-items-center justify-content-center">
+                <div class="row">
+                     <div class="col-12" style="display:none;">
+                         <asp:ImageButton ID="imgNewTrans" Visible="false" runat="server" OnClientClick="openTransport()" ImageUrl="~/assets/img/plus.png" Width="50px" />
+                          <asp:ImageButton ID="imgRefresh" runat="server" OnClick="imgRefresh_Click" ImageUrl="~/assets/img/refresh1.png" Width="50px" />
+                        
+                    </div>
+                    <div class="col-12" style="margin-top: -9px;">
+                      <label for="txtName" class="form-label">Transporter Name</label>
+                         <asp:DropDownList ID ="ddlTransport" runat="server" class="form-select">
+                           
+                        </asp:DropDownList>
+                        
+                    </div>
+
+                    <div class="col-12" style="margin-top: 0px;">
+                      <label for="txtMode" class="form-label">Transport Mode</label>
+                     <asp:TextBox id="txtMode" runat="server" autocomplete="off"  class="form-control"></asp:TextBox>
+                        
+                    </div>
+                    <div class="col-12" style="margin-top: 0px;">
+                      <label for="txtReg" class="form-label">Reg No</label>
+                     <asp:TextBox id="txtReg" runat="server" autocomplete="off" class="form-control"></asp:TextBox>
+                      
+                    </div>
+                    <div class="col-12" style="margin-top: 0px;display:none;">
+                      <label for="txtDelivery" class="form-label">DeliveryNote No</label>
+                     <asp:TextBox id="txtDelivery" autocomplete="off" runat="server" class="form-control"></asp:TextBox>
+                      
+                    </div>
+                    <hr />
+                    <h3>Delivery Address</h3>
+                     <div class="col-12" style="margin-top: 0px;">
+                      <label for="txtAddr" class="form-label">Address1</label>
+                     <asp:TextBox id="txtAddr1" runat="server" autocomplete="off" ReadOnly="true" BackColor="#dfe8f0" class="form-control"></asp:TextBox>
+                      
+                    </div>
+                     <div class="col-12" style="margin-top: 0px;">
+                      <label for="txtAddr" class="form-label">Address2</label>
+                     <asp:TextBox id="txtAddr2" runat="server" autocomplete="off" ReadOnly="true" BackColor="#dfe8f0" class="form-control"></asp:TextBox>
+                      
+                    </div>
+
+                     <div class="col-12" style="margin-top: 0px;">
+                      <label for="txtAddr" class="form-label">Address3</label>
+                     <asp:TextBox id="txtAddr3" runat="server" autocomplete="off" ReadOnly="true" BackColor="#dfe8f0" class="form-control"></asp:TextBox>
+                      
+                    </div>
+                     <div class="col-12" style="margin-top: 0px;">
+                      <label for="txtAddr" class="form-label">Address4</label>
+                     <asp:TextBox id="txtAddr4" runat="server" autocomplete="off" ReadOnly="true" BackColor="#dfe8f0" class="form-control"></asp:TextBox>
+                      
+                    </div>
+                     <div class="col-12" style="margin-top: 0px;">
+                      <label for="txtSpl" class="form-label">Special Instruction</label>
+                     <asp:TextBox id="txtSpl" runat="server" autocomplete="off" class="form-control"></asp:TextBox>
+                      
+                    </div>
+                  
+                    
+                   
+                    <div class="col-12">
+                        <asp:Button ID="btnPrint" OnClick="btnPrint_Click" class="btn btn-primary w-100" Text="Print" runat="server" />
+                    </div>
+                   
+                  </div>
+       
+      </section>
+
+          </div><!-- End Recent Activity -->
+
+         
+      </div>
+          </div>
+    </div>
+           <div class="popup" id="popup1" visible="false" runat="server" style="height:450px;overflow:scroll;" >
+        <asp:Button ID="btnClose" runat="server" Text="X" class="close-popup-btn" OnClick="btnClose_Click" ValidationGroup="new"/>
+        <h2>Change Entry Date</h2>
+        <div class="row">
+
+       
+
+        <!-- Right side columns -->
+        <div class="col">
+
+          <!-- Recent Activity -->
+          <div class="card">
+           
+
+           <section class="section error-404 d-flex flex-column align-items-center justify-content-center">
+                <div class="row">
+                      <div class="col-9">
+                        <label for="txtContainer" class="form-label">New Date</label>
+                    </div>
+                    <div class="col-12" style="margin-top: -9px;">
+                      
+                     <asp:TextBox id="txtNewdate" runat="server" ValidationGroup="TimeSlot12" autocomplete="off" TextMode="Date" ClientIDMode="Static" class="form-control"></asp:TextBox>
+                         <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator5" controltovalidate="txtNewdate" ErrorMessage="Please enter new entry date" ForeColor="OrangeRed" />
+                    
+                        </div>
+                     <div class="col-9">
+                        <label for="txtContainer" class="form-label">Supervisor Password</label>
+                    </div>
+                   <div class="col-12" style="margin-top: -9px;">
+                      
+                     <asp:TextBox id="txtSupPassword" runat="server" ValidationGroup="TimeSlot12" autocomplete="new-password" TextMode="Password" ClientIDMode="Static" class="form-control"></asp:TextBox>
+                       <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator6" controltovalidate="txtSupPassword" ErrorMessage="Please enter supervisor password" ForeColor="OrangeRed" />
+                     
+                        </div>
+                    <div class="col-6" style="margin-top: 3px;">
+                         <asp:Button ID="btnSaveDate" class="btn btn-secondary" OnClick="btnSaveDate_Click" ValidationGroup="TimeSlot12" OnClientClick="return confirm('Are you sure you want to change the date?');" Text="Change" runat="server" />
+                       
+                    </div>
+                    <div class="col-6" style="margin-top: 3px;">
+                        <asp:Button ID="btnCancelDate" class="btn btn-danger" ValidationGroup="no"  OnClientClick="return confirm('Are you sure to cancel?');" OnClick="btnCancelDate_Click" Text="Cancel" runat="server" />    
+                
+                    </div>
+                  </div>
+       
+      </section>
+
+          </div><!-- End Recent Activity -->
+
+         
+      </div>
+          </div>
+    </div>
+
+
+
+
+        <!-- Right side columns -->
+        <div class="col">
+
+          <!-- Recent Activity -->
+          <div class="card" id="divCustomer" runat="server">
+           
+               <h5 class="card-title" style="text-align:center;background-color: #4090ce;color:white">OutBound Process</h5>
+           <div class="section error-404 d-flex flex-column align-items-center justify-content-center">
+                <div class="row g-3 needs-validation">
+                    <div class="col-9">
+                        <label for="txtContainer" class="form-label">Outbound Date</label>
+                    </div>
+                    <div class="col-10" style="margin-top: -9px;">
+                      
+                     <asp:TextBox id="txtDate" runat="server" ValidationGroup="TimeSlot" autocomplete="off" ReadOnly="true" BackColor="#dfe8f0" ClientIDMode="Static" class="form-control"></asp:TextBox>
+                        
+                        </div>
+                    <div class="col-2" style="margin-top: -9px;">
+                       <asp:ImageButton ID="btnDateChange" runat="server" ValidationGroup="5" ImageUrl="~/assets/img/datechange.png" OnClick="btnDateChange_Click" ToolTip="Change Date" Width="50" CssClass="form-control" />
+                       
+            
+        
+                    </div>
+                    <div class="col-12">
+                      <label for="ddlBranch" class="form-label">Branch</label>
+                        <asp:DropDownList ID ="ddlBranch" AutoPostBack="true" OnSelectedIndexChanged="ddlBranch_SelectedIndexChanged" runat="server" class="form-select">
+                           
+                        </asp:DropDownList>
+                        
+                    </div>
+
+                    <div class="col-12">
+                      <label for="txtSurName" class="form-label">Customer</label>
+                    <asp:DropDownList ID ="ddlCustomer" AutoPostBack="true" OnSelectedIndexChanged="ddlCustomer_SelectedIndexChanged" runat="server" class="form-select">
+                        </asp:DropDownList>
+                      
+                    </div>
+                  <div class="col-12">
+                      <label for="txtContainer" class="form-label">Delivery Location</label>
+                     <asp:TextBox id="txtContainer" runat="server" ValidationGroup="TimeSlot" autocomplete="off"  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator2" controltovalidate="txtContainer" ErrorMessage="Please type delivery location" ForeColor="OrangeRed" />
+                    </div>
+                    <div class="col-12">
+                      <label for="txtGRN" class="form-label">GDN</label>
+                     <asp:TextBox id="txtGRN" runat="server" ValidationGroup="TimeSlot"   ClientIDMode="Static"  ReadOnly="true" BackColor="#dfe8f0" class="form-control"></asp:TextBox>
+                         </div>
+                    <div class="col-12" style="text-align:center;">
+                        <asp:ImageButton ID="btnCusNext"  class="btn btn-primary" OnClick="btnCusNext_Click" BackColor="Transparent" Width="120" ImageUrl="~/assets/img/next.png" Text="Next" runat="server" />
+                    </div>
+                   
+                  </div>
+       
+      </div>
+
+          </div><!-- End Recent Activity -->
+             <div class="card" id="divScan" visible="false" runat="server">
+           
+               <div class="card-title" id="divHeader" runat="server" style="text-align:center;background-color: #4090ce;color:white">OutBound Process</div>
+           <div class="section error-404 d-flex flex-column align-items-center justify-content-center">
+                <div class="row g-3 needs-validation">
+                   
+                     <div class="col-12" style="display:none;">
+                      <label for="txtBin" class="form-label">Type or Scan Bin</label>
+                     <asp:TextBox id="txtBin" runat="server" ValidationGroup="TimeSlot" Text="Collection" OnTextChanged="txtBin_TextChanged1" AutoPostBack="true" ClientIDMode="Static" class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator3" controltovalidate="txtBin" ErrorMessage="Please type/scan bin" ForeColor="OrangeRed" />
+                    </div>
+
+                    <div class="col-12">
+                      <label for="txtHU" class="form-label">Scan or Type HU Number</label>
+                     <asp:TextBox id="txtHU" runat="server" ValidationGroup="TimeSlot" autocomplete="off" OnTextChanged="txtHU_TextChanged" AutoPostBack="true" ClientIDMode="Static" class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="reqName" controltovalidate="txtHU" ErrorMessage="Please type HU Number" ForeColor="OrangeRed" />
+                    </div>
+                   
+                     <div class="col-12">
+                      <label for="txtQty" class="form-label">Quantity</label>
+                     <asp:TextBox id="txtQty" runat="server" ValidationGroup="TimeSlot" Text="1" ReadOnly="true" BackColor="#dfe8f0"  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator1" controltovalidate="txtQty" ErrorMessage="Please Enter Qty" ForeColor="OrangeRed" />
+                    </div>
+                     <div class="col-12">
+                         <asp:Button ID="btnComplete" class="btn btn-primary" OnClick="btnComplete_Click" Text="Scanning Complete" OnClientClick="return myFunction();" BackColor="#bc623c" runat="server" />
+                       <asp:Button ID="btnBack" class="btn btn-secondary" OnClick="btnBack_Click" ValidationGroup="2" OnClientClick="return confirm('Are you sure you want to go back to the previous screen?');" Text="Back" runat="server" />
+                                             <asp:Button ID="btnCancel" class="btn btn-danger" ValidationGroup="2" OnClientClick="return confirm('Are you sure to cancel the outbound process?');" OnClick="btnCancel_Click1" Text="Cancel" runat="server" />    
+                 
+                         </div>
+                       <div class="col-12">
+                        <asp:GridView ID="grdScans" runat="server" class="form-control" AutoGenerateColumns="False" Width="100%">
+                <Columns>
+                     <asp:TemplateField HeaderText="SNo" HeaderStyle-Width="10%" >
+                        <ItemTemplate>
+                            <%# Container.DataItemIndex + 1 %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField DataField="HU" HeaderText="HU"  HeaderStyle-Width="57%" />                    
+                     <asp:BoundField DataField="GDN" HeaderText="GDN"  HeaderStyle-Width="30%" />
+                    <asp:BoundField DataField="Qty" HeaderText="Qty"  HeaderStyle-Width="10%" />
+                </Columns>
+                            <HeaderStyle BackColor="#4090ce" ForeColor="White" />
+            </asp:GridView>
+                        </div>
+                  </div>
+               <div class="row" style="display:none;">
+                    <div class="col-6">
+                        <asp:HiddenField ID="hdnContainer" runat="server" Value="0" />
+                        <asp:HiddenField ID="hdnBin" runat="server" Value="0" />
+                        <asp:HiddenField ID="hdnInboundFee" runat="server" Value="0" />
+                          <asp:Button ID="btnSave" class="btn btn-primary" OnClick="btnSave_Click" Text="Save" runat="server" />
+                         </div>
+                  
+                  </div>
+        
+      </div>
+
+          </div>
+         
+      </div>
+          </div>
+    </section>
+
+  </main><!-- End #main -->
+
+</asp:Content>

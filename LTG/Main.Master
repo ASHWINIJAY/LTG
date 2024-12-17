@@ -1,0 +1,575 @@
+﻿0<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Main.master.cs" Inherits="LTG.Main" %>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title> LTG</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+        /* Full screen overlay for the loader */
+        #loadingDiv {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: none; /* Initially hidden */
+        }
+
+        /* Spinner */
+        #spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script type="text/javascript">
+        // Show the loader when the page starts loading
+        window.onload = function () {
+            document.getElementById("loadingDiv").style.display = "none";
+        }
+
+        // Show the loader when the page starts loading
+        window.addEventListener("load", function () {
+            document.getElementById("loadingDiv").style.display = "none";
+        });
+
+        // Show loader when navigating away (useful for full-page postbacks)
+        window.addEventListener("beforeunload", function () {
+            
+            if (!window.location.pathname.includes("UserMaintenance") && !window.location.pathname.includes("AuditLogs") && !window.location.pathname.includes("BinMaintain") && !window.location.pathname.includes("CustomerEdit") && !window.location.pathname.includes("TransportMaintain")) {
+                document.getElementById("loadingDiv").style.display = "block";
+            }
+        });
+    </script>
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+    <form id="form1" runat="server">
+         <div id="loadingDiv" runat="server">
+        <div id="spinner"></div>
+    </div>
+        <div>
+            <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="DashBoard.aspx" class="logo d-flex align-items-center">
+        <img src="assets/img/ltglogo_new.png" style="max-height: 60px;" alt="">
+        <span class="d-none d-lg-block"></span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar" style="display:none;">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+          <asp:HiddenField ID="hdnLoginId" Value="0" runat="server" />
+          <asp:HiddenField ID="hdnUserName" Value="0" runat="server" />
+           <asp:HiddenField ID="hdnDisplayLoader" Value="1" runat="server" />
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none" style="display:none;">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search" style="display:none;"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        <li class="nav-item dropdown" style="display:none;">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number">4</span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            <li class="dropdown-header">
+              You have 4 new notifications
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>Lorem Ipsum</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>30 min. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-x-circle text-danger"></i>
+              <div>
+                <h4>Atque rerum nesciunt</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>1 hr. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-check-circle text-success"></i>
+              <div>
+                <h4>Sit rerum fuga</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>2 hrs. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-info-circle text-primary"></i>
+              <div>
+                <h4>Dicta reprehenderit</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>4 hrs. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer">
+              <a href="#">Show all notifications</a>
+            </li>
+
+          </ul><!-- End Notification Dropdown Items -->
+
+        </li><!-- End Notification Nav -->
+
+        <li class="nav-item dropdown" style="display:none;">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-chat-left-text"></i>
+            <span class="badge bg-success badge-number">3</span>
+          </a><!-- End Messages Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+            <li class="dropdown-header">
+              You have 3 new messages
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>Maria Hudson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>4 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>Anna Nelson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>6 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>David Muldon</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>8 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="dropdown-footer">
+              <a href="#">Show all messages</a>
+            </li>
+
+          </ul><!-- End Messages Dropdown Items -->
+
+        </li><!-- End Messages Nav -->
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="assets/img/plain.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2"></span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+             <asp:Label ID="lblFirst" runat="server" Font-Size="Medium"></asp:Label>
+                <br />
+              <asp:Label ID="lblRole" runat="server" Font-Size="Small"></asp:Label>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li style="display:none;">
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li style="display:none;">>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li style="display:none;">>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li style="display:none;">>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="Password">
+                <i class="bi bi-gear"></i>
+                <span>Change Password</span>
+              </a>
+            </li>
+               <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="Login">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+ <aside id="sidebar" class="sidebar">
+<ul id="Ul1" class="sidebar-nav" runat="server">
+
+    <li id="LiDashboard" runat="server">
+        <a class="nav-link" href="Dashboard.aspx">
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+        </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li id="LiInboundProcess" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="Inboundprocess">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Inbound Process</span>
+        </a>
+    </li>
+
+    <li id="LiWarehouseProcess" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="Warehouseprocess">
+            <i class="bi bi-box-seam-fill"></i>
+            <span>Binning Process</span>
+        </a>
+    </li>
+
+    <li id="LiBinToBin" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="BinToBin">
+            <i class="bi bi-box"></i><span>Bin To Bin</span>
+        </a>
+    </li>
+
+    <li id="LiPickingProcess" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="PickingProcess">
+            <i class="bi bi-box-arrow-in-left"></i>
+            <span>Pick Process</span>
+        </a>
+    </li>
+
+    <li id="LiOutboundProcess" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="Outboundprocess">
+            <i class="bi bi-box-arrow-in-left"></i>
+            <span>Outbound Process</span>
+        </a>
+    </li>
+
+    <li id="LiInvoiceReport" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="InvoiceReport">
+            <i class="bi bi-file-earmark-spreadsheet"></i>
+            <span>HU Tracking Report(Details)</span>
+        </a>
+    </li>
+        <li id="LiDetailedReport" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="DetailedReport">
+            <i class="bi bi-file-earmark-spreadsheet"></i>
+            <span>HU Tracking Report(Details)- Per month</span>
+        </a>
+    </li>
+
+    <li id="LiInvoiceSummaryReport" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="InvoiceSummaryReport">
+            <i class="bi bi-card-list"></i>
+            <span>HU Tracking Report(Summary)</span>
+        </a>
+    </li>
+      <li id="LiSummaryReport" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="SummaryReport">
+            <i class="bi bi-card-list"></i>
+            <span>HU Tracking Report(Summary)- Per month</span>
+        </a>
+    </li>
+    <li id="LiInboundException" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="InboundException">
+            <i class="bi bi-file-earmark"></i>
+            <span>Inbound Exception Report</span>
+        </a>
+    </li>
+
+    <li id="LiWarehousedException" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="WarehousedException">
+            <i class="bi bi-file-text"></i>
+            <span>Binned Exception Report</span>
+        </a>
+    </li>
+
+    <li id="LiPickedException" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="PickedException">
+            <i class="bi bi-graph-up"></i>
+            <span>Picked Exception Report</span>
+        </a>
+    </li>
+
+    <li id="LiDeliveryNoteReprint" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="DeliveryNoteReprint">
+            <i class="bi bi-box-arrow-in-left"></i>
+            <span>Delivery Note Re print</span>
+        </a>
+    </li>
+    <li id="LiReGenerateDN" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="ReGenerateDN">
+            <i class="bi bi-box-arrow-in-left"></i>
+            <span>Re-Generate Delivery Note</span>
+        </a>
+    </li>
+    <li id="LiInboundReport" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="InboundReport">
+            <i class="bi bi-card-list"></i>
+            <span>Inbound Tracking Report</span>
+        </a>
+    </li>
+     <li id="LiBinnedReport" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="BinnedReport">
+            <i class="bi bi-card-list"></i>
+            <span>Binned Tracking Report</span>
+        </a>
+    </li>
+     <li id="LiPickedReport" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="PickedReport">
+            <i class="bi bi-card-list"></i>
+            <span>Picked Tracking Report</span>
+        </a>
+    </li>
+     <li id="LiOutboundReport" class="nav-item" runat="server">
+        <a class="nav-link collapsed" href="OutboundReport">
+            <i class="bi bi-card-list"></i>
+            <span>Outbound Tracking Report</span>
+        </a>
+    </li>
+    <li id="LiAdmin" class="nav-item" runat="server" visible="false">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-journal-text"></i><span>Admin</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <li id="LiCustomerCreation" runat="server">
+                <a href="CustomerSetup">
+                    <i class="bi bi-circle"></i><span>Customer Creation</span>
+                </a>
+            </li>
+            <li id="LiCustomerMaintenance" runat="server">
+                <a href="CustomerEdit">
+                    <i class="bi bi-circle"></i><span>Customer Maintenance</span>
+                </a>
+            </li>
+            <li id="LiInboundFeeSetup" runat="server">
+                <a href="InBoundFeeSetup">
+                    <i class="bi bi-circle"></i><span>Inbound Fee Setup</span>
+                </a>
+            </li>
+            <li id="LiOutboundFeeSetup" runat="server">
+                <a href="OutBoundFee">
+                    <i class="bi bi-circle"></i><span>Outbound Fee Setup</span>
+                </a>
+            </li>
+            <li id="LiStorageFeeSetup" runat="server">
+                <a href="StorageFee">
+                    <i class="bi bi-circle"></i><span>Storage Fee Setup</span>
+                </a>
+            </li>
+            <li id="LiBinCreation" runat="server">
+                <a href="BinCreate.aspx">
+                    <i class="bi bi-circle"></i><span>Bin Creation</span>
+                </a>
+            </li>
+             <li id="LiBinMaintain" runat="server">
+                <a href="BinMaintain.aspx">
+                    <i class="bi bi-circle"></i><span>Bin Maintenance</span>
+                </a>
+            </li>
+            <li id="LiTransportCreation" runat="server">
+                <a href="Transport.aspx">
+                    <i class="bi bi-circle"></i><span>Transport Creation</span>
+                </a>
+            </li>
+            <li id="LiTransportMaintenance" runat="server">
+                <a href="TransportMaintain">
+                    <i class="bi bi-circle"></i><span>Transport Maintenance</span>
+                </a>
+            </li>
+            <li id="LiUserCreation" runat="server">
+                <a href="UserCreation.aspx">
+                    <i class="bi bi-circle"></i><span>User Creation</span>
+                </a>
+            </li>
+            <li id="LiUserMaintenance" runat="server">
+                <a href="UserMaintenance">
+                    <i class="bi bi-circle"></i><span>User Maintenance</span>
+                </a>
+            </li>
+            <li id="LiContainerAdjustment" runat="server">
+                <a href="HuAdj.aspx">
+                    <i class="bi bi-circle"></i><span>Container Adjustment</span>
+                </a>
+            </li>
+            <li id="LiChangeContainerToAnotherCustomer" runat="server">
+                <a href="ContainerAdj">
+                    <i class="bi bi-circle"></i><span>Change Container To Another Customer</span>
+                </a>
+            </li>
+             <li id="LiAudit" runat="server">
+                <a href="AuditLogs">
+                    <i class="bi bi-circle"></i><span>AuditLogs</span>
+                </a>
+            </li>
+             <li id="LiSupervisor" runat="server">
+                <a href="Supervisor">
+                    <i class="bi bi-circle"></i><span>Supervisor Setup</span>
+                </a>
+            </li>
+        </ul>
+    </li><!-- End Admin Nav -->
+</ul>
+
+  </aside><!-- End Sidebar-->
+ 
+
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+            <footer id="footer" class="footer">
+    
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://codex-it.co.za/">  www.codex-it.co.za</a>
+       
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+ 
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+ 
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+        </div>
+    </form>
+</body>
+</html>
