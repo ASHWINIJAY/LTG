@@ -39,7 +39,7 @@
                     </div>
                    <div class="col-12">
                      
-                     <asp:CheckBox id="chkActive" runat="server" Text="Active"></asp:CheckBox>
+                     <asp:CheckBox id="chkActive" runat="server" Checked="true" Text="Active"></asp:CheckBox>
                        
                     </div>
                     <div class="col-12">

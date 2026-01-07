@@ -327,6 +327,16 @@ namespace LTG
 
         private void save()
         {
+            txtAddHU.Text = txtAddHU.Text.Trim();
+            if (txtAddHU.Text == "")
+            {
+                string script = "alert(\"HU Cannot be empty\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                txtAddHU.Text = "";
+                txtAddHU.Focus();
+                return;
+            }
             if (checkHU())
             {
                 string script = "alert(\"HU Already Exisits\");";
@@ -466,6 +476,8 @@ namespace LTG
                         HiddenField hdUserName = (HiddenField)this.Master.FindControl("hdnUserName");
 
                         var userName = hdUserName.Value;
+                        if (row.Cells[1].Text == "&nbsp;")
+                            row.Cells[1].Text = "";
                         qry = "Update Inbound set ModifiedBy='"+userName+"' where HU='" + row.Cells[1].Text + "'";
                         cmd1 = new SqlCommand(qry, con);
                         cmd1.ExecuteNonQuery();

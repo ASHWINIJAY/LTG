@@ -136,7 +136,12 @@
                         </ItemTemplate>
                     </asp:TemplateField>
             
-             <asp:BoundField DataField="HU" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="HU"  HeaderStyle-Width="35%" />
+             <asp:BoundField DataField="HU" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="HU"  HeaderStyle-Width="20%" />
+              <asp:TemplateField HeaderText="HU/Part Number" HeaderStyle-Width="20%" >
+            <ItemTemplate>
+                <img src='data:image/png;base64,<%# Eval("BarcodeBase64") %>' alt="Barcode" style="max-width:100%" width="200" height="80" />
+            </ItemTemplate>
+        </asp:TemplateField>
             <asp:BoundField DataField="DefaultBin" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="Default Bin"  HeaderStyle-Width="35%" />
                    <asp:TemplateField HeaderText="Qty" HeaderStyle-Width="15%" ItemStyle-HorizontalAlign="Left">
             <ItemTemplate >
@@ -310,6 +315,7 @@
                     </td>
                 </tr>
             </table>
+             <asp:HiddenField ID="hdnCustomer" runat="server" Value="0" />
         </div>
       
     </form>

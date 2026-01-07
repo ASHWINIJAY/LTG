@@ -160,7 +160,8 @@ namespace LTG
                 {
 
 
-
+                    if (txtExistingFee.Text == "")
+                        txtExistingFee.Text = "0";
                     cmd.ExecuteNonQuery();
                     qry = "Update Customers set StorageFee='" + txtNewFee.Text + "',PreviousStorageFee='" + txtExistingFee.Text + "' where BranchId=" + ddlBranch.SelectedValue + " and CustomerCode='" + ddlCustomer.SelectedValue + "'";
                     cmd.CommandText = qry;

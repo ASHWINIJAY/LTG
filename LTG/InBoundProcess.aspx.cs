@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using ZXing;
+using ZXing.Common;
 
 namespace LTG
 {
@@ -19,16 +24,32 @@ namespace LTG
             {
                 bindBranch();
                 bindCustomer();
+                txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
                 GenerateGRN();
+                hdninitalNumber.Value = "1";
                 if (Request.QueryString["id"] != null)
                 {
+                    hdninitalNumber.Value = "0";
                     var id = Request.QueryString["id"].ToString();
                     BindIncomplete(id);
                 }
                 else
+                {
+                    if (hdninitalNumber.Value == "1")
+                    {
+                        if (CheckGRN())
+                        {
+                            GenerateGRN();
+                            string script = "alert(\"This GRN Already used by other user,Your new GRN is: " + txtGRN.Text + "\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(),
+                                                  "ServerControlScript", script, true);
+                            FillGrid();
+                        }
+                    }
                     CheckIncomplete();
-                    //GetContainer();
                 }
+                //GetContainer();
+            }
         }
 
         private void bindBranch()
@@ -57,11 +78,121 @@ namespace LTG
                 }
             }
         }
+        private string GenerateSeqn()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select count(distinct(PartNumber))+1 FROM Inbound where PartNumber='" + txtSpare.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return dt.Rows[0][0].ToString();
+
+                    }
+                    else return "1";
+                }
+            }
+        }
+        private bool CheckDuplicate()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select PartNumber FROM Inbound where PartNumber='" + txtSpare.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
+        private int partNumberTotal()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select count(PartNumber) FROM Inbound where PartNumber='" + txtSpare.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return Convert.ToInt32(dt.Rows[0][0].ToString());
+
+                    }
+                    else return 0;
+                }
+            }
+        }
+        private bool CheckFullStockTake()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select HU FROM StockMaster where Refno='Full Stock Take'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
+        private bool CheckFullStockTakeAccuracy()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select Bin FROM BinAccuracyMaster where Refno='Full Stock Accuracy'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
         private void GenerateGRN()
         {
             string dtMonth = DateTime.Now.ToString("dd-MM-yy").Replace("-", "");
             string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
-            txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
+           
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
@@ -76,6 +207,11 @@ namespace LTG
                     {
                         string output = FormatNumberWithLeadingZeros(dt.Rows[0][0].ToString(), 9);
                         txtGRN.Text = "GRN-" + dtMonth + "-" + output;
+                        if (CheckGRN())
+                        {
+                            output = FormatNumberWithLeadingZeros((Convert.ToInt32(dt.Rows[0][0].ToString()) + 1).ToString(), 9);
+                            txtGRN.Text = "GRN-" + dtMonth + "-" + output;
+                        }
                         // ddlBranch.da
                     }
                 }
@@ -122,6 +258,20 @@ namespace LTG
                                       "ServerControlScript", script, true);
                 return;
             }
+            if (CheckFullStockTake())
+            {
+                string script = "alert(\"Stock take currently in process you cannot proceed please contact LTG warehouse manager/s\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
+            if (CheckFullStockTakeAccuracy())
+            {
+                string script = "alert(\"Stock take accuracy currently in process, you cannot proceed please contact LTG warehouse manager/s\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
             if (checkRefNo())
             {
                 string script = "alert(\"Container Number Already Exisits\");";
@@ -130,13 +280,37 @@ namespace LTG
                 return;
             }
             
-            getInboundFee();
+            getInboundFee(); getTransportFee();
             if (hdnInboundFee.Value == "")
             {
                 string script = "alert(\"Please setup the inbound fee. \");";
+                if(hdnFeeDays.Value=="1")
+                {
+                    script = script.Replace("inbound", "saturday inbound");
+                }
+                if (hdnFeeDays.Value == "2")
+                {
+                    script = script.Replace("inbound", "sunday inbound");
+                }
                 ScriptManager.RegisterStartupScript(this, GetType(),
                                       "ServerControlScript", script, true);
 
+                return;
+            }
+            if ( hdnTransportFee.Value == "")
+            {
+                string script = "alert(\"Please setup the transport fee. \");";
+                
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+
+                return;
+            }
+            if (hdnContractDate.Value != "" && Convert.ToDateTime(hdnContractDate.Value) < Convert.ToDateTime(txtDate.Text))
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowModal", "var myModal = new bootstrap.Modal(document.getElementById('warningModal')); myModal.show();", true);
+
+              //  ScriptManager.RegisterStartupScript(this, GetType(), "ShowModal", "$('#warningModal').modal('show');", true);
                 return;
             }
             divCustomer.Visible = false;
@@ -144,6 +318,29 @@ namespace LTG
             divHeader.InnerText = "Inbound Process for - " + ddlCustomer.SelectedItem.Text;
             txtContainer1.Text = txtContainer.Text;
             txtHU.Focus();
+            
+            if(ddlCustomer.SelectedValue == "ALP001" || ddlCustomer.SelectedValue == "ALP002" || ddlCustomer.SelectedValue == "AUT003" || ddlCustomer.SelectedValue  == "AUT004")
+            {
+                divALP.Visible = true;
+                divBMW.Visible = false;
+                divBar.Visible = false;
+                divSeq.Visible = false;
+                grdScans.Columns[2].Visible = true;
+                grdScans.Columns[1].Visible = false;
+                btnPrintBarcode.Visible = true;
+                // GenerateSeqn();
+            }
+            else
+            {
+                divALP.Visible = false;
+                divBMW.Visible = true;
+                divBar.Visible = false;
+                divSeq.Visible = false;
+                grdScans.Columns[1].Visible = true;
+                grdScans.Columns[2].Visible = false;
+                btnPrintBarcode.Visible = false;
+            }
+            FillGrid();
         }
         private bool checkRefNo()
         {
@@ -175,7 +372,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select InboundFee,Bin from Customers where CustomerCode='" + ddlCustomer.SelectedValue + "'";
+                string qry = "Select InboundFee,Bin,SatInboundFee,SunInboundFee,ContractDate from Customers where CustomerCode='" + ddlCustomer.SelectedValue + "'";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -184,16 +381,104 @@ namespace LTG
 
                     if (dt.Rows.Count > 0)
                     {
-                        if (dt.Rows[0][0] != DBNull.Value)
-                            hdnInboundFee.Value = dt.Rows[0][0].ToString();
+                        if (dt.Rows[0][4] != DBNull.Value)
+                            hdnContractDate.Value = dt.Rows[0][4].ToString();
                         else
-                            hdnInboundFee.Value = "";
+                            hdnContractDate.Value = "";
+                        DateTime enterDate;
+                        if (DateTime.TryParse(txtDate.Text, out enterDate))
+                        {
+                            if (enterDate.DayOfWeek == DayOfWeek.Saturday)
+                            {
+                                if (dt.Rows[0][2] != DBNull.Value)
+                                    hdnInboundFee.Value = dt.Rows[0][2].ToString();
+                                else
+                                    hdnInboundFee.Value = "";
+                                hdnFeeDays.Value = "1";
+                            }
+                            else if(enterDate.DayOfWeek == DayOfWeek.Sunday)
+                            {
+                                if (dt.Rows[0][3] != DBNull.Value)
+                                    hdnInboundFee.Value = dt.Rows[0][3].ToString();
+                                else
+                                    hdnInboundFee.Value = "";
+                                hdnFeeDays.Value = "2";
+                            }
+                            else
+                            {
+                                if (dt.Rows[0][0] != DBNull.Value)
+                                    hdnInboundFee.Value = dt.Rows[0][0].ToString();
+                                else
+                                    hdnInboundFee.Value = "";
+                                hdnFeeDays.Value = "0";
+                            }
+                        }
+                           
                         hdnBin.Value = dt.Rows[0][1].ToString();
                         // ddlBranch.da
                     }
                     else
                     {
                         hdnInboundFee.Value = "";
+                    }
+                }
+            }
+        }
+        private void getTransportFee()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "Select TransportFee,Bin,SatTransportFee,SunTransportFee,ContractDate from Customers where CustomerCode='" + ddlCustomer.SelectedValue + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        if (dt.Rows[0][4] != DBNull.Value)
+                            hdnContractDate.Value = dt.Rows[0][4].ToString();
+                        else
+                            hdnContractDate.Value = "";
+                        DateTime enterDate;
+                        if (DateTime.TryParse(txtDate.Text, out enterDate))
+                        {
+                            if (enterDate.DayOfWeek == DayOfWeek.Saturday)
+                            {
+                                if (dt.Rows[0][2] != DBNull.Value)
+                                    hdnTransportFee.Value = dt.Rows[0][2].ToString();
+                                else
+                                    hdnTransportFee.Value = "";
+                                hdnFeeDays.Value = "1";
+                            }
+                            else if (enterDate.DayOfWeek == DayOfWeek.Sunday)
+                            {
+                                if (dt.Rows[0][3] != DBNull.Value)
+                                    hdnTransportFee.Value = dt.Rows[0][3].ToString();
+                                else
+                                    hdnTransportFee.Value = "";
+                                hdnFeeDays.Value = "2";
+                            }
+                            else
+                            {
+                                if (dt.Rows[0][0] != DBNull.Value)
+                                    hdnTransportFee.Value = dt.Rows[0][0].ToString();
+                                else
+                                    hdnTransportFee.Value = "";
+                                hdnFeeDays.Value = "0";
+                            }
+                        }
+
+                        hdnBin.Value = dt.Rows[0][1].ToString();
+                        // ddlBranch.da
+                    }
+                    else
+                    {
+                        hdnTransportFee.Value = "";
                     }
                 }
             }
@@ -226,6 +511,60 @@ namespace LTG
                 txtHU.Focus();
                 return;
             }
+            if (hdninitalNumber.Value == "1")
+            {
+                if (CheckGRN())
+                {
+                    GenerateGRN();
+                    string script = "alert(\"This GRN Already used by other user,Your new GRN is: " + txtGRN.Text + "\");";
+                    ScriptManager.RegisterStartupScript(this, GetType(),
+                                          "ServerControlScript", script, true);
+                    FillGrid();
+                }
+            }
+
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                HiddenField hdLoginId = (HiddenField)this.Master.FindControl("hdnLoginId");
+
+                var userid = hdLoginId.Value;
+                HiddenField hdUserName = (HiddenField)this.Master.FindControl("hdnUserName");
+
+                var userName = hdUserName.Value;
+                string qry = ""; string qry1 = "";
+                //if (ddlCustomer.SelectedValue == "ALP001" || ddlCustomer.SelectedValue == "ALP002")
+                //{
+                //   string barcode= GetBarcode();
+                //    qry = "Insert into Inbound(BarcodeBase64,BarCode,SeqnNumber,ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + barcode + "','" + txtBarcode.Text + "','" + txtSeqn.Text + "','" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                //}
+                //else
+                //{
+                if (Convert.ToDateTime(txtDate.Text).ToString("dd/MMM/yyyy") == DateTime.Now.ToString("dd/MMM/yyyy"))
+                    txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy HH:mm");
+
+                    qry = "Insert into Inbound(ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                qry1 = "Insert into Transport_Process(ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitTransportCost,TotalTransportCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnTransportFee.Value + "," + hdnTransportFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                // }
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                cmd1.ExecuteNonQuery();
+                SqlCommand cmd2 = new SqlCommand(qry1, con);
+                cmd2.ExecuteNonQuery();
+                hdninitalNumber.Value = "0";
+                //if (ddlCustomer.SelectedValue == "ALP001" || ddlCustomer.SelectedValue == "ALP002")
+                //{
+                //    GenerateSeqn();
+                //}
+            }
+            txtHU.Text = "";
+            txtHU.Focus();
+           // txtBarcode.Text = "";
+        }
+        private void saveAlP()
+        {
+            
             
             string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
 
@@ -238,12 +577,33 @@ namespace LTG
                 HiddenField hdUserName = (HiddenField)this.Master.FindControl("hdnUserName");
 
                 var userName = hdUserName.Value;
-                string qry = "Insert into Inbound(ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" +txtDate.Text+"','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                string qry = ""; string qry1 = "";
+                //if (ddlCustomer.SelectedValue == "ALP001" || ddlCustomer.SelectedValue == "ALP002")
+                //{
+                //   string barcode= GetBarcode();
+                //    qry = "Insert into Inbound(BarcodeBase64,BarCode,SeqnNumber,ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + barcode + "','" + txtBarcode.Text + "','" + txtSeqn.Text + "','" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                //}
+                //else
+                //{
+                string barcode = GetBarcode();
+                if (Convert.ToDateTime(txtDate.Text).ToString("dd/MMM/yyyy") == DateTime.Now.ToString("dd/MMM/yyyy"))
+                    txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy HH:mm");
+                qry = "Insert into Inbound(BarcodeBase64,PartNumber,PartQty,ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" +barcode +"', '" + txtSpare.Text + "','" + txtALPQty.Text + "','" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                qry1 = "Insert into Transport_Process(BarcodeBase64,PartNumber,PartQty,ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitTransportCost,TotalTransportCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + barcode + "', '" + txtSpare.Text + "','" + txtALPQty.Text + "','" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnTransportFee.Value + "," + hdnTransportFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                // }
                 SqlCommand cmd1 = new SqlCommand(qry, con);
-                cmd1.ExecuteNonQuery();                
+                cmd1.ExecuteNonQuery();
+                SqlCommand cmd2 = new SqlCommand(qry1, con);
+                cmd2.ExecuteNonQuery();
+                hdninitalNumber.Value = "0";
+                //if (ddlCustomer.SelectedValue == "ALP001" || ddlCustomer.SelectedValue == "ALP002")
+                //{
+                //    GenerateSeqn();
+                //}
             }
             txtHU.Text = "";
             txtHU.Focus();
+            // txtBarcode.Text = "";
         }
         protected void btnComplete_Click(object sender, EventArgs e)
         {
@@ -255,6 +615,9 @@ namespace LTG
                 
                 string qry = "Update Inbound set Completed=1 where GRN='" + txtGRN.Text + "'";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
+                cmd1.ExecuteNonQuery();
+                string qry1 = "Update Transport_Process set Completed=1 where GRN='" + txtGRN.Text + "'";
+                 cmd1 = new SqlCommand(qry1, con);
                 cmd1.ExecuteNonQuery();
             }
             string redirectUrl = "GRN.aspx?id=" + txtGRN.Text; // The URL to open in a new tab
@@ -268,11 +631,45 @@ namespace LTG
             // Register the script to run on the client-side
             ClientScript.RegisterStartupScript(this.GetType(), "confirmRedirectNewTab", script, true);
 
+           
+
             txtHU.Text = "";
             divCustomer.Visible = true;
             divScan.Visible = false;
             txtContainer.Text = "";
             GenerateGRN();
+        }
+        private string GenerateBarcodeBase64(string text)
+        {
+            BarcodeWriter writer = new BarcodeWriter
+            {
+                Format = BarcodeFormat.CODE_128,
+                Options = new ZXing.Common.EncodingOptions
+                {
+                    Width = 250,
+                    Height = 70
+                },
+                Renderer = new ZXing.Rendering.BitmapRenderer
+                {
+                    TextFont = new Font("Arial", 16, FontStyle.Bold) // Bigger and Bold Text
+                }
+            };
+
+            using (Bitmap bitmap = writer.Write(text))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    return Convert.ToBase64String(ms.ToArray());
+                }
+            }
+        }
+        private string GetBarcode()
+        {
+            string barcodeText = txtBarcode.Text.Trim();
+           
+                return  GenerateBarcodeBase64(barcodeText);
+               
         }
         protected void GetContainer()
         {
@@ -303,7 +700,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "SELECT  *  FROM Inbound where ContainerId='" + txtContainer.Text + "' order by CreatedDate";
+                string qry = "SELECT  *  FROM Inbound where GRN='" + txtGRN.Text + "' order by CreatedDate";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -315,6 +712,54 @@ namespace LTG
                     divHeader.InnerText = "InBound Process - Total Scans: " + dt.Rows.Count;
                 }
             }
+        }
+
+        protected List<string> FillHU()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            List<string> redirectUrls = new List<string>();
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "SELECT  HU  FROM Inbound where GRN='" + txtGRN.Text + "' order by CreatedDate";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        redirectUrls.Add(dt.Rows[i][0].ToString());
+                    }
+                   
+                }
+            }
+            return redirectUrls;
+        }
+        private bool CheckGRN()
+        {
+            string dtMonth = DateTime.Now.ToString("dd-MM-yy").Replace("-", "");
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+           // txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select GRN FROM Inbound where GRN ='" + txtGRN.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+                        // ddlBranch.da
+                    }
+                }
+            }
+            return false;
+
         }
         protected void CheckIncomplete()
         {
@@ -371,12 +816,32 @@ namespace LTG
                         txtContainer.Text = dt.Rows[0]["ContainerId"].ToString();
                         txtGRN.Text = GRN;
                         getInboundFee();
+                        getTransportFee();
                         divCustomer.Visible = false;
                         divScan.Visible = true;
                         divHeader.InnerText = "Inbound Process for - " + ddlCustomer.SelectedItem.Text;
                         txtContainer1.Text = txtContainer.Text;
                         txtHU.Focus();
                         FillGrid();
+                        if (ddlCustomer.SelectedValue == "ALP001" || ddlCustomer.SelectedValue == "ALP002" || ddlCustomer.SelectedValue == "AUT003" || ddlCustomer.SelectedValue == "AUT004")
+                        {
+                            divALP.Visible = true;
+                            divBMW.Visible = false;
+                            grdScans.Columns[2].Visible = true;
+                            grdScans.Columns[1].Visible = false;
+                            btnPrintBarcode.Visible = true;
+                            // GenerateSeqn();
+                        }
+                        else
+                        {
+                            btnPrintBarcode.Visible = false;
+                            divALP.Visible = false;
+                            divBMW.Visible = true;
+                            divBar.Visible = false;
+                            divSeq.Visible = false;
+                            grdScans.Columns[1].Visible = true;
+                            grdScans.Columns[2].Visible = false;
+                        }
                     }
                 }
             }
@@ -388,7 +853,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select * from Inbound where HU='" + txtHU.Text + "'";
+                string qry = "Select * from Inbound where HU='" + txtHU.Text + "' and Isnull(Returned,0)=0";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -412,8 +877,16 @@ namespace LTG
 
         protected void txtHU_TextChanged(object sender, EventArgs e)
         {
-            save();
-            FillGrid();
+            //if (ddlCustomer.SelectedValue == "ALP001" || ddlCustomer.SelectedValue == "ALP002")
+            //{
+            //    txtBarcode.Focus();
+            //}
+            //else
+            //{
+                save();
+                FillGrid();
+           // }
+            
         }
 
         protected void txtHU_TextChanged1(object sender, EventArgs e)
@@ -429,10 +902,12 @@ namespace LTG
             {
                 con.Open();
 
-                string qry = "Delete  from Inbound where GRN='" + txtGRN.Text + "'";
-                SqlCommand cmd1 = new SqlCommand(qry, con);
-                
+                string qry = "Delete  from Inbound where GRN='" + txtGRN.Text + "' and HU not in(select HU from WarehouseProcess)";
+                SqlCommand cmd1 = new SqlCommand(qry, con);                
                         cmd1.ExecuteNonQuery();
+                string qry1 = "Delete  from Transport_Process where GRN='" + txtGRN.Text + "' and HU not in(select HU from WarehouseProcess)";
+                 cmd1 = new SqlCommand(qry1, con);
+                cmd1.ExecuteNonQuery();
                 divScan.Visible = false;
                 divCustomer.Visible = true;
                 FillGrid();
@@ -449,9 +924,11 @@ namespace LTG
             {
                 con.Open();
 
-                string qry = "Delete  from Inbound where GRN='" + txtGRN.Text + "'";
+                string qry = "Delete  from Inbound where GRN='" + txtGRN.Text + "' and HU not in(select HU from WarehouseProcess)";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
-
+                cmd1.ExecuteNonQuery();
+                string qry1 = "Delete  from Transport_Process where GRN='" + txtGRN.Text + "' and HU not in(select HU from WarehouseProcess)";
+                 cmd1 = new SqlCommand(qry1, con);
                 cmd1.ExecuteNonQuery();
                 Response.Redirect("InboundProcess.aspx");
                 // ddlBranch.da
@@ -479,10 +956,30 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-
-                // Check if the table has any records
-                string checkCountQry = "SELECT COUNT(*) FROM Supervisor where Password='" + txtSupPassword.Text +"'";
+                string checkCountQry = "";
+                checkCountQry = "SELECT MonthEndDate FROM MonthEnd";
                 SqlCommand checkCmd = new SqlCommand(checkCountQry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(checkCmd))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+                    {
+                       if(Convert.ToDateTime(txtNewdate.Text).Date<= Convert.ToDateTime(dt.Rows[0][0].ToString()).Date)
+                        {
+                            string script = "alert(\"Cannot back post before monthend date please contact your system administrator\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(),
+                                                  "ServerControlScript", script, true);
+
+                            return;
+                        }
+                        // ddlBranch.da
+                    }
+                }
+                // Check if the table has any records
+                checkCountQry = "SELECT COUNT(*) FROM Supervisor where Password='" + txtSupPassword.Text +"'";
+                 checkCmd = new SqlCommand(checkCountQry, con);
                 int recordCount = (int)checkCmd.ExecuteScalar();
 
                
@@ -512,6 +1009,172 @@ namespace LTG
             txtNewdate.Attributes["max"] = DateTime.Now.ToString("yyyy-MM-dd");
            // return;
             popup.Visible = true;
+        }
+
+        protected void txtBarcode_TextChanged(object sender, EventArgs e)
+        {
+            save();
+            FillGrid();
+        }
+
+        protected void txtALPQty_TextChanged(object sender, EventArgs e)
+        {
+            txtSpare.Text = txtSpare.Text.Trim();
+            txtALPQty.Text = txtALPQty.Text.Trim();
+            if (txtSpare.Text != "")
+            {
+                saveALPInfo();
+            }
+            else
+                txtSpare.Focus();
+        }
+
+        protected void txtSpare_TextChanged(object sender, EventArgs e)
+        {
+
+            saveALPInfo();
+
+
+        }
+        private void saveALPInfo()
+        {
+            txtSpare.Text = txtSpare.Text.Trim();
+            txtALPQty.Text = txtALPQty.Text.Trim();
+            if (txtSpare.Text == "")
+            {
+                string script = "alert(\"Please enter the part number\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
+            if (txtALPQty.Text == "")
+            {
+                string script = "alert(\"Please enter the total quantity\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
+            if (CheckDuplicate())
+            {
+                var total = partNumberTotal();
+                for (int i = 0; i < Convert.ToInt32(txtALPQty.Text); i++)
+                {
+                    string output = FormatNumberWithLeadingZeros((i + 1 + total).ToString(), 6);
+                    txtHU.Text = txtSpare.Text + "-" + output;
+                    txtBarcode.Text = txtHU.Text;
+                    saveAlP();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < int.Parse(txtALPQty.Text.ToString().Trim()); i++)
+                {
+                    string output = FormatNumberWithLeadingZeros((i + 1).ToString(), 6);
+                    txtHU.Text = txtSpare.Text + "-" + output;
+                    txtBarcode.Text = txtHU.Text;
+                    saveAlP();
+                }
+            }
+            FillGrid();
+            txtALPQty.Text = "";
+            txtSpare.Text = "";
+            txtALPQty.Focus();
+        }
+        public void CallExecutable(string id)
+        {
+            // Specify the path to the executable
+            // string exePath = @"C:\DEVELOPMENT\LTGBarcode\bin\Debug\LTGBarcode.exe";
+            string exePath = @"C:\LTG\LTGBarcode\LTGBarcode.exe";
+
+            // Specify any arguments if needed
+            string arguments = id;
+
+            // Create a new process start info object
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = arguments,
+                RedirectStandardOutput = true,
+                UseShellExecute = false, // Important: this prevents redirection of streams
+                CreateNoWindow = true // Optional: hides the console window
+            };
+
+            try
+            {
+                using (Process process = Process.Start(startInfo))
+                {
+                    using (StreamReader reader = process.StandardOutput)
+                    {
+                        string result = reader.ReadToEnd();
+                        // return result;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                Response.Write("An error occurred: " + ex.Message);
+            }
+        }
+        protected void btnPrintBarcode_Click(object sender, EventArgs e)
+        {
+            var id = txtGRN.Text;
+            CallExecutable(id.ToString());
+
+            string relativeUrl = "Delivery.aspx?source=2&id=" + id;
+
+            // Register the JavaScript to open a new window with the relative URL
+            string script = $"openNewWindow('{ResolveUrl(relativeUrl)}');";
+            ClientScript.RegisterStartupScript(this.GetType(), "openNewWindowScript", script, true);
+
+            //var HUs = FillHU();
+            //if (HUs.Count > 0)
+            //{
+            //    var script2 = "<script>var userConfirmed2 = confirm('Do you want to print barcode?');" +
+            //            "if (userConfirmed2) {";
+
+            //    foreach (string url in HUs)
+            //    {
+            //        var redirectUrl1 = "Barcode.aspx?id=" + url;
+            //        script2 += "window.open('" + redirectUrl1 + "', '_blank');";
+            //    }
+
+            //    script2 += "}</script>";
+
+            //    // Register the script to execute
+            //    ClientScript.RegisterStartupScript(this.GetType(), "OpenPrintPages", script2);
+            //}
+        }
+
+        protected void btnYes_Click(object sender, EventArgs e)
+        {
+            divCustomer.Visible = false;
+            divScan.Visible = true;
+            divHeader.InnerText = "Inbound Process for - " + ddlCustomer.SelectedItem.Text;
+            txtContainer1.Text = txtContainer.Text;
+            txtHU.Focus();
+            if (ddlCustomer.SelectedValue == "ALP001" || ddlCustomer.SelectedValue == "ALP002" || ddlCustomer.SelectedValue == "AUT003" || ddlCustomer.SelectedValue == "AUT004")
+            {
+                divALP.Visible = true;
+                divBMW.Visible = false;
+                divBar.Visible = false;
+                divSeq.Visible = false;
+                grdScans.Columns[2].Visible = true;
+                grdScans.Columns[1].Visible = false;
+                btnPrintBarcode.Visible = true;
+                // GenerateSeqn();
+            }
+            else
+            {
+                divALP.Visible = false;
+                divBMW.Visible = true;
+                divBar.Visible = false;
+                divSeq.Visible = false;
+                grdScans.Columns[1].Visible = true;
+                grdScans.Columns[2].Visible = false;
+                btnPrintBarcode.Visible = false;
+            }
         }
     }
 }

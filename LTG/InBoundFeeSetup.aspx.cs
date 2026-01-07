@@ -82,7 +82,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select Fee from FeeMaster Where FeeType='InBound' and CustomerCode='" + ddlCustomer.SelectedValue + "'  and BranchId=" + ddlBranch.SelectedValue +" order by FeeId desc";
+                string qry = "Select InboundFee,SatInboundFee,PrevSatInboundFee,SunInboundFee,PrevSunInboundFee from Customers Where CustomerCode='" + ddlCustomer.SelectedValue + "'";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -91,12 +91,17 @@ namespace LTG
 
                     if (dt.Rows.Count > 0)
                     {
-                        txtExistingFee.Text = dt.Rows[0]["Fee"].ToString();
+                        txtExistingFee.Text = dt.Rows[0]["InboundFee"].ToString();
+                        txtExtSaturday.Text = dt.Rows[0]["SatInboundFee"].ToString();
+                        txtExtSunday.Text = dt.Rows[0]["SunInboundFee"].ToString();
+
                         // ddlBranch.da
                     }
                     else
                     {
                         txtExistingFee.Text = "0";
+                        txtExtSaturday.Text = "0";
+                        txtExtSunday.Text = "0";
                     }
                 }
             }
@@ -131,20 +136,48 @@ namespace LTG
                 using (SqlCommand cmd = new SqlCommand(qry, con))
                 {
 
-
+                    if (txtExtSaturday.Text == "")
+                        txtExtSaturday.Text = "0";
+                    if (txtExtSunday.Text == "")
+                        txtExtSunday.Text = "0";
+                    if (txtExistingFee.Text == "")
+                        txtExistingFee.Text = "0";
 
                     cmd.ExecuteNonQuery();
-                    qry = "Update Customers set InboundFee='" + txtNewFee.Text + "',PreviousInboundFee='" + txtExistingFee.Text + "' where CustomerCode='" + ddlCustomer.SelectedValue + "' and BranchId=" + ddlBranch.SelectedValue;
+                    qry = "Update Customers set InboundFee='" + txtNewFee.Text + "',PreviousInboundFee='" + txtExistingFee.Text + "',SatInboundFee='" + txtSaturday.Text + "',PrevSatInboundFee='" + txtExtSaturday.Text + "',SunInboundFee='" + txtSunday.Text + "',PrevSunInboundFee='" + txtExtSunday.Text + "' where CustomerCode='" + ddlCustomer.SelectedValue + "' and BranchId=" + ddlBranch.SelectedValue;
                     cmd.CommandText=qry;
                         cmd.ExecuteNonQuery();
-                    qry = "Insert into AuditLogs([Table],Field,ExistingValue,NewValue,ModifiedByUserId,ModifiedByUserName,ModifiedByDate,BranchName,BranchId,Custom)Values('FeeMaster','Fee','" + txtExistingFee.Text + "','" + txtNewFee.Text + "'," + userid + ",'" + userName + "',getdate(),'" + ddlBranch.SelectedItem.Text + "','" + ddlBranch.SelectedValue + "','Update the Inbound Fee " + ddlCustomer.SelectedValue + "')";
-                    cmd.CommandText = qry;
-                    cmd.ExecuteNonQuery();
-                    qry = "Insert into AuditLogs([Table],Field,ExistingValue,NewValue,ModifiedByUserId,ModifiedByUserName,ModifiedByDate,BranchName,BranchId,Custom)Values('Customers','InboundFee','" + txtExistingFee.Text + "','" + txtNewFee.Text + "'," + userid + ",'" + userName + "',getdate(),'" + ddlBranch.SelectedItem.Text + "','" + ddlBranch.SelectedValue + "','Update the Inbound Fee for Customer " + ddlCustomer.SelectedValue + "')";
-                    cmd.CommandText = qry;
-                    cmd.ExecuteNonQuery();
+                    if (txtNewFee.Text != txtExistingFee.Text)
+                    {
+                        //qry = "Insert into AuditLogs([Table],Field,ExistingValue,NewValue,ModifiedByUserId,ModifiedByUserName,ModifiedByDate,BranchName,BranchId,Custom)Values('FeeMaster','Fee','" + txtExistingFee.Text + "','" + txtNewFee.Text + "'," + userid + ",'" + userName + "',getdate(),'" + ddlBranch.SelectedItem.Text + "','" + ddlBranch.SelectedValue + "','Update the Inbound Fee " + ddlCustomer.SelectedValue + "')";
+                        //cmd.CommandText = qry;
+                        //cmd.ExecuteNonQuery();
+                        qry = "Insert into AuditLogs([Table],Field,ExistingValue,NewValue,ModifiedByUserId,ModifiedByUserName,ModifiedByDate,BranchName,BranchId,Custom)Values('Customers','InboundFee','" + txtExistingFee.Text + "','" + txtNewFee.Text + "'," + userid + ",'" + userName + "',getdate(),'" + ddlBranch.SelectedItem.Text + "','" + ddlBranch.SelectedValue + "','Update the WeekDays Inbound Fee for Customer " + ddlCustomer.SelectedValue + "')";
+                        cmd.CommandText = qry;
+                        cmd.ExecuteNonQuery();
+                    }
+                     if (txtSaturday.Text != txtExtSaturday.Text)
+                    {
+                        //qry = "Insert into AuditLogs([Table],Field,ExistingValue,NewValue,ModifiedByUserId,ModifiedByUserName,ModifiedByDate,BranchName,BranchId,Custom)Values('FeeMaster','Fee','" + txtExtSaturday.Text + "','" + txtSaturday.Text + "'," + userid + ",'" + userName + "',getdate(),'" + ddlBranch.SelectedItem.Text + "','" + ddlBranch.SelectedValue + "','Update the Saturday Fee " + ddlCustomer.SelectedValue + "')";
+                        //cmd.CommandText = qry;
+                        //cmd.ExecuteNonQuery();
+                        qry = "Insert into AuditLogs([Table],Field,ExistingValue,NewValue,ModifiedByUserId,ModifiedByUserName,ModifiedByDate,BranchName,BranchId,Custom)Values('Customers','Inbound Satuday Fee','" + txtExtSaturday.Text + "','" + txtSaturday.Text + "'," + userid + ",'" + userName + "',getdate(),'" + ddlBranch.SelectedItem.Text + "','" + ddlBranch.SelectedValue + "','Update the Saturday Inbound Fee for Customer " + ddlCustomer.SelectedValue + "')";
+                        cmd.CommandText = qry;
+                        cmd.ExecuteNonQuery();
+                    }
+                     if (txtSunday.Text != txtExtSunday.Text)
+                    {
+                        //qry = "Insert into AuditLogs([Table],Field,ExistingValue,NewValue,ModifiedByUserId,ModifiedByUserName,ModifiedByDate,BranchName,BranchId,Custom)Values('FeeMaster','Fee','" + txtExtSaturday.Text + "','" + txtSaturday.Text + "'," + userid + ",'" + userName + "',getdate(),'" + ddlBranch.SelectedItem.Text + "','" + ddlBranch.SelectedValue + "','Update the Saturday Fee " + ddlCustomer.SelectedValue + "')";
+                        //cmd.CommandText = qry;
+                        //cmd.ExecuteNonQuery();
+                        qry = "Insert into AuditLogs([Table],Field,ExistingValue,NewValue,ModifiedByUserId,ModifiedByUserName,ModifiedByDate,BranchName,BranchId,Custom)Values('Customers','Inbound Sunday Fee','" + txtExtSunday.Text + "','" + txtSunday.Text + "'," + userid + ",'" + userName + "',getdate(),'" + ddlBranch.SelectedItem.Text + "','" + ddlBranch.SelectedValue + "','Update the Sunday Inbound Fee for Customer " + ddlCustomer.SelectedValue + "')";
+                        cmd.CommandText = qry;
+                        cmd.ExecuteNonQuery();
+                    }
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "showalert", "alert('Inbound Fee Successfully Updated.');", true);
                     txtNewFee.Text = "";
+                    txtSaturday.Text = "";
+                    txtSunday.Text = "";
                     FillData();
                 }
             }

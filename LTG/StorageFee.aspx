@@ -44,20 +44,20 @@ function myFunction() {
                     </div>
                     <div class="col-12">
                       <label for="txtExistingFee" class="form-label">Existing Storage Fee</label>
-                        <asp:TextBox id="txtExistingFee" runat="server" ValidationGroup="TimeSlot" ReadOnly="true" BackColor="#dfe8f0" Text=""  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                        <asp:TextBox id="txtExistingFee" runat="server" ValidationGroup="TimeSlot5" ReadOnly="true" BackColor="#dfe8f0" Text=""  ClientIDMode="Static" class="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" id="reqName" controltovalidate="txtExistingFee" ForeColor="OrangeRed" />
                       
                     </div>
 
                     <div class="col-12">
                       <label for="txtNewFee" class="form-label">Enter Storage Fee</label>
-                     <asp:TextBox id="txtNewFee" runat="server"  class="form-control"></asp:TextBox>
+                     <asp:TextBox id="txtNewFee" runat="server" ValidationGroup="TimeSlot" class="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator1" ForeColor="OrangeRed" controltovalidate="txtNewFee" errormessage="Please enter a Storage Fee!" />
                       
                     </div>
                   
                     <div class="col-12">
-                        <asp:Button ID="btnCreate" OnClientClick="return myFunction();" OnClick="btnCreate_Click" class="btn btn-primary w-100" Text="Save" runat="server" />
+                        <asp:Button ID="btnCreate" OnClientClick="return myFunction();" ValidationGroup="TimeSlot" OnClick="btnCreate_Click" class="btn btn-primary w-100" Text="Save" runat="server" />
                     </div>
                    
                   </div>

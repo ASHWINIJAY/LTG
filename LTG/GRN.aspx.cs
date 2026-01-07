@@ -65,7 +65,10 @@ namespace LTG
             }
             else if (e.Row.RowType == DataControlRowType.Footer)
             {
-                e.Row.Cells[2].Text = "Total Qty Of HU Received";
+                
+                
+                    e.Row.Cells[2].Text = "Total Qty Of HU Received";
+   
                 // Find the lblTotalQty label in the footer and set its text
                 Label lblTotalQty = (Label)e.Row.FindControl("lblTotalQty");
                 lblTotalQty.Text = totalQty.ToString(); // Format as needed
@@ -101,13 +104,25 @@ namespace LTG
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
-                    grdOutBound.DataSource = dt;
+                    if (dt.Rows.Count > 0)
+                    {
+                        hdnCustomer.Value = dt.Rows[0]["CustomerCode"].ToString();
+                        if (hdnCustomer.Value == "ALP001" || hdnCustomer.Value == "ALP002" || hdnCustomer.Value == "AUT003" || hdnCustomer.Value == "AUT004")
+                        {
+                            grdOutBound.Columns[1].Visible = false;
+                        }
+                        else
+                        {
+                            grdOutBound.Columns[2].Visible = false;
+                        }
+                    }
+                        grdOutBound.DataSource = dt;
                     grdOutBound.DataBind();
                     if (dt.Rows.Count > 0)
                     {
 
                         lblCustomer.Text = dt.Rows[0]["CustomerName"].ToString();
-
+                       
                         lblContainer.Text = dt.Rows[0]["ContainerId"].ToString();
                         txtIssueDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
                         txtIssueTime.Text = DateTime.Now.ToString("HH:mm:ss");

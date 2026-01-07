@@ -1,8 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="CustomerSetup.aspx.cs" Inherits="LTG.CustomerSetup" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
      <main id="main" class="main">
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    
+    <script>
+    document.getElementById('<%= FileUpload1.ClientID %>').setAttribute('accept', '.pdf');
+    </script>
 
     <section class="section dashboard">
       <div class="row">
@@ -100,10 +104,54 @@
                      <asp:CheckBox id="chkActive" runat="server" Text="Active" AutoPostBack="false" OnCheckedChanged="chkDelivery_CheckedChanged"></asp:CheckBox>
                        
                     </div>
+                    <h2>Contract Details</h2>
+                    <div class="col-12">
+                      <label for="txtSurName" class="form-label">Existing Contract Date</label>
+                     <asp:TextBox id="txtExtContract" runat="server" ReadOnly="true" BackColor="#dfe8f0" class="form-control"></asp:TextBox>
+                       
+                    </div>
+                    <div class="col-12">
+                        <asp:Button ID="btnViewPdf" runat="server" Text="View Contract" OnClick="btnViewPdf_Click" />
+<asp:HiddenField ID="hdnPdfUrl" runat="server" />
+<asp:HiddenField ID="hdnPdfLocation" Value="" runat="server" />
+                    </div>
+                    <div class="col-12">
+                      <label for="txtSurName" class="form-label">New Contract Date</label>
+                     <asp:TextBox id="txtNewContract" runat="server" TextMode="Date" class="form-control"></asp:TextBox>
+                       
+                    </div>
+                    <div class="col-12">
+                      <label for="txtSurName" class="form-label">Contract Document</label>
+                        <asp:FileUpload ID="FileUpload1" class="form-control" runat="server" />
+                       
+                    </div>
                     <div class="col-12">
                         <asp:Button ID="btnCreate" class="btn btn-primary w-100" OnClick="btnCreate_Click" Text="Create Customer" runat="server" />
                     </div>
-                   
+                   <!-- Modal -->
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Contract Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <iframe id="pdfFrame" width="100%" height="600px" style="border:none;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    function showPdf() {
+        var pdfUrl = document.getElementById('<%= hdnPdfUrl.ClientID %>').value;
+        document.getElementById("pdfFrame").src = pdfUrl;
+        var modal = new bootstrap.Modal(document.getElementById("pdfModal"));
+        modal.show();
+    }
+</script>
+
                   </div>
        
       </section>

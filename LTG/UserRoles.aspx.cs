@@ -68,6 +68,31 @@ namespace LTG
             int audit = chkAudit.Checked ? 1 : 0;
             int supervisor = chkSup.Checked ? 1 : 0;
             int reDeliveryNote = chkReDN.Checked ? 1 : 0;
+            int monthEnd = chkMonthEnd.Checked ? 1 : 0;
+            int monthEndPwd = chkMonthEndPwd.Checked ? 1 : 0;
+            int stockOnHand = chkStockOnHand.Checked ? 1 : 0;
+            int updateContainer = chkUpdateContainer.Checked ? 1 : 0;
+            int GDNReturn = chkGDNReturn.Checked ? 1 : 0;
+            int GRNReturn = chkGRNReturn.Checked ? 1 : 0;
+            int PickupReturn = chkPickReturn.Checked ? 1 : 0;
+            int GDNReturnRpt = chkGDNReturnReport.Checked ? 1 : 0;
+            int GRNReturnRpt = chkGRNReturnReport.Checked ? 1 : 0;
+            int binReturn = chkBinReturn.Checked ? 1 : 0;
+            int binReturnRpt = chkBinReturnReport.Checked ? 1 : 0;
+            int PickupReturnRpt = chkPickReturnReport.Checked ? 1 : 0;
+            int returnReason = chkReasonCreate.Checked ? 1 : 0;
+            int reasonMaintain = chkReturnMaintain.Checked ? 1 : 0;
+            int barcodeRePrint = chkBarcodeReprint.Checked ? 1 : 0;
+            int DispatchedRpt = chkDispatchedReport.Checked ? 1 : 0;
+            int stockTakeReprint = chkStockTakeReprint.Checked ? 1 : 0;
+            int stockPwd = chkStockPwd.Checked ? 1 : 0;
+            int mailNotification = chkMailNotification.Checked ? 1 : 0;
+            int stockRoles = 0;
+            if (radManager.Checked)
+                stockRoles = 1;
+            if (radAdmin.Checked)
+                stockRoles = 2;
+
             using (SqlConnection conn = new SqlConnection(constr))
             {
                 conn.Open();
@@ -86,8 +111,11 @@ namespace LTG
                     // Update existing record
                     query = @"
                     UPDATE UserRoles
-                    SET 
+                    SET MailNotification=@MailNotification,StockTakeReprint=@StockTakeReprint,StockPwd=@StockPwd,
+StockRoles=@StockRoles,GRNReturn=@GRNReturn,PickupReturn=@PickupReturn,
                         InboundProcess = @InboundProcess,
+ReverseWarehouseReport = @ReverseWarehouseReport,
+ReverseWarehouse = @ReverseWarehouse,
                         WarehouseProcess = @WarehouseProcess,
                         PickingProcess = @PickingProcess,
                         OutboundProcess = @OutboundProcess,
@@ -119,35 +147,45 @@ PickedReport = @PickedReport,
 OutboundReport = @OutboundReport,
 Supervisor = @Supervisor,
 Audit = @Audit,
-ReDeliveryNote=@ReDeliveryNote
+MonthEndSetup = @MonthEndSetup,
+UpdateMonthEndPwd = @UpdateMonthEndPwd,
+StockOnHand = @StockOnHand,
+ReDeliveryNote=@ReDeliveryNote,
+UpdateContainer=@UpdateContainer,
+GDNReturn=@GDNReturn,
+GDNReturnReport=@GDNReturnReport,GRNReturnReport=@GRNReturnReport,PickupReturnReport=@PickupReturnReport,
+ReturnReason=@ReturnReason,
+ReasonMaintain=@ReasonMaintain,
+BarcodeRePrint=@BarcodeRePrint ,DispatchedReport=@DispatchedReport
                     WHERE Username = @Username";
                 }
                 else
                 {
                     // Insert new record
                     query = @"
-                    INSERT INTO UserRoles (
+                    INSERT INTO UserRoles (MailNotification,StockTakeReprint,StockPwd,ReverseWarehouseReport,ReverseWarehouse,DispatchedReport,PickupReturnReport,GRNReturnReport,GRNReturn,PickupReturn,BarcodeRePrint,ReturnReason,ReasonMaintain,StockRoles,MonthEndSetup,UpdateMonthEndPwd,GDNReturn,GDNReturnReport,
                         Username, InboundProcess, WarehouseProcess, PickingProcess, OutboundProcess, 
                         InboundException, WarehousedException, PickedException, BinToBin, 
                         ContainerAdjustment, ChangeContainerToAnotherCustomer, InboundFeeSetup, 
                         StorageFeeSetup, OutboundFeeSetup, BinCreation, CustomerCreation, 
                         UserCreation, TransporterCreation, CustomerMaintenance, UserMaintenance, 
                         TransporterMaintenance, HUTrackingReportsDetails, HUTrackingReportsSummary,BinMaintain,DeliveryNote,DetailMonth,SummaryMonth,InboundReport,
-BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote)
-                    VALUES (
+BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,StockOnHand,UpdateContainer)
+                    VALUES (@MailNotification,@StockTakeReprint,@StockPwd,@ReverseWarehouseReport,@ReverseWarehouse,@DispatchedReport,@PickupReturnReport,@GRNReturnReport,@GRNReturn,@PickupReturn,@BarcodeRePrint,@ReturnReason,@ReasonMaintain,@StockRoles,@MonthEndSetup,@UpdateMonthEndPwd,@GDNReturn,@GDNReturnReport,
                         @Username, @InboundProcess, @WarehouseProcess, @PickingProcess, @OutboundProcess, 
                         @InboundException, @WarehousedException, @PickedException, @BinToBin, 
                         @ContainerAdjustment, @ChangeContainerToAnotherCustomer, @InboundFeeSetup, 
                         @StorageFeeSetup, @OutboundFeeSetup, @BinCreation, @CustomerCreation, 
                         @UserCreation, @TransporterCreation, @CustomerMaintenance, @UserMaintenance, 
                         @TransporterMaintenance, @HUTrackingReportsDetails, @HUTrackingReportsSummary,@BinMaintain,@DeliveryNote,@DetailMonth,@SummaryMonth,@InboundReport,
-@BinnedReport,@PickedReport,@OutboundReport,@Audit,@Supervisor,@ReDeliveryNote)";
+@BinnedReport,@PickedReport,@OutboundReport,@Audit,@Supervisor,@ReDeliveryNote,@StockOnHand,@UpdateContainer)";
                 }
 
                 SqlCommand cmd = new SqlCommand(query, conn);
 
                 // Add parameters to command
                 cmd.Parameters.AddWithValue("@Username", username);
+                cmd.Parameters.AddWithValue("@StockRoles", stockRoles);
                 cmd.Parameters.AddWithValue("@InboundProcess", inboundProcess);
                 cmd.Parameters.AddWithValue("@WarehouseProcess", warehouseProcess);
                 cmd.Parameters.AddWithValue("@PickingProcess", pickingProcess);
@@ -181,6 +219,25 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote)
                 cmd.Parameters.AddWithValue("@Audit", audit);
                 cmd.Parameters.AddWithValue("@Supervisor", supervisor);
                 cmd.Parameters.AddWithValue("@ReDeliveryNote", reDeliveryNote);
+                cmd.Parameters.AddWithValue("@MonthEndSetup", monthEnd);
+                cmd.Parameters.AddWithValue("@UpdateMonthEndPwd", monthEndPwd);
+                cmd.Parameters.AddWithValue("@StockOnHand", stockOnHand);
+                cmd.Parameters.AddWithValue("@UpdateContainer", updateContainer);
+                cmd.Parameters.AddWithValue("@GDNReturn", GDNReturn);
+                cmd.Parameters.AddWithValue("@GRNReturn", GRNReturn);
+                cmd.Parameters.AddWithValue("@PickupReturn", PickupReturn);
+                cmd.Parameters.AddWithValue("@GDNReturnReport", GDNReturnRpt);
+                cmd.Parameters.AddWithValue("@ReverseWarehouse", binReturn);
+                cmd.Parameters.AddWithValue("@ReverseWarehouseReport", binReturnRpt);
+                cmd.Parameters.AddWithValue("@GRNReturnReport", GRNReturnRpt);
+                cmd.Parameters.AddWithValue("@PickupReturnReport", PickupReturnRpt);
+                cmd.Parameters.AddWithValue("@DispatchedReport", DispatchedRpt);
+                cmd.Parameters.AddWithValue("@ReturnReason", returnReason);
+                cmd.Parameters.AddWithValue("@ReasonMaintain", reasonMaintain);
+                cmd.Parameters.AddWithValue("@BarcodeRePrint", barcodeRePrint);
+                cmd.Parameters.AddWithValue("@StockTakeReprint", stockTakeReprint);
+                cmd.Parameters.AddWithValue("@StockPwd", stockPwd);
+                cmd.Parameters.AddWithValue("@MailNotification", mailNotification);
                 cmd.ExecuteNonQuery();
                 string script = "alert('Roles Assigned Successfully');" +
                  "window.setTimeout(function(){ window.location.href = 'UserMaintenance.aspx'; }, 1000);"; // 1-second delay before redirect
@@ -196,6 +253,8 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote)
             {
                 string query = @"
         SELECT 
+MailNotification,
+StockTakeReprint,StockPwd,
             InboundProcess,
             WarehouseProcess,
             PickingProcess,
@@ -218,9 +277,10 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote)
             TransporterMaintenance,
             HUTrackingReportsDetails,
             HUTrackingReportsSummary,
-BinMaintain,
+BinMaintain,PickupReturnReport,GDNReturn,GDNReturnReport,
 DeliveryNote,DetailMonth,SummaryMonth,InboundReport,
-BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote
+BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,MonthEndSetup,UpdateMonthEndPwd,StockOnHand,UpdateContainer,StockRoles,ReturnReason,
+ReasonMaintain,BarcodeRePrint,GRNReturn,PickupReturn,GRNReturnReport ,DispatchedReport ,ReverseWarehouse,ReverseWarehouseReport 
         FROM UserRoles
         WHERE Username = @Username";
 
@@ -280,6 +340,57 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote
                         chkSup.Checked = Convert.ToBoolean(userRow["Supervisor"]);
                     if (userRow["ReDeliveryNote"] != DBNull.Value)
                         chkReDN.Checked = Convert.ToBoolean(userRow["ReDeliveryNote"]);
+                    if (userRow["MonthEndSetup"] != DBNull.Value)
+                        chkMonthEnd.Checked = Convert.ToBoolean(userRow["MonthEndSetup"]);
+                    if (userRow["UpdateMonthEndPwd"] != DBNull.Value)
+                        chkMonthEndPwd.Checked = Convert.ToBoolean(userRow["UpdateMonthEndPwd"]);
+                    if (userRow["StockOnHand"] != DBNull.Value)
+                        chkStockOnHand.Checked = Convert.ToBoolean(userRow["StockOnHand"]);
+                    if (userRow["ReturnReason"] != DBNull.Value)
+                        chkReasonCreate.Checked = Convert.ToBoolean(userRow["ReturnReason"]);
+                    if (userRow["ReasonMaintain"] != DBNull.Value)
+                        chkReturnMaintain.Checked = Convert.ToBoolean(userRow["ReasonMaintain"]);
+                    if (userRow["BarcodeReprint"] != DBNull.Value)
+                        chkBarcodeReprint.Checked = Convert.ToBoolean(userRow["BarcodeReprint"]);
+                    if (userRow["GRNReturn"] != DBNull.Value)
+                        chkGRNReturn.Checked = Convert.ToBoolean(userRow["GRNReturn"]);
+                    if (userRow["GRNReturnReport"] != DBNull.Value)
+                        chkGRNReturnReport.Checked = Convert.ToBoolean(userRow["GRNReturnReport"]);
+                    if (userRow["ReverseWarehouse"] != DBNull.Value)
+                        chkBinReturn.Checked = Convert.ToBoolean(userRow["ReverseWarehouse"]);
+                    if (userRow["ReverseWarehouseReport"] != DBNull.Value)
+                        chkBinReturnReport.Checked = Convert.ToBoolean(userRow["ReverseWarehouseReport"]);
+                    if (userRow["GDNReturn"] != DBNull.Value)
+                        chkGDNReturn.Checked = Convert.ToBoolean(userRow["GDNReturn"]);
+                    if (userRow["GDNReturnReport"] != DBNull.Value)
+                        chkGDNReturnReport.Checked = Convert.ToBoolean(userRow["GDNReturnReport"]);
+                    if (userRow["PickupReturnReport"] != DBNull.Value)
+                        chkPickReturnReport.Checked = Convert.ToBoolean(userRow["PickupReturnReport"]);
+                    if (userRow["DispatchedReport"] != DBNull.Value)
+                        chkDispatchedReport.Checked = Convert.ToBoolean(userRow["DispatchedReport"]);
+                    if (userRow["PickupReturn"] != DBNull.Value)
+                        chkPickReturn.Checked = Convert.ToBoolean(userRow["PickupReturn"]);
+                    if (userRow["StockTakeReprint"] != DBNull.Value)
+                        chkStockTakeReprint.Checked = Convert.ToBoolean(userRow["StockTakeReprint"]);
+                    if (userRow["StockPwd"] != DBNull.Value)
+                        chkStockPwd.Checked = Convert.ToBoolean(userRow["StockPwd"]);
+                    if (userRow["MailNotification"] != DBNull.Value)
+                        chkMailNotification.Checked = Convert.ToBoolean(userRow["MailNotification"]);
+                    if (userRow["StockRoles"] != DBNull.Value)
+                    {
+                        if(Convert.ToInt32(userRow["StockRoles"])==0)
+                        {
+                            radCounter.Checked = true;
+                        }
+                        else if (Convert.ToInt32(userRow["StockRoles"]) == 1)
+                        {
+                            radManager.Checked = true;
+                        }
+                        else if (Convert.ToInt32(userRow["StockRoles"]) == 2)
+                        {
+                            radAdmin.Checked = true;
+                        }
+                    }
 
                 }
             }
@@ -314,6 +425,7 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote
             CheckBoxBinToBin.Checked = isChecked;
             CheckBoxContainerAdjustment.Checked = isChecked;
             CheckBoxChangeContainerToAnotherCustomer.Checked = isChecked;
+            chkUpdateContainer.Checked = isChecked;
         }
 
         protected void chkFeeAll_CheckedChanged(object sender, EventArgs e)
@@ -335,6 +447,7 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote
             CheckBoxCustomerCreation.Checked = isChecked;
             CheckBoxUserCreation.Checked = isChecked;
             CheckBoxTransporterCreation.Checked = isChecked;
+            chkReasonCreate.Checked = isChecked;
         }
 
         protected void chkMaintainAll_CheckedChanged(object sender, EventArgs e)
@@ -346,6 +459,8 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote
             CheckBoxUserMaintenance.Checked = isChecked;
             CheckBoxTransporterMaintenance.Checked = isChecked;
             chkBinMaintain.Checked = isChecked;
+            chkGDNReturn.Checked = isChecked;
+            chkReturnMaintain.Checked = isChecked;
             chkMaintainAll.Focus();
         }
 
@@ -356,13 +471,18 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote
             // Apply the state to all other checkboxes in the "Reports" section
             CheckBoxHUTrackingReportsDetails.Checked = isChecked;
             CheckBoxHUTrackingReportsSummary.Checked = isChecked;
-           
+            chkGDNReturnReport.Checked = isChecked;
+            chkGRNReturnReport.Checked = isChecked;
+            chkBinReturnReport.Checked = isChecked;
+            chkPickReturnReport.Checked = isChecked;
             chkDetailMonth.Checked = isChecked;
             chkSummaryMonth.Checked = isChecked;
             chkInboundReport.Checked = isChecked;
             chkBinnedReport.Checked = isChecked;
             chkPickedReport.Checked = isChecked;
             chkOutboundReport.Checked = isChecked;
+            chkStockOnHand.Checked = isChecked;
+            chkStockTakeReprint.Checked = isChecked;
             chkReportAll.Focus();
         }
 
@@ -380,6 +500,9 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote
 
             // Apply the state to all other checkboxes in the "Reports" section
             chkSup.Checked = isChecked;
+            chkMonthEnd.Checked = isChecked;
+            chkMonthEndPwd.Checked = isChecked;
+            chkStockPwd.Checked = isChecked;
         }
 
         protected void chkDeliveryAll_CheckedChanged(object sender, EventArgs e)
@@ -387,6 +510,21 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote
             bool isChecked = chkDeliveryAll.Checked;
             chkDelivery.Checked = isChecked;
             chkReDN.Checked = isChecked;
+            chkBarcodeReprint.Checked = isChecked;
+        }
+
+        protected void chkRoles_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void chkReturn_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isChecked = chkReturn.Checked;
+            chkGRNReturn .Checked = isChecked;
+            chkBinReturn.Checked = isChecked;
+            chkGDNReturn.Checked = isChecked;
+            chkPickReturn.Checked = isChecked;
         }
     }
 }

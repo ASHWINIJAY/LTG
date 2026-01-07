@@ -32,21 +32,47 @@
                         
                     </div>
                     <div class="col-12">
-                      <label for="txtExistingFee" class="form-label">Existing Inbound Fee</label>
-                        <asp:TextBox id="txtExistingFee" runat="server" ValidationGroup="TimeSlot" ReadOnly="true" BackColor="#dfe8f0" Text=""  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                      <label for="txtExistingFee" class="form-label">Existing WeekDays Inbound Fee</label>
+                        <asp:TextBox id="txtExistingFee" runat="server" ValidationGroup="TimeSlot5" ReadOnly="true" BackColor="#dfe8f0" Text=""  ClientIDMode="Static" class="form-control"></asp:TextBox>
                       
                       
                     </div>
 
                     <div class="col-12">
-                      <label for="txtNewFee" class="form-label">Enter Inbound Fee</label>
+                      <label for="txtNewFee" class="form-label">Enter WeekDays Inbound Fee</label>
                      <asp:TextBox id="txtNewFee" runat="server"  class="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator1" ForeColor="OrangeRed" controltovalidate="txtNewFee" errormessage="Please enter a Inbound Fee!" />
                       
                     </div>
+                     <div class="col-12">
+                      <label for="txtExistingFee" class="form-label">Existing Saturday Inbound Fee</label>
+                        <asp:TextBox id="txtExtSaturday" runat="server" ValidationGroup="TimeSlo5t" ReadOnly="true" BackColor="#dfe8f0" Text=""  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                      
+                      
+                    </div>
+
+                    <div class="col-12">
+                      <label for="txtNewFee" class="form-label">Enter Saturday Inbound Fee</label>
+                     <asp:TextBox id="txtSaturday" runat="server" ValidationGroup="TimeSlot"  class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator2" ForeColor="OrangeRed" controltovalidate="txtSaturday" errormessage="Please enter a Saturday Inbound Fee!" />
+                      
+                    </div>
+                     <div class="col-12">
+                      <label for="txtExistingFee" class="form-label">Existing Sunday Inbound Fee</label>
+                        <asp:TextBox id="txtExtSunday" runat="server" ValidationGroup="TimeSlot5" ReadOnly="true" BackColor="#dfe8f0" Text=""  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                      
+                      
+                    </div>
+
+                    <div class="col-12">
+                      <label for="txtNewFee" class="form-label">Enter Sunday Inbound Fee</label>
+                     <asp:TextBox id="txtSunday" runat="server" ValidationGroup="TimeSlot" class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator3" ForeColor="OrangeRed" controltovalidate="txtSunday" errormessage="Please enter a Sunday Inbound Fee!" />
+                      
+                    </div>
                   
                     <div class="col-12">
-                        <asp:Button ID="btnCreate" OnClick="btnCreate_Click" class="btn btn-primary w-100" Text="Save" runat="server" />
+                        <asp:Button ID="btnCreate" OnClick="btnCreate_Click" ValidationGroup="TimeSlot" class="btn btn-primary w-100" Text="Save" runat="server" />
                     </div>
                    
                   </div>

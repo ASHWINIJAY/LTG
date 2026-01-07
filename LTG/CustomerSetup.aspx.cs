@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -61,7 +62,11 @@ namespace LTG
                             chkActive.Checked = false;
                         if(dt.Rows[0]["Bin"] !=null)
                         ddlBin.SelectedValue= dt.Rows[0]["Bin"].ToString();
+                        if (dt.Rows[0]["ContractFiles"] != null)
+                            hdnPdfLocation.Value = dt.Rows[0]["ContractFiles"].ToString();
                         ddlBranch.SelectedValue = dt.Rows[0]["BranchId"].ToString();
+                        if (dt.Rows[0]["ContractDate"] != null && dt.Rows[0]["ContractDate"].ToString() != "")
+                            txtExtContract.Text = Convert.ToDateTime(dt.Rows[0]["ContractDate"]).ToString("dd/MMM/yyyy");
                     }
                 }
             }
@@ -121,6 +126,11 @@ namespace LTG
 
         protected void btnCreate_Click(object sender, EventArgs e)
         {
+            if(txtNewContract.Text !="" && !FileUpload1.HasFile)
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "showalert", "alert('Please upload a contract document.');", true);
+                return;
+            }
             if (Request.QueryString["Code"] != null)
             {
                 update();
@@ -148,8 +158,27 @@ namespace LTG
                         return;
                     }
                 }
+                string savePath = "";
+                if (FileUpload1.HasFile)
+                {
+                    string ext = Path.GetExtension(FileUpload1.FileName).ToLower();
+                    if (ext != ".pdf")
+                    {
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "showalert", "alert('Only PDF Files are allowed.');", true);
+                        return;
+                    }
+                    savePath = "Contract_" + DateTime.Now.ToString("yyyyMMdd_HHmm") + ".pdf";
 
+                    // string filename = Path.GetFileName(FileUpload1.FileName);
+                    string savePath1 = Server.MapPath("~/Contract/") + savePath;
+                    FileUpload1.SaveAs(savePath1);
+
+
+                }
+                if(savePath=="")
                 qry = "Insert into Customers(CustomerCode,CustomerName,BranchId,Active,Address1,Address2,Address3,Address4,DelAddr1,DelAddr2,DelAddr3,DelAddr4)values('" + txtCode.Text + "','" + txtSurName.Text + "','" + ddlBranch.SelectedValue + "',1,'" + txtAddr1.Text + "','" + txtAddr2.Text + "','" + txtAddr3.Text + "','" + txtAddr4.Text +"','" + txtDelAddr1.Text + "','" + txtDelAddr2.Text + "','" + txtDelAddr3.Text + "','" + txtDelAddr4.Text + "')";
+                else
+                    qry = "Insert into Customers(CustomerCode,CustomerName,BranchId,Active,Address1,Address2,Address3,Address4,DelAddr1,DelAddr2,DelAddr3,DelAddr4,ContractDate,ContractFiles)values('" + txtCode.Text + "','" + txtSurName.Text + "','" + ddlBranch.SelectedValue + "',1,'" + txtAddr1.Text + "','" + txtAddr2.Text + "','" + txtAddr3.Text + "','" + txtAddr4.Text + "','" + txtDelAddr1.Text + "','" + txtDelAddr2.Text + "','" + txtDelAddr3.Text + "','" + txtDelAddr4.Text + "','" + txtNewContract.Text + "','"+ savePath +"')";
 
                 using (SqlCommand cmd = new SqlCommand(qry, con))
                 {
@@ -191,7 +220,24 @@ namespace LTG
                 HiddenField hdUserName = (HiddenField)this.Master.FindControl("hdnUserName");
 
                 var userName = hdUserName.Value;
-                using (SqlDataAdapter da = new SqlDataAdapter(cmdCheck))
+                string savePath = "";
+                if (FileUpload1.HasFile)
+                {
+                    string ext = Path.GetExtension(FileUpload1.FileName).ToLower();
+                    if (ext != ".pdf")
+                    {
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "showalert", "alert('Only PDF Files are allowed.');", true);
+                        return;
+                    }
+                    savePath  = "Contract_" + DateTime.Now.ToString("yyyyMMdd_HHmm") + ".pdf";
+
+                   // string filename = Path.GetFileName(FileUpload1.FileName);
+                    string savePath1 = Server.MapPath("~/Contract/") + savePath;
+                    FileUpload1.SaveAs(savePath1);
+
+                    
+                }
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmdCheck))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -210,10 +256,14 @@ namespace LTG
                                            "DelAddr2=@DelAddr2, " +
                                            "DelAddr3=@DelAddr3, " +
                                            "DelAddr4=@DelAddr4, " +
-                                           "Active=@Active,"+
+                                           "Active=@Active," +
                                            "ModifiedUserId=@ModifiedUserId," +
-                                           "ModifiedUserName=@ModifiedUserName" +
-                                           " WHERE CustomerCode=@CustomerCode";
+                                           "ModifiedUserName=@ModifiedUserName";
+                                           if(savePath !="")
+                        {
+                            qryUpdate += " ,ContractDate='" + txtNewContract.Text + "',ContractFiles='" + savePath + "'";
+                        }
+                        qryUpdate += " WHERE CustomerCode=@CustomerCode";
 
                         SqlCommand cmdUpdate = new SqlCommand(qryUpdate, con);
                         cmdUpdate.Parameters.AddWithValue("@CustomerCode", txtCode.Text);
@@ -256,6 +306,21 @@ namespace LTG
                     txtDelAddr4.Text = "";
                 }
             }
+        }
+        protected void btnViewPdf_Click(object sender, EventArgs e)
+        {
+            if(hdnPdfLocation.Value=="")
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "showalert", "alert('Contract does not exist.');", true);
+
+            }
+            // Replace this with your actual PDF path (must be accessible via browser)
+            string pdfUrl = ResolveUrl("~/Contract/" + hdnPdfLocation.Value); // ← THIS is browser-friendly
+            hdnPdfUrl.Value = pdfUrl;
+
+           
+            // Call the JS function to show modal
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowPdfModal", "showPdf();", true);
         }
 
         protected void chkDelivery_CheckedChanged(object sender, EventArgs e)

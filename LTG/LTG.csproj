@@ -196,12 +196,24 @@
     <Content Include="assets\img\search.png" />
     <Content Include="assets\img\truck.png" />
     <Content Include="AuditLogs.aspx" />
+    <Content Include="BarCode.aspx" />
+    <Content Include="BarcodeRePrint.aspx" />
+    <Content Include="DeliveryDetailReport.aspx" />
+    <Content Include="DeliveryFeeSetup.aspx" />
+    <Content Include="DeliveryProcess.aspx" />
+    <Content Include="DeliveryReport.aspx" />
+    <Content Include="MailsSetup.aspx" />
+    <Content Include="StockAccRePrint.aspx" />
+    <Content Include="ManagerBinCockPit.aspx" />
     <Content Include="BinCreate.aspx" />
     <Content Include="BinMaintain.aspx" />
     <Content Include="BinnedDetailReport.aspx" />
     <Content Include="BinnedReport.aspx" />
     <Content Include="Binning.aspx" />
+    <Content Include="ManagerBinStockTake.aspx" />
     <Content Include="BinToBin.aspx" />
+    <Content Include="BinCockPit.aspx" />
+    <Content Include="CockPit.aspx" />
     <Content Include="ConsSummaryReport.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="ContainerAdj.aspx" />
@@ -348,6 +360,8 @@
     <Content Include="InBoundFeeSetup.aspx" />
     <Content Include="InBoundProcess.aspx" />
     <Content Include="InboundReport.aspx" />
+    <Content Include="InitStockTakeAccuracy.aspx" />
+    <Content Include="InitStockTake.aspx" />
     <Content Include="Invoice.aspx" />
     <Content Include="InvoiceDetailedReport.aspx" />
     <Content Include="InvoiceDetailReport.aspx" />
@@ -355,10 +369,15 @@
     <Content Include="InvoiceSummary.aspx" />
     <Content Include="InvoiceSummaryReport.aspx" />
     <Content Include="Main.Master" />
+    <Content Include="ManagerCockPit.aspx" />
+    <Content Include="ManagerStockTake.aspx" />
+    <Content Include="MonthEnd.aspx" />
+    <Content Include="MonthEndPwd.aspx" />
     <Content Include="OutboundDetailReport.aspx" />
     <Content Include="OutboundReport.aspx" />
     <Content Include="Password.aspx" />
     <Content Include="PdfHandler.ashx" />
+    <Content Include="LTG.pfx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\img\apple-touch-icon.png" />
@@ -701,6 +720,22 @@
     <Content Include="PickingProcess.aspx" />
     <Content Include="PickSlip.aspx" />
     <Content Include="ReGenerateDN.aspx" />
+    <Content Include="ReminderMails.aspx" />
+    <Content Include="ReturnReason.aspx" />
+    <Content Include="ReturnReasonMaintain.aspx" />
+    <Content Include="DispatchedReport.aspx" />
+    <Content Include="ReverseWarehouseReport.aspx" />
+    <Content Include="ReverseWarehouse.aspx" />
+    <Content Include="ReversePickupReport.aspx" />
+    <Content Include="ReversePick.aspx" />
+    <Content Include="ReverseGRN.aspx" />
+    <Content Include="ReverseGDN.aspx" />
+    <Content Include="ReverseGDNReport.aspx" />
+    <Content Include="ReverseGRNReport.aspx" />
+    <Content Include="RWarehouseDetailReport.aspx" />
+    <Content Include="RPICKDetailReport.aspx" />
+    <Content Include="RGRNDetailReport.aspx" />
+    <Content Include="RGDNDetailReport.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -730,13 +765,30 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
+    <Content Include="StockAdjDetailReport.aspx" />
+    <Content Include="StockAdjReport.aspx" />
+    <Content Include="StockonHand.aspx" />
+    <Content Include="DispatchedDetailReport.aspx" />
+    <Content Include="Stockonhandreport.aspx" />
+    <Content Include="BinStockTake.aspx" />
+    <Content Include="StockTake.aspx" />
+    <Content Include="StockAccConfirm.aspx" />
+    <Content Include="StockTakeConfirm.aspx" />
+    <Content Include="StockAccVariance.aspx" />
+    <Content Include="StockVariance.aspx" />
     <Content Include="StorageFee.aspx" />
     <Content Include="SummaryReport.aspx" />
+    <Content Include="StockPwd.aspx" />
     <Content Include="Supervisor.aspx" />
     <Content Include="Test.aspx" />
     <Content Include="Transport.aspx" />
+    <Content Include="TransportDetailReport.aspx" />
     <Content Include="TransportDetails.aspx" />
+    <Content Include="TransportFeeSetup.aspx" />
     <Content Include="TransportMaintain.aspx" />
+    <Content Include="TransportProcess.aspx" />
+    <Content Include="TransportReport.aspx" />
+    <Content Include="UpdateContainer.aspx" />
     <Content Include="UserCreation.aspx" />
     <Content Include="UserMaintenance.aspx" />
     <Content Include="UserRoles.aspx" />
@@ -764,6 +816,69 @@
     </Compile>
     <Compile Include="AuditLogs.aspx.designer.cs">
       <DependentUpon>AuditLogs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BarCode.aspx.cs">
+      <DependentUpon>BarCode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BarCode.aspx.designer.cs">
+      <DependentUpon>BarCode.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BarcodeRePrint.aspx.cs">
+      <DependentUpon>BarcodeRePrint.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BarcodeRePrint.aspx.designer.cs">
+      <DependentUpon>BarcodeRePrint.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryDetailReport.aspx.cs">
+      <DependentUpon>DeliveryDetailReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryDetailReport.aspx.designer.cs">
+      <DependentUpon>DeliveryDetailReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryFeeSetup.aspx.cs">
+      <DependentUpon>DeliveryFeeSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryFeeSetup.aspx.designer.cs">
+      <DependentUpon>DeliveryFeeSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryProcess.aspx.cs">
+      <DependentUpon>DeliveryProcess.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryProcess.aspx.designer.cs">
+      <DependentUpon>DeliveryProcess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryReport.aspx.cs">
+      <DependentUpon>DeliveryReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryReport.aspx.designer.cs">
+      <DependentUpon>DeliveryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MailsSetup.aspx.cs">
+      <DependentUpon>MailsSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MailsSetup.aspx.designer.cs">
+      <DependentUpon>MailsSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockAccRePrint.aspx.cs">
+      <DependentUpon>StockAccRePrint.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockAccRePrint.aspx.designer.cs">
+      <DependentUpon>StockAccRePrint.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ManagerBinCockPit.aspx.cs">
+      <DependentUpon>ManagerBinCockPit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ManagerBinCockPit.aspx.designer.cs">
+      <DependentUpon>ManagerBinCockPit.aspx</DependentUpon>
     </Compile>
     <Compile Include="BinCreate.aspx.cs">
       <DependentUpon>BinCreate.aspx</DependentUpon>
@@ -800,12 +915,33 @@
     <Compile Include="Binning.aspx.designer.cs">
       <DependentUpon>Binning.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ManagerBinStockTake.aspx.cs">
+      <DependentUpon>ManagerBinStockTake.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ManagerBinStockTake.aspx.designer.cs">
+      <DependentUpon>ManagerBinStockTake.aspx</DependentUpon>
+    </Compile>
     <Compile Include="BinToBin.aspx.cs">
       <DependentUpon>BinToBin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="BinToBin.aspx.designer.cs">
       <DependentUpon>BinToBin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BinCockPit.aspx.cs">
+      <DependentUpon>BinCockPit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BinCockPit.aspx.designer.cs">
+      <DependentUpon>BinCockPit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CockPit.aspx.cs">
+      <DependentUpon>CockPit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CockPit.aspx.designer.cs">
+      <DependentUpon>CockPit.aspx</DependentUpon>
     </Compile>
     <Compile Include="ConsSummaryReport.aspx.cs">
       <DependentUpon>ConsSummaryReport.aspx</DependentUpon>
@@ -950,6 +1086,20 @@
     <Compile Include="InboundReport.aspx.designer.cs">
       <DependentUpon>InboundReport.aspx</DependentUpon>
     </Compile>
+    <Compile Include="InitStockTakeAccuracy.aspx.cs">
+      <DependentUpon>InitStockTakeAccuracy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InitStockTakeAccuracy.aspx.designer.cs">
+      <DependentUpon>InitStockTakeAccuracy.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InitStockTake.aspx.cs">
+      <DependentUpon>InitStockTake.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InitStockTake.aspx.designer.cs">
+      <DependentUpon>InitStockTake.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Invoice.aspx.cs">
       <DependentUpon>Invoice.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1005,6 +1155,34 @@
     </Compile>
     <Compile Include="Main.Master.designer.cs">
       <DependentUpon>Main.Master</DependentUpon>
+    </Compile>
+    <Compile Include="ManagerCockPit.aspx.cs">
+      <DependentUpon>ManagerCockPit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ManagerCockPit.aspx.designer.cs">
+      <DependentUpon>ManagerCockPit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ManagerStockTake.aspx.cs">
+      <DependentUpon>ManagerStockTake.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ManagerStockTake.aspx.designer.cs">
+      <DependentUpon>ManagerStockTake.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MonthEnd.aspx.cs">
+      <DependentUpon>MonthEnd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MonthEnd.aspx.designer.cs">
+      <DependentUpon>MonthEnd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MonthEndPwd.aspx.cs">
+      <DependentUpon>MonthEndPwd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MonthEndPwd.aspx.designer.cs">
+      <DependentUpon>MonthEndPwd.aspx</DependentUpon>
     </Compile>
     <Compile Include="OutboundDetailReport.aspx.cs">
       <DependentUpon>OutboundDetailReport.aspx</DependentUpon>
@@ -1094,6 +1272,118 @@
     <Compile Include="ReGenerateDN.aspx.designer.cs">
       <DependentUpon>ReGenerateDN.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ReminderMails.aspx.cs">
+      <DependentUpon>ReminderMails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReminderMails.aspx.designer.cs">
+      <DependentUpon>ReminderMails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnReason.aspx.cs">
+      <DependentUpon>ReturnReason.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReturnReason.aspx.designer.cs">
+      <DependentUpon>ReturnReason.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnReasonMaintain.aspx.cs">
+      <DependentUpon>ReturnReasonMaintain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReturnReasonMaintain.aspx.designer.cs">
+      <DependentUpon>ReturnReasonMaintain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DispatchedReport.aspx.cs">
+      <DependentUpon>DispatchedReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DispatchedReport.aspx.designer.cs">
+      <DependentUpon>DispatchedReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReverseWarehouseReport.aspx.cs">
+      <DependentUpon>ReverseWarehouseReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReverseWarehouseReport.aspx.designer.cs">
+      <DependentUpon>ReverseWarehouseReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReverseWarehouse.aspx.cs">
+      <DependentUpon>ReverseWarehouse.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReverseWarehouse.aspx.designer.cs">
+      <DependentUpon>ReverseWarehouse.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReversePickupReport.aspx.cs">
+      <DependentUpon>ReversePickupReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReversePickupReport.aspx.designer.cs">
+      <DependentUpon>ReversePickupReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReversePick.aspx.cs">
+      <DependentUpon>ReversePick.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReversePick.aspx.designer.cs">
+      <DependentUpon>ReversePick.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReverseGRN.aspx.cs">
+      <DependentUpon>ReverseGRN.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReverseGRN.aspx.designer.cs">
+      <DependentUpon>ReverseGRN.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReverseGDN.aspx.cs">
+      <DependentUpon>ReverseGDN.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReverseGDN.aspx.designer.cs">
+      <DependentUpon>ReverseGDN.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReverseGDNReport.aspx.cs">
+      <DependentUpon>ReverseGDNReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReverseGDNReport.aspx.designer.cs">
+      <DependentUpon>ReverseGDNReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReverseGRNReport.aspx.cs">
+      <DependentUpon>ReverseGRNReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReverseGRNReport.aspx.designer.cs">
+      <DependentUpon>ReverseGRNReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RWarehouseDetailReport.aspx.cs">
+      <DependentUpon>RWarehouseDetailReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RWarehouseDetailReport.aspx.designer.cs">
+      <DependentUpon>RWarehouseDetailReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RPICKDetailReport.aspx.cs">
+      <DependentUpon>RPICKDetailReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RPICKDetailReport.aspx.designer.cs">
+      <DependentUpon>RPICKDetailReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RGRNDetailReport.aspx.cs">
+      <DependentUpon>RGRNDetailReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RGRNDetailReport.aspx.designer.cs">
+      <DependentUpon>RGRNDetailReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RGDNDetailReport.aspx.cs">
+      <DependentUpon>RGDNDetailReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RGDNDetailReport.aspx.designer.cs">
+      <DependentUpon>RGDNDetailReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1108,6 +1398,83 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="StockAdjDetailReport.aspx.cs">
+      <DependentUpon>StockAdjDetailReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockAdjDetailReport.aspx.designer.cs">
+      <DependentUpon>StockAdjDetailReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockAdjReport.aspx.cs">
+      <DependentUpon>StockAdjReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockAdjReport.aspx.designer.cs">
+      <DependentUpon>StockAdjReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockonHand.aspx.cs">
+      <DependentUpon>StockonHand.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockonHand.aspx.designer.cs">
+      <DependentUpon>StockonHand.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DispatchedDetailReport.aspx.cs">
+      <DependentUpon>DispatchedDetailReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DispatchedDetailReport.aspx.designer.cs">
+      <DependentUpon>DispatchedDetailReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Stockonhandreport.aspx.cs">
+      <DependentUpon>Stockonhandreport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Stockonhandreport.aspx.designer.cs">
+      <DependentUpon>Stockonhandreport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BinStockTake.aspx.cs">
+      <DependentUpon>BinStockTake.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BinStockTake.aspx.designer.cs">
+      <DependentUpon>BinStockTake.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockTake.aspx.cs">
+      <DependentUpon>StockTake.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockTake.aspx.designer.cs">
+      <DependentUpon>StockTake.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockAccConfirm.aspx.cs">
+      <DependentUpon>StockAccConfirm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockAccConfirm.aspx.designer.cs">
+      <DependentUpon>StockAccConfirm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockTakeConfirm.aspx.cs">
+      <DependentUpon>StockTakeConfirm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockTakeConfirm.aspx.designer.cs">
+      <DependentUpon>StockTakeConfirm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockAccVariance.aspx.cs">
+      <DependentUpon>StockAccVariance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockAccVariance.aspx.designer.cs">
+      <DependentUpon>StockAccVariance.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockVariance.aspx.cs">
+      <DependentUpon>StockVariance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockVariance.aspx.designer.cs">
+      <DependentUpon>StockVariance.aspx</DependentUpon>
+    </Compile>
     <Compile Include="StorageFee.aspx.cs">
       <DependentUpon>StorageFee.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1121,6 +1488,13 @@
     </Compile>
     <Compile Include="SummaryReport.aspx.designer.cs">
       <DependentUpon>SummaryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StockPwd.aspx.cs">
+      <DependentUpon>StockPwd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StockPwd.aspx.designer.cs">
+      <DependentUpon>StockPwd.aspx</DependentUpon>
     </Compile>
     <Compile Include="Supervisor.aspx.cs">
       <DependentUpon>Supervisor.aspx</DependentUpon>
@@ -1143,6 +1517,13 @@
     <Compile Include="Transport.aspx.designer.cs">
       <DependentUpon>Transport.aspx</DependentUpon>
     </Compile>
+    <Compile Include="TransportDetailReport.aspx.cs">
+      <DependentUpon>TransportDetailReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TransportDetailReport.aspx.designer.cs">
+      <DependentUpon>TransportDetailReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="TransportDetails.aspx.cs">
       <DependentUpon>TransportDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1150,12 +1531,40 @@
     <Compile Include="TransportDetails.aspx.designer.cs">
       <DependentUpon>TransportDetails.aspx</DependentUpon>
     </Compile>
+    <Compile Include="TransportFeeSetup.aspx.cs">
+      <DependentUpon>TransportFeeSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TransportFeeSetup.aspx.designer.cs">
+      <DependentUpon>TransportFeeSetup.aspx</DependentUpon>
+    </Compile>
     <Compile Include="TransportMaintain.aspx.cs">
       <DependentUpon>TransportMaintain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="TransportMaintain.aspx.designer.cs">
       <DependentUpon>TransportMaintain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TransportProcess.aspx.cs">
+      <DependentUpon>TransportProcess.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TransportProcess.aspx.designer.cs">
+      <DependentUpon>TransportProcess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TransportReport.aspx.cs">
+      <DependentUpon>TransportReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TransportReport.aspx.designer.cs">
+      <DependentUpon>TransportReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateContainer.aspx.cs">
+      <DependentUpon>UpdateContainer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UpdateContainer.aspx.designer.cs">
+      <DependentUpon>UpdateContainer.aspx</DependentUpon>
     </Compile>
     <Compile Include="UserCreation.aspx.cs">
       <DependentUpon>UserCreation.aspx</DependentUpon>
@@ -1209,6 +1618,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Contract\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -1322,6 +1732,12 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>LTG.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />

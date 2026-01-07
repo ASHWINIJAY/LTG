@@ -2,6 +2,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
      <main id="main" class="main">
                   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
 function myFunction() {
   confirm("Are you sure complete the Binning Scan !");
@@ -233,6 +236,8 @@ function myFunction() {
                      <div class="col-12">
                         <asp:HiddenField ID="hdnInboundFee" runat="server" Value="0" />
                        <asp:HiddenField ID="hdnContainer" runat="server" Value="0" />
+                         <asp:HiddenField ID="hdninitalNumber" runat="server" Value="0" />
+                          <asp:HiddenField ID="hdnContractDate" runat="server" Value="" />
                          <asp:Button ID="btnComplete" class="btn btn-primary" OnClick="btnComplete_Click" OnClientClick="return myFunction();" Text="Scanning Complete" BackColor="#bc623c" runat="server" />
                         <asp:Button ID="btnBack" class="btn btn-secondary" OnClick="btnBack_Click" ValidationGroup="2" OnClientClick="return confirm('Are you sure you want to go back to the previous screen?');" Text="Back" runat="server" />
                                              <asp:Button ID="btnCancel" class="btn btn-danger" ValidationGroup="2" OnClientClick="return confirm('Are you sure to cancel the Binning Process?');" OnClick="btnCancel_Click1" Text="Cancel" runat="server" />    
@@ -266,6 +271,25 @@ function myFunction() {
           </div>
          
       </div>
+          </div>
+          <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-warning">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="warningModalLabel">⚠ Warning</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      Customer contract expired. Are you sure want to proceed further?
+      </div>
+      <div class="modal-footer">
+        <asp:Button ID="btnYes" runat="server" Text="Yes" OnClick="btnYes_Click" class="btn btn-outline-warning" data-bs-dismiss="modal"/>
+          <asp:Button ID="btnNo" runat="server" Text="No" class="btn btn-outline-secondary" data-bs-dismiss="modal"/>
+      </div>
+    </div>
+  </div>
+
+
           </div>
     </section>
 

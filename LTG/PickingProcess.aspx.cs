@@ -19,14 +19,30 @@ namespace LTG
             {
                 bindBranch();
                 bindCustomer();
+                txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
                 GenerateGRN();
+                hdninitalNumber.Value = "1";
                 if (Request.QueryString["id"] != null)
                 {
+                    hdninitalNumber.Value = "0";
                     var id = Request.QueryString["id"].ToString();
                     BindIncomplete(id);
                 }
                 else
+                {
+                    if (hdninitalNumber.Value == "1")
+                    {
+                        if (CheckGRN())
+                        {
+                            GenerateGRN();
+                            string script = "alert(\"This PickingNumber Already used by other user,Your new PickingNumber is: " + txtGRN.Text + "\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(),
+                                                  "ServerControlScript", script, true);
+                            FillGrid();
+                        }
+                    }
                     CheckIncomplete();
+                }
                 //GetContainer();
             }
         }
@@ -125,7 +141,7 @@ namespace LTG
         {
             string dtMonth = DateTime.Now.ToString("dd-MM-yy").Replace("-", "");
             string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
-            txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
+            
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
@@ -140,10 +156,40 @@ namespace LTG
                     {
                         string output = FormatNumberWithLeadingZeros(dt.Rows[0][0].ToString(), 9);
                         txtGRN.Text = "PICK-" + dtMonth + "-" + output;
+                        if (CheckGRN())
+                        {
+                            output = FormatNumberWithLeadingZeros((Convert.ToInt32(dt.Rows[0][0].ToString()) + 1).ToString(), 9);
+                            txtGRN.Text = "PICK-" + dtMonth + "-" + output;
+                        }
                         // ddlBranch.da
                     }
                 }
             }
+
+        }
+        private bool CheckGRN()
+        {
+            string dtMonth = DateTime.Now.ToString("dd-MM-yy").Replace("-", "");
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+           
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select PickNumber FROM PickingProcess where PickNumber ='" + txtGRN.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+                        // ddlBranch.da
+                    }
+                }
+            }
+            return false;
 
         }
         static string FormatNumberWithLeadingZeros(string number, int totalLength)
@@ -177,6 +223,28 @@ namespace LTG
                 }
             }
         }
+        private bool CheckFullStockTake()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select HU FROM StockMaster where Refno='Full Stock Take'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
         protected void btnCusNext_Click(object sender, ImageClickEventArgs e)
         {
             if (ddlCustomer.SelectedIndex == 0)
@@ -186,9 +254,22 @@ namespace LTG
                                       "ServerControlScript", script, true);
                 return;
             }
-            
+            if (CheckFullStockTake())
+            {
+                string script = "alert(\"Stock take currently in process you cannot proceed please contact LTG warehouse manager/s\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
+            if (CheckFullStockTakeAccuracy())
+            {
+                string script = "alert(\"Stock take accuracy currently in process, you cannot proceed please contact LTG warehouse manager/s\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
 
-           
+
             divCustomer.Visible = false;
             divScan.Visible = true;
             divHeader.InnerText = "Picking Process for - " + ddlCustomer.SelectedItem.Text;
@@ -229,6 +310,50 @@ namespace LTG
             FillGrid();
 
         }
+        private bool CheckCycleCount()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select Bin FROM BinAccuracyMaster where Bin='" + txtFromBin.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
+        private bool CheckStockTake()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select HU FROM StockMaster where HU='" + txtHU.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
         private void save()
         {
             txtHU.Text = txtHU.Text.Trim();
@@ -251,7 +376,24 @@ namespace LTG
                 txtFromBin.Focus();
                 return;
             }
-
+            if (CheckStockTake())
+            {
+                string script = "alert(\"Stock take initiated for this HU,You cannot proceed until complete it.\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                txtHU.Text = "";
+                txtHU.Focus();
+                return;
+            }
+            if (CheckCycleCount())
+            {
+                string script = "alert(\"Stock take initiated for this Bin,You cannot proceed until complete it.\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                txtHU.Text = "";
+                txtHU.Focus();
+                return;
+            }
             if (hdnFromBin.Value.ToUpper() != txtFromBin.Text.ToUpper())
             {
                 string script = "alert(\"Bin is not assigned for this HU!\");";
@@ -261,6 +403,17 @@ namespace LTG
                 txtFromBin.Text = "";
                 txtHU.Focus();
                 return;
+            }
+            if (hdninitalNumber.Value == "1")
+            {
+                if (CheckGRN())
+                {
+                    GenerateGRN();
+                    string script = "alert(\"This PickingNumber Already used by other user,Your new PickingNumber is: " + txtGRN.Text + "\");";
+                    ScriptManager.RegisterStartupScript(this, GetType(),
+                                          "ServerControlScript", script, true);
+                    FillGrid();
+                }
             }
             string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
 
@@ -276,10 +429,33 @@ namespace LTG
                 string qry = "Insert into PickingProcess(BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,Loginname,DateTimeofScan,CreatedBy,CreatedDate,PickNumber,BinName,Status,FromBinLocation)values(" + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "','" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "','PICKED','" + hdnFromBin.Value + "')";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 cmd1.ExecuteNonQuery();
+                hdninitalNumber.Value = "0";
             }
             txtHU.Text = "";
             txtHU.Focus();
             txtFromBin.Text = "";
+        }
+        private bool CheckFullStockTakeAccuracy()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select Bin FROM BinAccuracyMaster where Refno='Full Stock Accuracy'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
         }
         private int IsHUAvailable()
         {
@@ -288,7 +464,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select * from WarehouseProcess where CustomerCode='" + ddlCustomer.SelectedValue + "' and  HU='" + txtHU.Text + "'";
+                string qry = "Select * from WarehouseProcess where CustomerCode='" + ddlCustomer.SelectedValue + "' and isnull(BinReturned,0)=0 and  HU='" + txtHU.Text + "'";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -385,7 +561,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select * from PickingProcess where HU='" + txtHU.Text + "'";
+                string qry = "Select * from PickingProcess where Isnull(Returned,0)<>1 and HU='" + txtHU.Text + "'";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -491,7 +667,7 @@ namespace LTG
             {
                 con.Open();
 
-                string qry = "Delete  from PickingProcess where PickNumber='" + txtGRN.Text + "'";
+                string qry = "Delete  from PickingProcess where PickNumber='" + txtGRN.Text + "'  and HU not in(select HU from Outbound) and isnull(Completed,0)=0";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
 
                 cmd1.ExecuteNonQuery();
@@ -513,7 +689,7 @@ namespace LTG
             {
                 con.Open();
 
-                string qry = "Delete  from PickingProcess where PickNumber='" + txtGRN.Text + "'";
+                string qry = "Delete  from PickingProcess where  PickNumber='" + txtGRN.Text + "' and HU not in(select HU from Outbound) and isnull(Completed,0)=0";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
 
                 cmd1.ExecuteNonQuery();
@@ -548,10 +724,30 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-
-                // Check if the table has any records
-                string checkCountQry = "SELECT COUNT(*) FROM Supervisor where Password='" + txtSupPassword.Text + "'";
+                string checkCountQry = "";
+                checkCountQry = "SELECT MonthEndDate FROM MonthEnd";
                 SqlCommand checkCmd = new SqlCommand(checkCountQry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(checkCmd))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+                    {
+                        if (Convert.ToDateTime(txtNewdate.Text).Date <= Convert.ToDateTime(dt.Rows[0][0].ToString()).Date)
+                        {
+                            string script = "alert(\"Cannot back post before monthend date please contact your system administrator\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(),
+                                                  "ServerControlScript", script, true);
+
+                            return;
+                        }
+                        // ddlBranch.da
+                    }
+                }
+                // Check if the table has any records
+                 checkCountQry = "SELECT COUNT(*) FROM Supervisor where Password='" + txtSupPassword.Text + "'";
+                 checkCmd = new SqlCommand(checkCountQry, con);
                 int recordCount = (int)checkCmd.ExecuteScalar();
 
 

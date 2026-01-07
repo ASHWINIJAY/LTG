@@ -32,21 +32,47 @@
                         
                     </div>
                     <div class="col-12">
-                      <label for="txtExistingFee" class="form-label">Existing Outbound Fee</label>
-                        <asp:TextBox id="txtExistingFee" runat="server" ValidationGroup="TimeSlot" ReadOnly="true" BackColor="#dfe8f0" Text=""  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                      <label for="txtExistingFee" class="form-label">Existing WeekDays Outbound Fee</label>
+                        <asp:TextBox id="txtExistingFee" runat="server" ValidationGroup="TimeSlot5" ReadOnly="true" BackColor="#dfe8f0" Text="0"  ClientIDMode="Static" class="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" id="reqName" controltovalidate="txtExistingFee" ForeColor="OrangeRed" />
                       
                     </div>
 
                     <div class="col-12">
-                      <label for="txtNewFee" class="form-label">Enter Outbound Fee</label>
-                     <asp:TextBox id="txtNewFee" runat="server"  class="form-control"></asp:TextBox>
-                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator1" ForeColor="OrangeRed" controltovalidate="txtNewFee" errormessage="Please enter a Outbound Fee!" />
+                      <label for="txtNewFee" class="form-label">Enter WeekDays Outbound Fee</label>
+                     <asp:TextBox id="txtNewFee" runat="server" ValidationGroup="TimeSlot" class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator1" ForeColor="OrangeRed" controltovalidate="txtNewFee" errormessage="Please enter a WeekDays Outbound Fee!" />
                       
                     </div>
-                  
+                   
+                     <div class="col-12">
+                      <label for="txtExistingFee" class="form-label">Existing Saturday Outbound Fee</label>
+                        <asp:TextBox id="txtExtSaturday" runat="server" ValidationGroup="TimeSlo5t" ReadOnly="true" BackColor="#dfe8f0" Text="0"  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                      
+                      
+                    </div>
+
                     <div class="col-12">
-                        <asp:Button ID="btnCreate" class="btn btn-primary w-100" OnClick="btnCreate_Click" Text="Save" runat="server" />
+                      <label for="txtNewFee" class="form-label">Enter Saturday Outbound Fee</label>
+                     <asp:TextBox id="txtSaturday" runat="server" ValidationGroup="TimeSlot"  class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator3" ForeColor="OrangeRed" controltovalidate="txtSaturday" errormessage="Please enter a Saturday Outbound Fee!" />
+                      
+                    </div>
+                     <div class="col-12">
+                      <label for="txtExistingFee" class="form-label">Existing Sunday Outbound Fee</label>
+                        <asp:TextBox id="txtExtSunday" runat="server" ValidationGroup="TimeSlo5t" ReadOnly="true" BackColor="#dfe8f0" Text="0"  ClientIDMode="Static" class="form-control"></asp:TextBox>
+                      
+                      
+                    </div>
+
+                    <div class="col-12">
+                      <label for="txtNewFee" class="form-label">Enter Sunday Outbound Fee</label>
+                     <asp:TextBox id="txtSunday" runat="server"  class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" ValidationGroup="TimeSlot" id="RequiredFieldValidator4" ForeColor="OrangeRed" controltovalidate="txtSunday" errormessage="Please enter a Sunday Outbound Fee!" />
+                      
+                    </div>
+                    <div class="col-12">
+                        <asp:Button ID="btnCreate" ValidationGroup="TimeSlot" class="btn btn-primary w-100" OnClick="btnCreate_Click" Text="Save" runat="server" />
                     </div>
                    
                   </div>

@@ -177,6 +177,15 @@ namespace LTG
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxChangeContainerToAnotherCustomer;
 
         /// <summary>
+        /// chkUpdateContainer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkUpdateContainer;
+
+        /// <summary>
         /// div4 control.
         /// </summary>
         /// <remarks>
@@ -276,6 +285,15 @@ namespace LTG
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxTransporterCreation;
 
         /// <summary>
+        /// chkReasonCreate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkReasonCreate;
+
+        /// <summary>
         /// div6 control.
         /// </summary>
         /// <remarks>
@@ -330,6 +348,69 @@ namespace LTG
         protected global::System.Web.UI.WebControls.CheckBox chkBinMaintain;
 
         /// <summary>
+        /// chkReturnMaintain control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkReturnMaintain;
+
+        /// <summary>
+        /// divReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divReturn;
+
+        /// <summary>
+        /// chkReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkReturn;
+
+        /// <summary>
+        /// chkGRNReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkGRNReturn;
+
+        /// <summary>
+        /// chkBinReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkBinReturn;
+
+        /// <summary>
+        /// chkPickReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkPickReturn;
+
+        /// <summary>
+        /// chkGDNReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkGDNReturn;
+
+        /// <summary>
         /// div9 control.
         /// </summary>
         /// <remarks>
@@ -364,6 +445,15 @@ namespace LTG
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkReDN;
+
+        /// <summary>
+        /// chkBarcodeReprint control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkBarcodeReprint;
 
         /// <summary>
         /// div7 control.
@@ -456,6 +546,69 @@ namespace LTG
         protected global::System.Web.UI.WebControls.CheckBox chkOutboundReport;
 
         /// <summary>
+        /// chkStockOnHand control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkStockOnHand;
+
+        /// <summary>
+        /// chkGRNReturnReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkGRNReturnReport;
+
+        /// <summary>
+        /// chkBinReturnReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkBinReturnReport;
+
+        /// <summary>
+        /// chkGDNReturnReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkGDNReturnReport;
+
+        /// <summary>
+        /// chkPickReturnReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkPickReturnReport;
+
+        /// <summary>
+        /// chkDispatchedReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkDispatchedReport;
+
+        /// <summary>
+        /// chkStockTakeReprint control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkStockTakeReprint;
+
+        /// <summary>
         /// divLogs control.
         /// </summary>
         /// <remarks>
@@ -508,6 +661,78 @@ namespace LTG
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkSup;
+
+        /// <summary>
+        /// chkMonthEnd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkMonthEnd;
+
+        /// <summary>
+        /// chkMonthEndPwd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkMonthEndPwd;
+
+        /// <summary>
+        /// chkStockPwd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkStockPwd;
+
+        /// <summary>
+        /// chkMailNotification control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkMailNotification;
+
+        /// <summary>
+        /// div10 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div10;
+
+        /// <summary>
+        /// radCounter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton radCounter;
+
+        /// <summary>
+        /// radManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton radManager;
+
+        /// <summary>
+        /// radAdmin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton radAdmin;
 
         /// <summary>
         /// btnCreate control.

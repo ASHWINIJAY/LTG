@@ -119,7 +119,7 @@ namespace LTG
                 divTransport.Visible = false;
                 CallExecutable(id.ToString());
 
-                string relativeUrl = "Delivery.aspx?id=" + id;
+                string relativeUrl = "Delivery.aspx?source=1&id=" + id;
 
                 // Register the JavaScript to open a new window with the relative URL
                 string script = $"openNewWindow('{ResolveUrl(relativeUrl)}');";

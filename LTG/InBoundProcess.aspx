@@ -2,12 +2,22 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
      <main id="main" class="main">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+         <script src="https://cdn.jsdelivr.net/jsbarcode/3.11.0/JsBarcode.all.min.js"></script>
+         <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
 function myFunction() {
   confirm("Are you sure complete the InBound Scan !");
         }
-       
+        
+            function openNewWindow(url) {
+                window.open(url, '_blank');
+             }
     </script>
+       
           <style>
         /* Basic styling for the page */
        
@@ -222,11 +232,20 @@ function myFunction() {
                      <asp:TextBox id="txtContainer1" runat="server" ValidationGroup="TimeSlot"   ClientIDMode="Static"  ReadOnly="true" BackColor="#dfe8f0" class="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator3" controltovalidate="txtContainer1" ErrorMessage="Please type Container Number" ForeColor="OrangeRed" />
                     </div>
-
+                    <div id="divBMW" runat="server">
                     <div class="col-12">
                       <label for="txtHU" class="form-label">Scan or Type HU Number</label>
                      <asp:TextBox id="txtHU" runat="server" ValidationGroup="TimeSlot" ClientIDMode="Static" autocomplete="off" AutoPostBack="true" OnTextChanged="txtHU_TextChanged" class="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" id="reqName" controltovalidate="txtHU" ErrorMessage="Please type HU Number" ForeColor="OrangeRed" />
+                    </div>
+                     <div class="col-12" runat="server" id="divBar" visible="false">
+                      <label for="txtHU" class="form-label">Scan or Type Barcode</label>
+                     <asp:TextBox id="txtBarcode" runat="server" ValidationGroup="TimeSlot" ClientIDMode="Static" autocomplete="off" AutoPostBack="true" OnTextChanged="txtBarcode_TextChanged" class="form-control"></asp:TextBox>
+                   
+                     </div>
+                     <div class="col-12" id="divSeq" runat="server" visible="false">
+                      <label for="txtHU" class="form-label">Sequential Number</label>
+                     <asp:TextBox id="txtSeqn" runat="server" ValidationGroup="TimeSlot" Text="000000001" ReadOnly="true" BackColor="#dfe8f0" ClientIDMode="Static" autocomplete="off" AutoPostBack="false" OnTextChanged="txtHU_TextChanged" class="form-control"></asp:TextBox>
                     </div>
                      <div class="col-12">
                       <label for="txtQty" class="form-label">Default Bin</label>
@@ -238,13 +257,32 @@ function myFunction() {
                      <asp:TextBox id="txtQty" runat="server" ValidationGroup="TimeSlot" Text="1" ReadOnly="true" BackColor="#dfe8f0"  ClientIDMode="Static" class="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator1" controltovalidate="txtQty" ErrorMessage="Please Enter Qty" ForeColor="OrangeRed" />
                     </div>
+                        </div>
+                    <div id="divALP" visible="false" runat="server">
+                         <div class="col-12">
+                      <label for="txtQty" class="form-label">Total Quantity</label>
+                     <asp:TextBox id="txtALPQty" runat="server" ValidationGroup="TimeSlot" AutoPostBack="true" OnTextChanged="txtALPQty_TextChanged" ClientIDMode="Static" class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator7" controltovalidate="txtALPQty" ErrorMessage="Please Enter Qty" ForeColor="OrangeRed" />
+                    </div>
+                         <div class="col-12">
+                      <label for="txtHU" class="form-label">Scan or Type Part Number</label>
+                     <asp:TextBox id="txtSpare" runat="server" ValidationGroup="TimeSlot" ClientIDMode="Static" autocomplete="off" AutoPostBack="true" OnTextChanged="txtSpare_TextChanged" class="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator8" controltovalidate="txtSpare" ErrorMessage="Please type HU Number" ForeColor="OrangeRed" />
+                    </div>
+                    </div>
                     <div class="col-12" style="display:none;">
                         <asp:HiddenField ID="hdnContainer" runat="server" Value="0" />
                         <asp:HiddenField ID="hdnBin" runat="server" Value="0" />
                         <asp:HiddenField ID="hdnInboundFee" runat="server" Value="0" />
+                        <asp:HiddenField ID="hdnTransportFee" runat="server" Value="0" />
+                        <asp:HiddenField ID="hdninitalNumber" runat="server" Value="0" />
+                        <asp:HiddenField ID="hdnFeeDays" runat="server" Value="0" />
+                        <asp:HiddenField ID="hdnContractDate" runat="server" Value="" />
                           <asp:Button ID="btnSave" class="btn btn-primary" OnClick="btnSave_Click" Text="Save" runat="server" />
                          </div>
                    <div class="col-12">
+                        <asp:Button ID="btnPrintBarcode" class="btn btn-secondary" OnClick="btnPrintBarcode_Click" ValidationGroup="2" Text="Print Barcode" runat="server" />
+                        
                          <asp:Button ID="btnComplete" class="btn btn-primary" OnClick="btnComplete_Click" OnClientClick="return myFunction();" Text="Scanning Complete" BackColor="#bc623c" runat="server" />
                    <asp:Button ID="btnBack" class="btn btn-secondary" OnClick="btnBack_Click" ValidationGroup="2" OnClientClick="return confirm('Are you sure you want to go back to the previous screen?');" Text="Back" runat="server" />
                                              <asp:Button ID="btnCancel" class="btn btn-danger" ValidationGroup="2" OnClientClick="return confirm('Are you sure to cancel the inbound process?');" OnClick="btnCancel_Click1" Text="Cancel" runat="server" />    
@@ -258,11 +296,17 @@ function myFunction() {
                             <%# Container.DataItemIndex + 1 %>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="HU" HeaderText="HU"  HeaderStyle-Width="57%" />                    
-                     <asp:BoundField DataField="GRN" HeaderText="GRN"  HeaderStyle-Width="25%" />
-                    <asp:BoundField DataField="DefaultBin" HeaderText="Default Bin"  HeaderStyle-Width="20%" />
+                    <asp:BoundField DataField="HU" HeaderText="HU"  HeaderStyle-Width="27%" />
+                     <asp:TemplateField HeaderText="HU/Part Number" HeaderStyle-Width="37%" >
+            <ItemTemplate>
+                <img src='data:image/png;base64,<%# Eval("BarcodeBase64") %>' alt="HU/Part Number" style="max-width:100%" width="250" height="100" />
+            </ItemTemplate>
+        </asp:TemplateField>
+                   
+                     <asp:BoundField DataField="GRN" HeaderText="GRN"  HeaderStyle-Width="23%" />
+                    <asp:BoundField DataField="DefaultBin" HeaderText="Default Bin" Visible="false" HeaderStyle-Width="10%" />
                     
-                    <asp:BoundField DataField="Qty" HeaderText="Qty"  HeaderStyle-Width="10%" />
+                    <asp:BoundField DataField="Qty" HeaderText="Qty"  HeaderStyle-Width="5%" />
                 </Columns>
                             <HeaderStyle BackColor="#4090ce" ForeColor="White" />
             </asp:GridView>
@@ -276,6 +320,25 @@ function myFunction() {
          
       </div>
           </div>
+        <!-- Warning Modal -->
+<div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-warning">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="warningModalLabel">⚠ Warning</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      Customer contract expired. Are you sure want to proceed further?
+      </div>
+      <div class="modal-footer">
+        <asp:Button ID="btnYes" runat="server" Text="Yes" OnClick="btnYes_Click" class="btn btn-outline-warning" data-bs-dismiss="modal"/>
+          <asp:Button ID="btnNo" runat="server" Text="No" class="btn btn-outline-secondary" data-bs-dismiss="modal"/>
+      </div>
+    </div>
+  </div>
+</div>
+
     </section>
 
   </main><!-- End #main -->

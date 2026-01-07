@@ -241,6 +241,7 @@ function myFunction() {
                         <asp:HiddenField ID="hdnBin" runat="server" Value="0" />
                         <asp:HiddenField ID="hdnFromBin" runat="server" Value="0" />
                         <asp:HiddenField ID="hdnInboundFee" runat="server" Value="0" />
+                        <asp:HiddenField ID="hdninitalNumber" runat="server" Value="0" />
                           <asp:Button ID="btnSave" class="btn btn-primary" OnClick="btnSave_Click" Text="Save" runat="server" />
                          </div>
                    <div class="col-12">

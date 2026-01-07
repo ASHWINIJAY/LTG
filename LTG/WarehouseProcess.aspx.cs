@@ -19,17 +19,33 @@ namespace LTG
             {
                 bindBranch();
                 bindCustomer();
+                txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
                 GenerateGRN();
+                hdninitalNumber.Value = "1";
                 if (Request.QueryString["id"] != null)
                 {
+                    hdninitalNumber.Value = "0";
                     var id = Request.QueryString["id"].ToString();
                     BindIncomplete(id);
                 }
                 else
+                {
+                    if (hdninitalNumber.Value == "1")
+                    {
+                        if (CheckGRN())
+                        {
+                            GenerateGRN();
+                            string script = "alert(\"This Binning Number Already used by other user,Your new Binning Number is: " + txtGRN.Text + "\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(),
+                                                  "ServerControlScript", script, true);
+                            FillGrid();
+                        }
+                    }
                     CheckIncomplete();
+                }
                 //GetContainer();
-            
-        }
+
+            }
         }
         private void bindCustomer()
         {
@@ -84,12 +100,69 @@ namespace LTG
                 }
             }
         }
-       
+        private bool CheckFullStockTake()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select HU FROM StockMaster where Refno='Full Stock Take'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
+        private bool CheckFullStockTakeAccuracy()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select Bin FROM BinAccuracyMaster where Refno='Full Stock Accuracy'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
         protected void btnCusNext_Click(object sender, ImageClickEventArgs e)
         {
             if (ddlCustomer.SelectedIndex == 0)
             {
                 string script = "alert(\"Please select customer\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
+            if (CheckFullStockTake())
+            {
+                string script = "alert(\"Stock take currently in process you cannot proceed please contact LTG warehouse manager/s\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
+            if (CheckFullStockTakeAccuracy())
+            {
+                string script = "alert(\"Stock take accuracy currently in process, you cannot proceed please contact LTG warehouse manager/s\");";
                 ScriptManager.RegisterStartupScript(this, GetType(),
                                       "ServerControlScript", script, true);
                 return;
@@ -103,6 +176,21 @@ namespace LTG
 
                 return;
             }
+            if (hdnContractDate.Value != "" && Convert.ToDateTime(hdnContractDate.Value) < Convert.ToDateTime(txtDate.Text))
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowModal", "var myModal = new bootstrap.Modal(document.getElementById('warningModal')); myModal.show();", true);
+
+                //  ScriptManager.RegisterStartupScript(this, GetType(), "ShowModal", "$('#warningModal').modal('show');", true);
+                return;
+            }
+            divCustomer.Visible = false;
+            divScan.Visible = true;
+            GetContainer();
+            divHeader.InnerText = "Binning Process for - " + ddlCustomer.SelectedItem.Text;
+            txtBin.Focus();
+        }
+        protected void btnYes_Click(object sender, EventArgs e)
+        {
             divCustomer.Visible = false;
             divScan.Visible = true;
             GetContainer();
@@ -113,7 +201,7 @@ namespace LTG
         {
             string dtMonth = DateTime.Now.ToString("dd-MM-yy").Replace("-", "");
             string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
-            txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
+            
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
@@ -128,10 +216,40 @@ namespace LTG
                     {
                         string output = FormatNumberWithLeadingZeros(dt.Rows[0][0].ToString(), 9);
                         txtGRN.Text = "BINNING-" + dtMonth + "-" + output;
+                        if (CheckGRN())
+                        {
+                            output = FormatNumberWithLeadingZeros((Convert.ToInt32(dt.Rows[0][0].ToString()) + 1).ToString(), 9);
+                            txtGRN.Text = "BINNING-" + dtMonth + "-" + output;
+                        }
                         // ddlBranch.da
                     }
                 }
             }
+
+        }
+        private bool CheckGRN()
+        {
+            string dtMonth = DateTime.Now.ToString("dd-MM-yy").Replace("-", "");
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select BinningNumber FROM WarehouseProcess where BinningNumber ='" + txtGRN.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+                        // ddlBranch.da
+                    }
+                }
+            }
+            return false;
 
         }
         static string FormatNumberWithLeadingZeros(string number, int totalLength)
@@ -188,6 +306,24 @@ namespace LTG
                 txtBin.Focus();
                 return;
             }
+            if (CheckCycleCount())
+            {
+                string script = "alert(\"Stock take initiated for this Bin,You cannot proceed until complete it.\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                txtHU.Text = "";
+                txtHU.Focus();
+                return;
+            }
+            if (CheckStockTake())
+            {
+                string script = "alert(\"Stock take initiated for this HU,You cannot proceed until complete it.\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                txtHU.Text = "";
+                txtHU.Focus();
+                return;
+            }
             if (checkBin())
             {
 
@@ -227,6 +363,17 @@ namespace LTG
                 txtHU.Focus();
                 return;
             }
+            if (hdninitalNumber.Value == "1")
+            {
+                if (CheckGRN())
+                {
+                    GenerateGRN();
+                    string script = "alert(\"This BinningNumber Already used by other user,Your new BinningNumber is: " + txtGRN.Text + "\");";
+                    ScriptManager.RegisterStartupScript(this, GetType(),
+                                          "ServerControlScript", script, true);
+                    FillGrid();
+                }
+            }
             string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
 
             using (SqlConnection con = new SqlConnection(constr))
@@ -241,6 +388,7 @@ namespace LTG
                 string qry = "Insert into WarehouseProcess(Bin,BranchId,BranchName,CustomerCode,CustomerName,HU,QtyIn,QtyOnHand,UnitStorageCost,TotalStorageCost,UserName,ScannedInTime,CreatedBy,CreatedDate,UniqueId,BinningNumber)values('" + txtBin.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','"+txtDate.Text+ "','" + userName + "',getdate()," + hdnContainer.Value + ",'" + txtGRN.Text + "')";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 cmd1.ExecuteNonQuery();
+                hdninitalNumber.Value = "0";
                 // qry = "Insert into WarehouseProcess(Bin,BranchId,BranchName,CustomerCode,CustomerName,HU,QtyIn,QtyOnHand,UnitStorageCost,TotalStorageCost,UserName,ScannedInTime,CreatedBy,CreatedDate)values('" + hdnBin.Value + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "',getdate(),'" + userName + "',getdate())";
                 // cmd1 = new SqlCommand(qry, con);
                 //cmd1.ExecuteNonQuery();
@@ -281,7 +429,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select * from Inbound where HU='" + txtHU.Text + "'";
+                string qry = "Select * from Inbound where HU='" + txtHU.Text + "' and isnull(Returned,0)=0";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -304,7 +452,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select * from Inbound where HU='" + txtHU.Text + "'";
+                string qry = "Select * from Inbound where HU='" + txtHU.Text + "' and isnull(Returned,0)=0";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -436,14 +584,13 @@ namespace LTG
             divScan.Visible = false;
             GenerateGRN();
         }
-        private void getIStorageFee()
+        private bool CheckStockTake()
         {
             string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
-
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select StorageFee from Customers where CustomerCode='" + ddlCustomer.SelectedValue + "'";
+                string qry = "select HU FROM StockMaster where HU='" + txtHU.Text + "'";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
@@ -452,6 +599,55 @@ namespace LTG
 
                     if (dt.Rows.Count > 0)
                     {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
+        private bool CheckCycleCount()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select Bin FROM BinAccuracyMaster where Bin='" + txtBin.Text + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+
+                    }
+                    else return false;
+                }
+            }
+        }
+        private void getIStorageFee()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "Select StorageFee,ContractDate from Customers where CustomerCode='" + ddlCustomer.SelectedValue + "'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        if (dt.Rows[0][1] != DBNull.Value)
+                            hdnContractDate.Value = dt.Rows[0][1].ToString();
+                        else
+                            hdnContractDate.Value = "";
                         if (dt.Rows[0][0] != DBNull.Value)
                             hdnInboundFee.Value = dt.Rows[0][0].ToString();
                         else
@@ -524,10 +720,10 @@ namespace LTG
             {
                 con.Open();
 
-                string qry = "Delete  from WarehouseProcess where UniqueId='" + hdnContainer.Value + "'";
+                string qry = "Delete  from WarehouseProcess where UniqueId='" + hdnContainer.Value + "'  and HU not in(select HU from PickingProcess) and isnull(Completed,0)=0";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
 
-                cmd1.ExecuteNonQuery();
+                //cmd1.ExecuteNonQuery();
                 divScan.Visible = false;
                 divCustomer.Visible = true;
                 FillGrid();
@@ -544,7 +740,7 @@ namespace LTG
             {
                 con.Open();
 
-                string qry = "Delete  from WarehouseProcess where UniqueId='" + hdnContainer.Value + "'";
+                string qry = "Delete  from WarehouseProcess where UniqueId='" + hdnContainer.Value + "' and HU not in(select HU from PickingProcess) and isnull(Completed,0)=0 ";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
 
                 cmd1.ExecuteNonQuery();
@@ -573,10 +769,31 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
+                string checkCountQry = "";
+                checkCountQry = "SELECT MonthEndDate FROM MonthEnd";
+                SqlCommand checkCmd = new SqlCommand(checkCountQry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(checkCmd))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+                    {
+                        if (Convert.ToDateTime(txtNewdate.Text).Date <= Convert.ToDateTime(dt.Rows[0][0].ToString()).Date)
+                        {
+                            string script = "alert(\"Cannot back post before monthend date please contact your system administrator\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(),
+                                                  "ServerControlScript", script, true);
+
+                            return;
+                        }
+                        // ddlBranch.da
+                    }
+                }
 
                 // Check if the table has any records
-                string checkCountQry = "SELECT COUNT(*) FROM Supervisor where Password='" + txtSupPassword.Text + "'";
-                SqlCommand checkCmd = new SqlCommand(checkCountQry, con);
+                 checkCountQry = "SELECT COUNT(*) FROM Supervisor where Password='" + txtSupPassword.Text + "'";
+                 checkCmd = new SqlCommand(checkCountQry, con);
                 int recordCount = (int)checkCmd.ExecuteScalar();
 
 

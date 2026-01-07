@@ -25,13 +25,19 @@ namespace LTG
                 {
                    // ScriptManager.RegisterStartupScript(this, this.GetType(), "showLoader", "showLoader();", true);
                     var id = Request.QueryString["Id"].ToString();
-                   // CallExecutable(id.ToString());
+                    var source = "1";
+                    if (Request.QueryString["source"] != null)
+                    {
+                        source = Request.QueryString["source"].ToString(); 
+                    }
+                    // CallExecutable(id.ToString());
                     // Assuming you have the document ID
                     // int documentId = 8; // You can get this value dynamically as needed
-                   // Thread.Sleep(8000);
+                    // Thread.Sleep(8000);
                     // Set the src attribute of the iframe
-                    pdfIframe.Attributes["src"] = $"PdfHandler.ashx?id={id}";
+                    pdfIframe.Attributes["src"] = $"PdfHandler.ashx?id={id}&source={source}";
                     //ScriptManager.RegisterStartupScript(this, this.GetType(), "showLoader", "closeLoader();", true);
+                    if(source == "1")
                     SendEmailWithAttachment(id);
                 }
             }
@@ -58,13 +64,49 @@ namespace LTG
                 mail.From = new MailAddress(fromEmail);
                 //mail.To.Add(toEmail);
                 // mail.To.Add("greg@codex-it.co.za");
-                mail.To.Add("tbusang@ltgfreight.co.za");
-                mail.To.Add("vz3dispatch@ltgfreight.co.za");
-                mail.To.Add("tmabena@ltgfreight.co.za");
-                mail.To.Add("vz3receiving@ltgfreight.co.za");
-                mail.To.Add("tngamthewe@ltgfreight.co.za");
-                mail.To.Add("tsetshedi@ltgfreight.co.za");
+                //mail.To.Add("tbusang@ltgfreight.co.za");
+                //mail.To.Add("vz3dispatch@ltgfreight.co.za");
+                //mail.To.Add("tmabena@ltgfreight.co.za");
+                //mail.To.Add("vz3receiving@ltgfreight.co.za");
+                //mail.To.Add("tngamthewe@ltgfreight.co.za");
+                //mail.To.Add("tsetshedi@ltgfreight.co.za");
+                string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
 
+                using (SqlConnection con = new SqlConnection(constr))
+                {
+                    con.Open();
+                    string qry = "Select * from MailSetup Where Type=3";
+                    SqlCommand cmd1 = new SqlCommand(qry, con);
+                    // HiddenField hdUserName = (HiddenField)this.Master.FindControl("hdnUserName");
+
+                    //var userName = hdUserName.Value;
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            var maillist = dt.Rows[0]["MailIds"].ToString().Split(',');
+                            foreach (var item in maillist)
+                            {
+                                mail.To.Add(item);
+                            }
+                            // qry = "Update MailSetup set  MailIds='" + txtMails.Text + "',UpdatedDate=Getdate(),UpdatedBy='" + hdUserName.Value + "'  Where Type=" + ddlReturnType.SelectedValue;
+
+                        }
+                        else
+                        {
+                            mail.To.Add("tbusang@ltgfreight.co.za");
+                            mail.To.Add("vz3dispatch@ltgfreight.co.za");
+                            mail.To.Add("tmabena@ltgfreight.co.za");
+                            mail.To.Add("vz3receiving@ltgfreight.co.za");
+                            mail.To.Add("tngamthewe@ltgfreight.co.za");
+                            mail.To.Add("tsetshedi@ltgfreight.co.za");
+                        }
+
+                    }
+                }
 
                 mail.Subject = subject;
                 mail.Body = body;

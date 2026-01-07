@@ -43,7 +43,7 @@ namespace LTG
                 return;
             }
 
-            string relativeUrl = "Delivery.aspx?id=" + hdnBin.Value;
+            string relativeUrl = "Delivery.aspx?source=1&id=" + hdnBin.Value;
 
             // Register the JavaScript to open a new window with the relative URL
             string script1 = $"openNewWindow('{ResolveUrl(relativeUrl)}');";

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DeliveryNote.aspx.cs" EnableEventValidation="false" Inherits="LTG.DeliveryNote" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DeliveryNote.aspx.cs" Inherits="LTG.DeliveryNote" %>
 
 <!DOCTYPE html>
 

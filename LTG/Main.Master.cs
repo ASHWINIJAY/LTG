@@ -48,6 +48,8 @@ namespace LTG
                 var liElements = new Dictionary<string, string>
             {
                 { "LiInboundProcess", "InboundProcess" },
+                { "LiTransportProcess", "TransportProcess" },
+                { "LiDeliveryProcess", "DeliveryProcess" },
                 { "LiWarehouseProcess", "WarehouseProcess" },
                 { "LiPickingProcess", "PickingProcess" },
                 { "LiOutboundProcess", "OutboundProcess" },
@@ -60,6 +62,8 @@ namespace LTG
                 { "LiCustomerCreation", "CustomerCreation" },
                 { "LiCustomerMaintenance", "CustomerMaintenance" },
                 { "LiInboundFeeSetup", "InboundFeeSetup" },
+                 { "LiTransportFeeSetup", "TransportFeeSetup" },
+                { "LiDeliveryFeeSetup", "DeliveryFeeSetup" },
                 { "LiOutboundFeeSetup", "OutboundFeeSetup" },
                 { "LiStorageFeeSetup", "StorageFeeSetup" },
                 { "LiBinCreation", "BinCreation" },
@@ -74,12 +78,33 @@ namespace LTG
                 { "LiDetailedReport", "DetailMonth" },
                 { "LiSummaryReport", "SummaryMonth" },
                 { "LiInboundReport", "InboundReport" },
+                { "LiTransportReport", "TransportReport" },
+                { "LiDeliveryReport", "TransportReport" },
                 { "LiBinnedReport", "BinnedReport" },
                 { "LiPickedReport", "PickedReport" },
                 { "LiOutboundReport", "OutboundReport" },
                 { "LiAudit", "Audit" },
                 { "LiSupervisor", "Supervisor" },
-                { "LiReGenerateDN", "ReDeliveryNote" }
+                { "LiMonthEndSetup", "MonthEndSetup" },
+                { "LiUpdateMonthEndPwd", "UpdateMonthEndPwd" },
+                { "LiReGenerateDN", "ReDeliveryNote" },
+                { "LiStockOnHandReport", "StockOnHand" },
+                { "LiUpdateContainer", "UpdateContainer" },
+                { "LiGDNReturn", "GDNReturn" },
+                { "LiGRNReturn", "GRNReturn" },
+                { "LiPickupReturn", "PickupReturn" },
+                { "LiGDNReturnReport", "GDNReturnReport" },
+                 { "LiGRNReturnReport", "GRNReturnReport" },
+                 { "LiWarehouseReturnReport", "ReverseWarehouseReport" },
+                 { "LiWarehouseReturn", "ReverseWarehouse" },
+                 { "LiPickupReturnReport", "PickupReturnReport" },
+                  { "LiDispatchedReport", "DispatchedReport" },
+                { "LiReturnReason", "ReturnReason" },
+                { "LiReasonMaintain", "ReasonMaintain" },
+                { "LiStockTakeReprint", "StockTakeReprint" },
+                { "LiMailNotification", "MailNotification" },
+                { "LiStockPwd", "StockPwd" },
+                { "LiBarcodeRePrint", "BarcodeRePrint" }
               
 
           
@@ -90,8 +115,53 @@ namespace LTG
                 {
                     DataRow userRow = userValuesTable.Rows[0];
                     // List of IDs corresponding to the <li> elements
-                    
-                    foreach (var li in liElements)
+                    if(userRow["StockRoles"] != DBNull.Value)
+                    {
+                        var roles = Convert.ToInt32(userRow["StockRoles"].ToString());
+                        LiInitStock.Visible = false;
+                        LiCounterCockPit.Visible = false;
+                        LiCounter.Visible = false;
+                        LiManagerCockPit.Visible = false;
+                        LiManager.Visible = false;
+                        LiStockConfirm.Visible = false;
+                        LiStockAdj.Visible = false;
+                        LiInitStockTakeAccuracy.Visible = false;
+                        LiCancelStockTakeAccuracy.Visible = false;
+                        LiBinCockPit.Visible = false;
+                        LiBinStockTake.Visible = false;
+                        LiManagerBinCockPit.Visible = false;
+                        LiManagerBinStockTake.Visible = false;
+                        LiStockAccVariance.Visible = false;
+                        LiStockAccConfirm.Visible = false;
+                        if (roles==0)
+                        {
+                           // LiCounterCockPit.Visible = true;
+                            LiCounter.Visible = true;
+                            LiBinStockTake.Visible = true;
+                        }
+                        else if (roles == 1)
+                        {
+                            //LiManagerCockPit.Visible = true;
+                            LiManager.Visible = true;
+                            LiManagerBinStockTake.Visible = true;
+                        }
+                        else if (roles == 2)
+                        {
+                            LiInitStockTakeAccuracy.Visible = true;
+                            LiCancelStockTakeAccuracy.Visible = true;
+                            LiBinCockPit.Visible = true;
+                            LiManagerBinCockPit.Visible = true;
+                            LiStockAccVariance.Visible = true;
+                            LiStockAccConfirm.Visible = true;
+                            LiInitStock.Visible = true;
+                            LiCounterCockPit.Visible = true;
+                            LiManagerCockPit.Visible = true;
+                            LiStockConfirm.Visible = true;
+                            LiStockAdj.Visible = true;
+
+                        }
+                    }
+                        foreach (var li in liElements)
                     {
                         string liId = li.Key;
                         string columnName = li.Value;
@@ -145,6 +215,7 @@ namespace LTG
             Session["LoginId"] = LoginType.Value;
             LoginType = Request.Cookies["Username"];
             hdnUserName.Value = LoginType.Value;
+            Session["Username"] = LoginType.Value;
             lblFirst.Text = firstName.Value;
             lblRole.Text = loginRole.Value;
             
