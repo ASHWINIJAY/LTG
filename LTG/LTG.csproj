@@ -198,6 +198,8 @@
     <Content Include="AuditLogs.aspx" />
     <Content Include="BarCode.aspx" />
     <Content Include="BarcodeRePrint.aspx" />
+    <Content Include="UOPMaintain.aspx" />
+    <Content Include="UOPCreate.aspx" />
     <Content Include="DeliveryDetailReport.aspx" />
     <Content Include="DeliveryFeeSetup.aspx" />
     <Content Include="DeliveryProcess.aspx" />
@@ -830,6 +832,20 @@
     </Compile>
     <Compile Include="BarcodeRePrint.aspx.designer.cs">
       <DependentUpon>BarcodeRePrint.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UOPMaintain.aspx.cs">
+      <DependentUpon>UOPMaintain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UOPMaintain.aspx.designer.cs">
+      <DependentUpon>UOPMaintain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UOPCreate.aspx.cs">
+      <DependentUpon>UOPCreate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UOPCreate.aspx.designer.cs">
+      <DependentUpon>UOPCreate.aspx</DependentUpon>
     </Compile>
     <Compile Include="DeliveryDetailReport.aspx.cs">
       <DependentUpon>DeliveryDetailReport.aspx</DependentUpon>

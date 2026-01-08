@@ -591,6 +591,24 @@ namespace LTG
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiBinMaintain;
 
         /// <summary>
+        /// LiUOPCreation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiUOPCreation;
+
+        /// <summary>
+        /// LiUOPMaintain control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiUOPMaintain;
+
+        /// <summary>
         /// LiReturnReason control.
         /// </summary>
         /// <remarks>

@@ -20,6 +20,7 @@ namespace LTG
             {
                 bindBranch();
                 bindBin();
+                bindUOP();
                 if (Request.QueryString["Code"] != null)
                 {
                     var id = Request.QueryString["Code"].ToString();
@@ -62,6 +63,8 @@ namespace LTG
                             chkActive.Checked = false;
                         if(dt.Rows[0]["Bin"] !=null)
                         ddlBin.SelectedValue= dt.Rows[0]["Bin"].ToString();
+                        if (dt.Rows[0]["UOP"] != null)
+                            ddlUOP.SelectedValue = dt.Rows[0]["UOP"].ToString();
                         if (dt.Rows[0]["ContractFiles"] != null)
                             hdnPdfLocation.Value = dt.Rows[0]["ContractFiles"].ToString();
                         ddlBranch.SelectedValue = dt.Rows[0]["BranchId"].ToString();
@@ -92,6 +95,33 @@ namespace LTG
                         ddlBin.DataTextField = "BinName";
                         ddlBin.DataValueField = "BinId";
                         ddlBin.DataBind();
+                        // ddlBranch.da
+                    }
+                }
+            }
+        }
+        private void bindUOP()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "Select * from UOPMaster";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        ddlUOP.DataSource = dt;
+                        ddlUOP.DataBind();
+                        ddlUOP.DataTextField = "UOP";
+                        ddlUOP.DataValueField = "UOP";
+                        ddlUOP.DataBind();
+                        ddlUOP.Items.Insert(0, new ListItem("Select Default UOP", ""));
                         // ddlBranch.da
                     }
                 }
@@ -175,10 +205,15 @@ namespace LTG
 
 
                 }
+                if(ddlUOP.SelectedIndex==0)
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "showalert", "alert('Please select Default UOP.');", true);
+                    return;
+                }
                 if(savePath=="")
-                qry = "Insert into Customers(CustomerCode,CustomerName,BranchId,Active,Address1,Address2,Address3,Address4,DelAddr1,DelAddr2,DelAddr3,DelAddr4)values('" + txtCode.Text + "','" + txtSurName.Text + "','" + ddlBranch.SelectedValue + "',1,'" + txtAddr1.Text + "','" + txtAddr2.Text + "','" + txtAddr3.Text + "','" + txtAddr4.Text +"','" + txtDelAddr1.Text + "','" + txtDelAddr2.Text + "','" + txtDelAddr3.Text + "','" + txtDelAddr4.Text + "')";
+                qry = "Insert into Customers(UOP,CustomerCode,CustomerName,BranchId,Active,Address1,Address2,Address3,Address4,DelAddr1,DelAddr2,DelAddr3,DelAddr4)values('" + ddlUOP.SelectedValue + "','" + txtCode.Text + "','" + txtSurName.Text + "','" + ddlBranch.SelectedValue + "',1,'" + txtAddr1.Text + "','" + txtAddr2.Text + "','" + txtAddr3.Text + "','" + txtAddr4.Text +"','" + txtDelAddr1.Text + "','" + txtDelAddr2.Text + "','" + txtDelAddr3.Text + "','" + txtDelAddr4.Text + "')";
                 else
-                    qry = "Insert into Customers(CustomerCode,CustomerName,BranchId,Active,Address1,Address2,Address3,Address4,DelAddr1,DelAddr2,DelAddr3,DelAddr4,ContractDate,ContractFiles)values('" + txtCode.Text + "','" + txtSurName.Text + "','" + ddlBranch.SelectedValue + "',1,'" + txtAddr1.Text + "','" + txtAddr2.Text + "','" + txtAddr3.Text + "','" + txtAddr4.Text + "','" + txtDelAddr1.Text + "','" + txtDelAddr2.Text + "','" + txtDelAddr3.Text + "','" + txtDelAddr4.Text + "','" + txtNewContract.Text + "','"+ savePath +"')";
+                    qry = "Insert into Customers(UOP,CustomerCode,CustomerName,BranchId,Active,Address1,Address2,Address3,Address4,DelAddr1,DelAddr2,DelAddr3,DelAddr4,ContractDate,ContractFiles)values('" + ddlUOP.SelectedValue + "','" + txtCode.Text + "','" + txtSurName.Text + "','" + ddlBranch.SelectedValue + "',1,'" + txtAddr1.Text + "','" + txtAddr2.Text + "','" + txtAddr3.Text + "','" + txtAddr4.Text + "','" + txtDelAddr1.Text + "','" + txtDelAddr2.Text + "','" + txtDelAddr3.Text + "','" + txtDelAddr4.Text + "','" + txtNewContract.Text + "','"+ savePath +"')";
 
                 using (SqlCommand cmd = new SqlCommand(qry, con))
                 {
@@ -218,7 +253,11 @@ namespace LTG
 
                 var userid = hdLoginId.Value;
                 HiddenField hdUserName = (HiddenField)this.Master.FindControl("hdnUserName");
-
+                if (ddlUOP.SelectedIndex == 0)
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "showalert", "alert('Please select Default UOP.');", true);
+                    return;
+                }
                 var userName = hdUserName.Value;
                 string savePath = "";
                 if (FileUpload1.HasFile)
@@ -257,6 +296,7 @@ namespace LTG
                                            "DelAddr3=@DelAddr3, " +
                                            "DelAddr4=@DelAddr4, " +
                                            "Active=@Active," +
+                                           "UOP=@UOP," +
                                            "ModifiedUserId=@ModifiedUserId," +
                                            "ModifiedUserName=@ModifiedUserName";
                                            if(savePath !="")
@@ -269,6 +309,7 @@ namespace LTG
                         cmdUpdate.Parameters.AddWithValue("@CustomerCode", txtCode.Text);
                         cmdUpdate.Parameters.AddWithValue("@CustomerName", txtSurName.Text);
                         cmdUpdate.Parameters.AddWithValue("@BranchId", ddlBranch.SelectedValue);
+                        cmdUpdate.Parameters.AddWithValue("@UOP", ddlUOP.SelectedValue);
                         cmdUpdate.Parameters.AddWithValue("@Address1", txtAddr1.Text);
                         cmdUpdate.Parameters.AddWithValue("@Address2", txtAddr2.Text);
                         cmdUpdate.Parameters.AddWithValue("@Address3", txtAddr3.Text);

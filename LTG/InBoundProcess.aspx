@@ -198,7 +198,14 @@ function myFunction() {
 
                     <div class="col-12">
                       <label for="txtSurName" class="form-label">Customer</label>
-                    <asp:DropDownList ID ="ddlCustomer"  runat="server" class="form-select">
+                    <asp:DropDownList ID ="ddlCustomer"  runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlCustomer_SelectedIndexChanged" class="form-select">
+                            
+                        </asp:DropDownList>
+                      
+                    </div>
+                    <div class="col-12">
+                      <label for="txtSurName" class="form-label">Unit Of Package(UOP)</label>
+                    <asp:DropDownList ID ="ddlUOP"  runat="server" class="form-select">
                             
                         </asp:DropDownList>
                       

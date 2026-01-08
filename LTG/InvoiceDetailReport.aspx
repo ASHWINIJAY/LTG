@@ -180,7 +180,7 @@
                     </asp:TemplateField>
             
             <asp:BoundField DataField="ContainerId" HeaderStyle-HorizontalAlign="Left" HeaderStyle-Width="100" ItemStyle-Width="100" ItemStyle-HorizontalAlign="Left" HeaderText="ContainerId"/>
-              <asp:BoundField DataField="Kolli" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="Kolli"/>
+              <asp:BoundField DataField="Kolli" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="UOP"/>
                    <asp:BoundField DataField="HU" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="HU"/>
            <asp:BoundField DataField="DocDate" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="DocDate(GRN)"/>
               <asp:BoundField DataField="FromDate" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="Binned Date"/>

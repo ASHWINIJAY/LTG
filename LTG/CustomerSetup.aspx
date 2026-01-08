@@ -48,6 +48,12 @@
                         </asp:DropDownList>
                     </div>
                      <div class="col-12">
+                      <label for="ddlBin" class="form-label">Default Unit Of Package</label>
+                     <asp:DropDownList ID ="ddlUOP" runat="server" class="form-select">
+                           
+                        </asp:DropDownList>
+                    </div>
+                     <div class="col-12">
                       <label for="txtSurName" class="form-label">Address 1</label>
                      <asp:TextBox id="txtAddr1" runat="server"  class="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator2" ForeColor="OrangeRed" controltovalidate="txtAddr1" errormessage="Please enter a Address1!" />

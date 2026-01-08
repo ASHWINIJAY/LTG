@@ -670,6 +670,16 @@
                     <i class="bi bi-circle"></i><span>Bin Maintenance</span>
                 </a>
             </li>
+             <li id="LiUOPCreation" runat="server">
+                <a href="UOPCreate.aspx">
+                    <i class="bi bi-circle"></i><span>UOP Creation</span>
+                </a>
+            </li>
+             <li id="LiUOPMaintain" runat="server">
+                <a href="UOPMaintain.aspx">
+                    <i class="bi bi-circle"></i><span>UOP Maintenance</span>
+                </a>
+            </li>
             <li id="LiReturnReason" runat="server">
                 <a href="ReturnReason.aspx">
                     <i class="bi bi-circle"></i><span>Return Reason Creation</span>

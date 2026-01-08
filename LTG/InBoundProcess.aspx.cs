@@ -24,6 +24,7 @@ namespace LTG
             {
                 bindBranch();
                 bindCustomer();
+                bindUOP();
                 txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy");
                 GenerateGRN();
                 hdninitalNumber.Value = "1";
@@ -249,11 +250,45 @@ namespace LTG
                 }
             }
         }
+        private void bindUOP()
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "Select * from UOPMaster";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        ddlUOP.DataSource = dt;
+                        ddlUOP.DataBind();
+                        ddlUOP.DataTextField = "UOP";
+                        ddlUOP.DataValueField = "UOP";
+                        ddlUOP.DataBind();
+                        ddlUOP.Items.Insert(0, new ListItem("Select UOP", ""));
+                        // ddlBranch.da
+                    }
+                }
+            }
+        }
         protected void btnCusNext_Click(object sender, ImageClickEventArgs e)
         {
             if(ddlCustomer.SelectedIndex==0)
             {
                 string script = "alert(\"Please select customer\");";
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                                      "ServerControlScript", script, true);
+                return;
+            }
+            if (ddlUOP.SelectedIndex == 0)
+            {
+                string script = "alert(\"Please select Unit Of Package(UOP)\");";
                 ScriptManager.RegisterStartupScript(this, GetType(),
                                       "ServerControlScript", script, true);
                 return;
@@ -545,7 +580,7 @@ namespace LTG
                 if (Convert.ToDateTime(txtDate.Text).ToString("dd/MMM/yyyy") == DateTime.Now.ToString("dd/MMM/yyyy"))
                     txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy HH:mm");
 
-                    qry = "Insert into Inbound(ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                    qry = "Insert into Inbound(UOP,ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + ddlUOP.SelectedValue +"','" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
                 qry1 = "Insert into Transport_Process(ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitTransportCost,TotalTransportCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnTransportFee.Value + "," + hdnTransportFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
                 // }
                 SqlCommand cmd1 = new SqlCommand(qry, con);
@@ -588,7 +623,7 @@ namespace LTG
                 string barcode = GetBarcode();
                 if (Convert.ToDateTime(txtDate.Text).ToString("dd/MMM/yyyy") == DateTime.Now.ToString("dd/MMM/yyyy"))
                     txtDate.Text = DateTime.Now.ToString("dd/MMM/yyyy HH:mm");
-                qry = "Insert into Inbound(BarcodeBase64,PartNumber,PartQty,ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" +barcode +"', '" + txtSpare.Text + "','" + txtALPQty.Text + "','" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
+                qry = "Insert into Inbound(UOP,BarcodeBase64,PartNumber,PartQty,ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitInBoundCost,TotalInBoundCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + ddlUOP.SelectedValue + "','" + barcode +"', '" + txtSpare.Text + "','" + txtALPQty.Text + "','" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnInboundFee.Value + "," + hdnInboundFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
                 qry1 = "Insert into Transport_Process(BarcodeBase64,PartNumber,PartQty,ContainerId,BranchId,BranchName,CustomerCode,CustomerName,HU,Qty,UnitTransportCost,TotalTransportCost,Loginname,DateTimeofScan,CreatedBy,CreatedDate,GRN,DefaultBin)values('" + barcode + "', '" + txtSpare.Text + "','" + txtALPQty.Text + "','" + txtContainer.Text + "'," + ddlBranch.SelectedValue + ",'" + ddlBranch.SelectedItem.Text + "','" + ddlCustomer.SelectedValue + "','" + ddlCustomer.SelectedItem.Text + "','" + txtHU.Text + "','" + txtQty.Text + "'," + hdnTransportFee.Value + "," + hdnTransportFee.Value + ",'" + userid + "','" + txtDate.Text + "','" + userName + "',getdate(),'" + txtGRN.Text + "','" + txtDefaultBin.Text + "')";
                 // }
                 SqlCommand cmd1 = new SqlCommand(qry, con);
@@ -1174,6 +1209,31 @@ namespace LTG
                 grdScans.Columns[1].Visible = true;
                 grdScans.Columns[2].Visible = false;
                 btnPrintBarcode.Visible = false;
+            }
+        }
+
+        protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                con.Open();
+                string qry = "select UOP FROM Customers where CustomerCode='" + ddlCustomer.SelectedValue +"'";
+                SqlCommand cmd1 = new SqlCommand(qry, con);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        if (dt.Rows[0]["UOP"] != null)
+                            ddlUOP.SelectedValue = dt.Rows[0]["UOP"].ToString();
+                        // return true;
+
+                    }
+                    //else return false;
+                }
             }
         }
     }
