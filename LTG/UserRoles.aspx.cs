@@ -87,6 +87,8 @@ namespace LTG
             int stockTakeReprint = chkStockTakeReprint.Checked ? 1 : 0;
             int stockPwd = chkStockPwd.Checked ? 1 : 0;
             int mailNotification = chkMailNotification.Checked ? 1 : 0;
+            int UOPCreation = chkUOPCreation.Checked ? 1 : 0;
+            int uopMaintain = chkUOPMaintain.Checked ? 1 : 0;
             int stockRoles = 0;
             if (radManager.Checked)
                 stockRoles = 1;
@@ -111,7 +113,7 @@ namespace LTG
                     // Update existing record
                     query = @"
                     UPDATE UserRoles
-                    SET MailNotification=@MailNotification,StockTakeReprint=@StockTakeReprint,StockPwd=@StockPwd,
+                    SET UOPCreation=@UOPCreation,UOPMaintain=@UOPMaintain, MailNotification=@MailNotification,StockTakeReprint=@StockTakeReprint,StockPwd=@StockPwd,
 StockRoles=@StockRoles,GRNReturn=@GRNReturn,PickupReturn=@PickupReturn,
                         InboundProcess = @InboundProcess,
 ReverseWarehouseReport = @ReverseWarehouseReport,
@@ -163,7 +165,7 @@ BarcodeRePrint=@BarcodeRePrint ,DispatchedReport=@DispatchedReport
                 {
                     // Insert new record
                     query = @"
-                    INSERT INTO UserRoles (MailNotification,StockTakeReprint,StockPwd,ReverseWarehouseReport,ReverseWarehouse,DispatchedReport,PickupReturnReport,GRNReturnReport,GRNReturn,PickupReturn,BarcodeRePrint,ReturnReason,ReasonMaintain,StockRoles,MonthEndSetup,UpdateMonthEndPwd,GDNReturn,GDNReturnReport,
+                    INSERT INTO UserRoles (UOPCreation,UOPMaintain,MailNotification,StockTakeReprint,StockPwd,ReverseWarehouseReport,ReverseWarehouse,DispatchedReport,PickupReturnReport,GRNReturnReport,GRNReturn,PickupReturn,BarcodeRePrint,ReturnReason,ReasonMaintain,StockRoles,MonthEndSetup,UpdateMonthEndPwd,GDNReturn,GDNReturnReport,
                         Username, InboundProcess, WarehouseProcess, PickingProcess, OutboundProcess, 
                         InboundException, WarehousedException, PickedException, BinToBin, 
                         ContainerAdjustment, ChangeContainerToAnotherCustomer, InboundFeeSetup, 
@@ -237,6 +239,8 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,StockOn
                 cmd.Parameters.AddWithValue("@BarcodeRePrint", barcodeRePrint);
                 cmd.Parameters.AddWithValue("@StockTakeReprint", stockTakeReprint);
                 cmd.Parameters.AddWithValue("@StockPwd", stockPwd);
+                cmd.Parameters.AddWithValue("@UOPCreation", UOPCreation);
+                cmd.Parameters.AddWithValue("@UOPMaintain",uopMaintain);
                 cmd.Parameters.AddWithValue("@MailNotification", mailNotification);
                 cmd.ExecuteNonQuery();
                 string script = "alert('Roles Assigned Successfully');" +
@@ -253,7 +257,7 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,StockOn
             {
                 string query = @"
         SELECT 
-MailNotification,
+MailNotification,UOPCreation,UOPMaintain,
 StockTakeReprint,StockPwd,
             InboundProcess,
             WarehouseProcess,
@@ -376,6 +380,12 @@ ReasonMaintain,BarcodeRePrint,GRNReturn,PickupReturn,GRNReturnReport ,Dispatched
                         chkStockPwd.Checked = Convert.ToBoolean(userRow["StockPwd"]);
                     if (userRow["MailNotification"] != DBNull.Value)
                         chkMailNotification.Checked = Convert.ToBoolean(userRow["MailNotification"]);
+
+                    if (userRow["UOPCreation"] != DBNull.Value)
+                        chkUOPCreation.Checked = Convert.ToBoolean(userRow["UOPCreation"]);
+
+                    if (userRow["UOPMaintain"] != DBNull.Value)
+                        chkUOPMaintain.Checked = Convert.ToBoolean(userRow["UOPMaintain"]);
                     if (userRow["StockRoles"] != DBNull.Value)
                     {
                         if(Convert.ToInt32(userRow["StockRoles"])==0)
@@ -448,6 +458,7 @@ ReasonMaintain,BarcodeRePrint,GRNReturn,PickupReturn,GRNReturnReport ,Dispatched
             CheckBoxUserCreation.Checked = isChecked;
             CheckBoxTransporterCreation.Checked = isChecked;
             chkReasonCreate.Checked = isChecked;
+            chkUOPCreation.Checked = isChecked;
         }
 
         protected void chkMaintainAll_CheckedChanged(object sender, EventArgs e)
@@ -461,6 +472,7 @@ ReasonMaintain,BarcodeRePrint,GRNReturn,PickupReturn,GRNReturnReport ,Dispatched
             chkBinMaintain.Checked = isChecked;
             chkGDNReturn.Checked = isChecked;
             chkReturnMaintain.Checked = isChecked;
+            chkUOPMaintain.Checked = isChecked;
             chkMaintainAll.Focus();
         }
 

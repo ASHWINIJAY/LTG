@@ -230,6 +230,7 @@ namespace LTG
                 sumRow.Cells.Add(CreateEmptyCell()); // For Kolli
                 sumRow.Cells.Add(CreateEmptyCell());
                 sumRow.Cells.Add(CreateEmptyCell());
+                sumRow.Cells.Add(CreateEmptyCell());
                 sumRow.Cells.Add(CreateEmptyCell()); // For DocDate
                                                      // For FromDate
                 sumRow.Cells.Add(CreateSumCell("0"));
@@ -274,15 +275,15 @@ namespace LTG
 
                 foreach (GridViewRow row in grdDetails.Rows)
                 {
-                    if (row.Cells[6].Text != "&nbsp;")
-                        qtyIn += Convert.ToDouble(row.Cells[6].Text);
                     if (row.Cells[7].Text != "&nbsp;")
-                        storeQty += Convert.ToDouble(row.Cells[7].Text);
+                        qtyIn += Convert.ToDouble(row.Cells[7].Text);
+                    if (row.Cells[8].Text != "&nbsp;")
+                        storeQty += Convert.ToDouble(row.Cells[8].Text);
                 }
 
                 GridViewRow sumRow = grdDetails.Controls[0].Controls[0] as GridViewRow;
-                sumRow.Cells[7].Text = storeQty.ToString();
-                sumRow.Cells[6].Text = qtyIn.ToString();
+                sumRow.Cells[8].Text = storeQty.ToString();
+                sumRow.Cells[7].Text = qtyIn.ToString();
             }
         }
     }

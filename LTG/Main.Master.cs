@@ -104,8 +104,9 @@ namespace LTG
                 { "LiStockTakeReprint", "StockTakeReprint" },
                 { "LiMailNotification", "MailNotification" },
                 { "LiStockPwd", "StockPwd" },
-                { "LiBarcodeRePrint", "BarcodeRePrint" }
-              
+                { "LiBarcodeRePrint", "BarcodeRePrint" },
+                { "LiUOPCreation", "UOPCreation" },
+                { "LiUOPMaintain", "UOPMaintain" }
 
           
                 // Add more mappings as needed

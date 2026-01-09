@@ -109,7 +109,9 @@
                      <div class="col-12">
                        <asp:CheckBox id="CheckBoxBinCreation" runat="server" Text="Bin Creation" style="padding-left:50px;" />
         <asp:CheckBox id="CheckBoxCustomerCreation" runat="server" Text="Customer Creation" style="padding-left:50px;" />
-        <asp:CheckBox id="CheckBoxUserCreation" runat="server" Text="User Creation" style="padding-left:50px;" />
+        <asp:CheckBox id="chkUOPCreation" runat="server" Text="UOP Creation" style="padding-left:50px;" />
+       
+                         <asp:CheckBox id="CheckBoxUserCreation" runat="server" Text="User Creation" style="padding-left:50px;" />
         <asp:CheckBox id="CheckBoxTransporterCreation" runat="server" Text="Transporter Creation" style="padding-left:50px;" />
   <asp:CheckBox id="chkReasonCreate" runat="server" Text="Return Reason Creation" style="padding-left:50px;" />
                       
@@ -119,7 +121,9 @@
 
                     <div class="col-12">
         <asp:CheckBox id="CheckBoxCustomerMaintenance" runat="server" Text="Customer Maintenance" style="padding-left:50px;" />
-        <asp:CheckBox id="CheckBoxUserMaintenance" runat="server" Text="User Maintenance" style="padding-left:50px;" />
+        <asp:CheckBox id="chkUOPMaintain" runat="server" Text="UOP Maintenance" style="padding-left:50px;" />
+       
+                        <asp:CheckBox id="CheckBoxUserMaintenance" runat="server" Text="User Maintenance" style="padding-left:50px;" />
         <asp:CheckBox id="CheckBoxTransporterMaintenance" runat="server" Text="Transporter Maintenance" style="padding-left:50px;" />
                          <asp:CheckBox id="chkBinMaintain" runat="server" Text="Bin Maintenance" style="padding-left:50px;" />
                         <asp:CheckBox id="chkReturnMaintain" runat="server" Text="Return Reason Maintenance" style="padding-left:50px;" />

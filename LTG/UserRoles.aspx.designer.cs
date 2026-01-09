@@ -267,6 +267,15 @@ namespace LTG
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxCustomerCreation;
 
         /// <summary>
+        /// chkUOPCreation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkUOPCreation;
+
+        /// <summary>
         /// CheckBoxUserCreation control.
         /// </summary>
         /// <remarks>
@@ -319,6 +328,15 @@ namespace LTG
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxCustomerMaintenance;
+
+        /// <summary>
+        /// chkUOPMaintain control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkUOPMaintain;
 
         /// <summary>
         /// CheckBoxUserMaintenance control.

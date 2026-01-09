@@ -229,6 +229,7 @@ namespace LTG
                 sumRow.Cells.Add(CreateEmptyCell()); // For ContainerId
                 sumRow.Cells.Add(CreateEmptyCell()); // For Kolli
                 sumRow.Cells.Add(CreateEmptyCell());
+                sumRow.Cells.Add(CreateEmptyCell());
                 sumRow.Cells.Add(CreateEmptyCell()); // For DocDate
                 sumRow.Cells.Add(CreateEmptyCell()); // For FromDate
                 sumRow.Cells.Add(CreateSumCell("0")); // Placeholder for StoreQty
@@ -271,12 +272,12 @@ namespace LTG
 
                 foreach (GridViewRow row in grdDetails.Rows)
                 {
-                    if (row.Cells[6].Text != "&nbsp;")
-                        storeQty += Convert.ToDouble(row.Cells[6].Text);
+                    if (row.Cells[7].Text != "&nbsp;")
+                        storeQty += Convert.ToDouble(row.Cells[7].Text);
                 }
 
                 GridViewRow sumRow = grdDetails.Controls[0].Controls[0] as GridViewRow;
-                sumRow.Cells[6].Text = storeQty.ToString();
+                sumRow.Cells[7].Text = storeQty.ToString();
             }
         }
     }

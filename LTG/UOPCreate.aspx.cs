@@ -73,7 +73,7 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select * from UOPMaster where UOP='" + txtCode.Text + "'";
+                string qry = "Select * from UOPMaster where UOP='" + txtSurName.Text + "'";
                 SqlCommand cmd1 = new SqlCommand(qry, con);
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                 {
