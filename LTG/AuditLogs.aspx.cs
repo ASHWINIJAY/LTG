@@ -21,8 +21,34 @@ namespace LTG
         {
             if (!IsPostBack)
             {
-              //  bindCustomer();
+                BindActionDropdown();
             }
+        }
+        private void BindActionDropdown()
+        {
+            ddlActionType.Items.Clear();
+
+            ddlActionType.Items.Add(new ListItem("-- All --", ""));
+
+            ddlActionType.Items.Add("Insert Return Reason");
+            ddlActionType.Items.Add("Update Return Reason");
+            ddlActionType.Items.Add("Update Delivery Fee");
+            ddlActionType.Items.Add("Update Transport Fee");
+            ddlActionType.Items.Add("Bin To Bin");
+            ddlActionType.Items.Add("GRN Return");
+            ddlActionType.Items.Add("GDN Return");
+            ddlActionType.Items.Add("Pick Return");
+            ddlActionType.Items.Add("User Creation");
+            ddlActionType.Items.Add("User Update");
+            ddlActionType.Items.Add("User Roles Updation");
+            ddlActionType.Items.Add("MonthEnd Updation");
+            ddlActionType.Items.Add("Regenerate DN");
+            ddlActionType.Items.Add("RePrint DN");
+            ddlActionType.Items.Add("Fee Changes");
+            ddlActionType.Items.Add("HU Actions");
+            ddlActionType.Items.Add("Customer Updates");
+            ddlActionType.Items.Add("System Settings");
+            ddlActionType.Items.Add("Other");
         }
         private void bindCustomer()
         {
@@ -31,21 +57,60 @@ namespace LTG
             using (SqlConnection con = new SqlConnection(constr))
             {
                 con.Open();
-                string qry = "Select * from AuditLogs WHERE CAST(ModifiedByDate AS DATE) BETWEEN '" + txtFrmDate.Text + "' AND '" + txtToDate.Text + "'";
-               
-                SqlCommand cmd1 = new SqlCommand(qry, con);
-                using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+
+                string qry = @"
+        SELECT *
+        FROM AuditLogs
+        WHERE CAST(ModifiedByDate AS DATE) BETWEEN @FromDate AND @ToDate
+        ";
+
+                // ✅ Add dropdown filter
+                if (!string.IsNullOrEmpty(ddlActionType.SelectedValue))
+                {
+                    qry += @"
+            AND (
+                CASE 
+                    WHEN LOWER(Custom) LIKE '%insert%return reason%' THEN 'Insert Return Reason'
+                    WHEN LOWER(Custom) LIKE '%update%return reason%' THEN 'Update Return Reason'
+                    WHEN LOWER(Custom) LIKE '%delivery fee%' THEN 'Update Delivery Fee'
+                    WHEN LOWER(Custom) LIKE '%transport fee%' THEN 'Update Transport Fee'
+                    WHEN LOWER(Custom) LIKE '%bin to bin%' THEN 'Bin To Bin'
+                    WHEN LOWER(Custom) LIKE '%grn%' AND LOWER(Custom) LIKE '%return%' THEN 'GRN Return'
+                    WHEN LOWER(Custom) LIKE '%gdn%' AND LOWER(Custom) LIKE '%return%' THEN 'GDN Return'
+                    WHEN LOWER(Custom) LIKE '%pick%' AND LOWER(Custom) LIKE '%return%' THEN 'Pick Return'
+                    WHEN [Table] = 'Users' AND LOWER(Custom) LIKE '%create%' THEN 'User Creation'
+                    WHEN [Table] = 'Users' AND LOWER(Custom) LIKE '%update%' THEN 'User Update'
+                    WHEN LOWER(Custom) LIKE '%role%' THEN 'User Roles Updation'
+                    WHEN [Table] = 'MonthEnd' THEN 'MonthEnd Updation'
+                    WHEN LOWER(Custom) LIKE '%regenerate%' THEN 'Regenerate DN'
+                    WHEN LOWER(Custom) LIKE '%reprint%' THEN 'RePrint DN'
+                    WHEN LOWER(Custom) LIKE '%fee%' THEN 'Fee Changes'
+                    WHEN LOWER(Custom) LIKE '%hu%' THEN 'HU Actions'
+                    WHEN [Table] = 'Customers' THEN 'Customer Updates'
+                    WHEN [Table] IN ('ReminderMails', 'UOPMaster') THEN 'System Settings'
+                    ELSE 'Other'
+                END = @Filter
+            )";
+                }
+
+                SqlCommand cmd = new SqlCommand(qry, con);
+
+                // ✅ Safe parameters
+                cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(txtFrmDate.Text));
+                cmd.Parameters.AddWithValue("@ToDate", Convert.ToDateTime(txtToDate.Text));
+
+                if (!string.IsNullOrEmpty(ddlActionType.SelectedValue))
+                {
+                    cmd.Parameters.AddWithValue("@Filter", ddlActionType.SelectedValue);
+                }
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
 
-                    if (dt.Rows.Count > 0)
-                    {
-                        grdCustomer.DataSource = dt;
-                        grdCustomer.DataBind();
-
-                        // ddlBranch.da
-                    }
+                    grdCustomer.DataSource = dt;
+                    grdCustomer.DataBind();
                 }
             }
         }

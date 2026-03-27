@@ -110,7 +110,7 @@
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
-<div style="display:block;">
+<div style="display:none;">
     <span style="font:bold 13px !important;color:#fc0101;">LTG TEST App</span>
 </div>
     <div class="search-bar" style="display:none;">

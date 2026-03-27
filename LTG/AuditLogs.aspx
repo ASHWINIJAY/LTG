@@ -35,7 +35,12 @@
                         <asp:RequiredFieldValidator runat="server" id="RequiredFieldValidator1" ForeColor="OrangeRed" controltovalidate="txtToDate" errormessage="Please enter a toDate!" />
                       
                     </div>
-                  
+                  <div class="col-12">
+    <label class="form-label">Action Type</label>
+    <asp:DropDownList ID="ddlActionType" runat="server" class="form-control">
+        <asp:ListItem Text="-- All --" Value="" />
+    </asp:DropDownList>
+</div>
                     <div class="col-12">
                         <asp:Button ID="btnCreate" class="btn btn-primary w-100" OnClick="btnCreate_Click" Text="Search" runat="server" />
                     </div>
