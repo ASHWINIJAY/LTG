@@ -173,7 +173,7 @@ BarcodeRePrint=@BarcodeRePrint ,DispatchedReport=@DispatchedReport
                         UserCreation, TransporterCreation, CustomerMaintenance, UserMaintenance, 
                         TransporterMaintenance, HUTrackingReportsDetails, HUTrackingReportsSummary,BinMaintain,DeliveryNote,DetailMonth,SummaryMonth,InboundReport,
 BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,StockOnHand,UpdateContainer)
-                    VALUES (@MailNotification,@StockTakeReprint,@StockPwd,@ReverseWarehouseReport,@ReverseWarehouse,@DispatchedReport,@PickupReturnReport,@GRNReturnReport,@GRNReturn,@PickupReturn,@BarcodeRePrint,@ReturnReason,@ReasonMaintain,@StockRoles,@MonthEndSetup,@UpdateMonthEndPwd,@GDNReturn,@GDNReturnReport,
+                    VALUES (@UOPCreation,@UOPMaintain,@MailNotification,@StockTakeReprint,@StockPwd,@ReverseWarehouseReport,@ReverseWarehouse,@DispatchedReport,@PickupReturnReport,@GRNReturnReport,@GRNReturn,@PickupReturn,@BarcodeRePrint,@ReturnReason,@ReasonMaintain,@StockRoles,@MonthEndSetup,@UpdateMonthEndPwd,@GDNReturn,@GDNReturnReport,
                         @Username, @InboundProcess, @WarehouseProcess, @PickingProcess, @OutboundProcess, 
                         @InboundException, @WarehousedException, @PickedException, @BinToBin, 
                         @ContainerAdjustment, @ChangeContainerToAnotherCustomer, @InboundFeeSetup, 

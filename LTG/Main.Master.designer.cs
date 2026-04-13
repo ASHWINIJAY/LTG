@@ -177,51 +177,6 @@ namespace LTG
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiSummaryReport;
 
         /// <summary>
-        /// LiInboundException control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiInboundException;
-
-        /// <summary>
-        /// LiWarehousedException control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiWarehousedException;
-
-        /// <summary>
-        /// LiPickedException control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiPickedException;
-
-        /// <summary>
-        /// LiDeliveryNoteReprint control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiDeliveryNoteReprint;
-
-        /// <summary>
-        /// LiReGenerateDN control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiReGenerateDN;
-
-        /// <summary>
         /// LiInboundReport control.
         /// </summary>
         /// <remarks>
@@ -285,6 +240,51 @@ namespace LTG
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiStockOnHandReport;
 
         /// <summary>
+        /// LiDispatchedReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiDispatchedReport;
+
+        /// <summary>
+        /// LiDeliveryNoteReprint control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiDeliveryNoteReprint;
+
+        /// <summary>
+        /// LiInboundException control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiInboundException;
+
+        /// <summary>
+        /// LiWarehousedException control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiWarehousedException;
+
+        /// <summary>
+        /// LiPickedException control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiPickedException;
+
+        /// <summary>
         /// LiGRNReport control.
         /// </summary>
         /// <remarks>
@@ -319,15 +319,6 @@ namespace LTG
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiPickupReturnReport;
-
-        /// <summary>
-        /// LiDispatchedReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiDispatchedReport;
 
         /// <summary>
         /// Li1 control.
@@ -645,42 +636,6 @@ namespace LTG
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiTransportMaintenance;
 
         /// <summary>
-        /// LiUserCreation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiUserCreation;
-
-        /// <summary>
-        /// LiUserMaintenance control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiUserMaintenance;
-
-        /// <summary>
-        /// LiContainerAdjustment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiContainerAdjustment;
-
-        /// <summary>
-        /// LiUpdateContainer control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiUpdateContainer;
-
-        /// <summary>
         /// LiGRNReturn control.
         /// </summary>
         /// <remarks>
@@ -717,13 +672,22 @@ namespace LTG
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiGDNReturn;
 
         /// <summary>
-        /// LiBarcodeRePrint control.
+        /// LiContainerAdjustment control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiBarcodeRePrint;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiContainerAdjustment;
+
+        /// <summary>
+        /// LiUpdateContainer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiUpdateContainer;
 
         /// <summary>
         /// LiChangeContainerToAnotherCustomer control.
@@ -733,6 +697,33 @@ namespace LTG
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiChangeContainerToAnotherCustomer;
+
+        /// <summary>
+        /// LiBarcodeRePrint control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiBarcodeRePrint;
+
+        /// <summary>
+        /// LiUserCreation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiUserCreation;
+
+        /// <summary>
+        /// LiUserMaintenance control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiUserMaintenance;
 
         /// <summary>
         /// LiAudit control.

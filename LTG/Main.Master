@@ -33,6 +33,68 @@
    
 
     <style>
+        /* Parent Admin menu spacing */
+
+/* ================= GLOBAL SUBMENU ALIGNMENT FIX ================= */
+
+/* Make all submenu links flex */
+.sidebar-nav .nav-content a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 8px 12px;
+}
+
+/* Level 1 indent */
+.sidebar-nav .nav-content > li > a {
+    padding-left: 30px;
+}
+
+/* Level 2 indent */
+.sidebar-nav .nav-content .nav-content > li > a {
+    padding-left: 50px;
+}
+
+/* FIX ICON ALIGNMENT */
+.sidebar-nav .nav-content a i {
+    width: 20px;           /* fixed width = perfect alignment */
+    min-width: 20px;
+    text-align: center;
+    margin-right: 10px;
+    font-size: 13px;
+}
+
+/* AUTO WRAP TEXT (NO <span> NEEDED) */
+.sidebar-nav .nav-content a {
+    white-space: nowrap;
+}
+
+/* Force text to align properly even without span */
+.sidebar-nav .nav-content a::after {
+    content: "";
+    flex: 1;
+}
+
+/* Remove unwanted spacing */
+.sidebar-nav .nav-content a {
+    gap: 0;
+}
+
+/* Optional hover */
+.sidebar-nav .nav-content a:hover {
+    background: #f1f5ff;
+    border-radius: 6px;
+}
+
+/* Absolute positioning fallback */
+.sidebar-nav a[data-bs-toggle="collapse"] {
+    position: relative;
+}
+
+.sidebar-nav a[data-bs-toggle="collapse"] .bi-chevron-down {
+    position: absolute;
+    right: 10px;
+}
         /* Full screen overlay for the loader */
         #loadingDiv {
             position: fixed;
@@ -110,7 +172,7 @@
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
-<div style="display:none;">
+<div style="display:block;">
     <span style="font:bold 13px !important;color:#fc0101;">LTG TEST App</span>
 </div>
     <div class="search-bar" style="display:none;">
@@ -336,460 +398,254 @@
  <aside id="sidebar" class="sidebar">
 <ul id="Ul1" class="sidebar-nav" runat="server">
 
+    <!-- Dashboard -->
     <li id="LiDashboard" runat="server">
         <a class="nav-link" href="Dashboard.aspx">
             <i class="bi bi-grid"></i>
             <span>Dashboard</span>
         </a>
-    </li><!-- End Dashboard Nav -->
-
-    <li id="LiInboundProcess" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="Inboundprocess">
-            <i class="bi bi-box-arrow-in-right"></i>
-            <span>Inbound Process</span>
-        </a>
-    </li>
-    <%--  <li id="LiDeliveryProcess" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="Deliveryprocess">
-            <i class="bi bi-box-arrow-in-right"></i>
-            <span>Delivery Process</span>
-        </a>
-    </li>
-    <li id="LiTransportProcess" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="Transportprocess">
-            <i class="bi bi-box-arrow-in-right"></i>
-            <span>Transport Process</span>
-        </a>
-    </li>--%>
-    <li id="LiWarehouseProcess" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="Warehouseprocess">
-            <i class="bi bi-box-seam-fill"></i>
-            <span>Binning Process</span>
-        </a>
     </li>
 
-    <li id="LiBinToBin" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="BinToBin">
-            <i class="bi bi-box"></i><span>Bin To Bin</span>
+    <!-- ================= PROCESS ================= -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#process-nav" data-bs-toggle="collapse">
+            <i class="bi bi-diagram-3"></i><span>Processes</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
         </a>
-    </li>
-
-    <li id="LiPickingProcess" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="PickingProcess">
-            <i class="bi bi-box-arrow-in-left"></i>
-            <span>Pick Process</span>
-        </a>
-    </li>
-
-    <li id="LiOutboundProcess" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="Outboundprocess">
-            <i class="bi bi-box-arrow-in-left"></i>
-            <span>Outbound Process</span>
-        </a>
-    </li>
-
-    <li id="LiInvoiceReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="InvoiceReport">
-            <i class="bi bi-file-earmark-spreadsheet"></i>
-            <span>HU Tracking Report(Details)</span>
-        </a>
-    </li>
-        <li id="LiDetailedReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="DetailedReport">
-            <i class="bi bi-file-earmark-spreadsheet"></i>
-            <span>HU Tracking Report(Details)- Per month</span>
-        </a>
-    </li>
-
-    <li id="LiInvoiceSummaryReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="InvoiceSummaryReport">
-            <i class="bi bi-card-list"></i>
-            <span>HU Tracking Report(Summary)</span>
-        </a>
-    </li>
-      <li id="LiSummaryReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="SummaryReport">
-            <i class="bi bi-card-list"></i>
-            <span>HU Tracking Report(Summary)- Per month</span>
-        </a>
-    </li>
-    <li id="LiInboundException" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="InboundException">
-            <i class="bi bi-file-earmark"></i>
-            <span>Inbound Exception Report</span>
-        </a>
-    </li>
-
-    <li id="LiWarehousedException" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="WarehousedException">
-            <i class="bi bi-file-text"></i>
-            <span>Binned Exception Report</span>
-        </a>
-    </li>
-
-    <li id="LiPickedException" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="PickedException">
-            <i class="bi bi-graph-up"></i>
-            <span>Picked Exception Report</span>
-        </a>
-    </li>
-
-    <li id="LiDeliveryNoteReprint" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="DeliveryNoteReprint">
-            <i class="bi bi-box-arrow-in-left"></i>
-            <span>Delivery Note Re print</span>
-        </a>
-    </li>
-    <li id="LiReGenerateDN" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="ReGenerateDN">
-            <i class="bi bi-box-arrow-in-left"></i>
-            <span>Re-Generate Delivery Note</span>
-        </a>
-    </li>
-    <li id="LiInboundReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="InboundReport">
-            <i class="bi bi-card-list"></i>
-            <span>Inbound Tracking Report</span>
-        </a>
-    </li>
-     <li id="LiTransportReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="TransportReport">
-            <i class="bi bi-card-list"></i>
-            <span>Transport Summary Report</span>
-        </a>
-    </li>
-     <li id="LiDeliveryReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="DeliveryReport">
-            <i class="bi bi-card-list"></i>
-            <span>Delivery Summary Report</span>
-        </a>
-    </li>
-     <li id="LiBinnedReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="BinnedReport">
-            <i class="bi bi-card-list"></i>
-            <span>Binned Tracking Report</span>
-        </a>
-    </li>
-     <li id="LiPickedReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="PickedReport">
-            <i class="bi bi-card-list"></i>
-            <span>Picked Tracking Report</span>
-        </a>
-    </li>
-     <li id="LiOutboundReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="OutboundReport">
-            <i class="bi bi-card-list"></i>
-            <span>Outbound Tracking Report</span>
-        </a>
-    </li>
-     <li id="LiStockOnHandReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="StockOnHand">
-            <i class="bi bi-card-list"></i>
-            <span>StockOnHand Report</span>
-        </a>
-    </li>
-         <li id="LiGRNReport" class="nav-item" runat="server">
-    <a class="nav-link collapsed" href="ReverseGRNReport">
-        <i class="bi bi-card-list"></i>
-        <span>GRN Return Report</span>
-    </a>
-</li>
-     <li id="LiWarehouseReturnReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="ReverseWarehouseReport">
-            <i class="bi bi-card-list"></i>
-            <span>Binned Return Report</span>
-        </a>
-    </li>
-     <li id="LiGDNReturnReport" class="nav-item" runat="server">
-        <a class="nav-link collapsed" href="ReverseGDNReport">
-            <i class="bi bi-card-list"></i>
-            <span>GDN Return Report</span>
-        </a>
-    </li>
-     
-     <li id="LiPickupReturnReport" class="nav-item" runat="server">
-    <a class="nav-link collapsed" href="ReversePickupReport">
-        <i class="bi bi-card-list"></i>
-        <span>Pickup Return Report</span>
-    </a>
-</li>
-         <li id="LiDispatchedReport" class="nav-item" runat="server">
-    <a class="nav-link collapsed" href="DispatchedReport">
-        <i class="bi bi-card-list"></i>
-        <span>Stock Despatched Report</span>
-    </a>
-</li>
-     <li id="Li1" class="nav-item" runat="server" visible="true">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav1" data-bs-toggle="collapse" href="#">
-            <i class="bi bi-journal-text"></i><span>Stock Take</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav1" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-            <li id="LiInitStock" runat="server">
-                <a href="InitStockTake">
-                    <i class="bi bi-circle"></i><span>Initiate Stock Take</span>
-                </a>
-            </li>
-            <li id="LiCounterCockPit" runat="server">
-                <a href="CockPit">
-                    <i class="bi bi-circle"></i><span>Counter CockPit Setup</span>
-                </a>
-            </li>
-            <li id="LiCounter" runat="server">
-                <a href="StockTake">
-                    <i class="bi bi-circle"></i><span>Counter Process</span>
-                </a>
-            </li>
-            <li id="LiManagerCockPit" runat="server">
-                <a href="ManagerCockPit">
-                    <i class="bi bi-circle"></i><span>Manager CockPit Setup</span>
-                </a>
-            </li>
-            <li id="LiManager" runat="server">
-                <a href="ManagerStockTake">
-                    <i class="bi bi-circle"></i><span>Manager Counter</span>
-                </a>
-            </li>
-             <li id="Li5" runat="server">
-                <a href="StockVariance">
-                    <i class="bi bi-circle"></i><span>Stock Variance</span>
-                </a>
-            </li>
-             <li id="LiStockConfirm" runat="server">
-                <a href="StockTakeConfirm">
-                    <i class="bi bi-circle"></i><span>Stock Take Confirm</span>
-                </a>
-            </li>
-             <li id="LiStockAdj" runat="server">
-                <a href="StockAdjReport">
-                    <i class="bi bi-circle"></i><span>Stock Adjustment Report</span>
-                </a>
-            </li>
-            </ul>
-         </li>
-      <li id="LiStockAccuracy" class="nav-item" runat="server" visible="true">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav2" data-bs-toggle="collapse" href="#">
-            <i class="bi bi-journal-text"></i><span>Stock Accuracy</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav2" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-            <li id="LiInitStockTakeAccuracy" runat="server">
-                <a href="InitStockTakeAccuracy">
-                    <i class="bi bi-circle"></i><span>Initiate Stock Accuracy</span>
-                </a>
-            </li>
-             <li id="LiCancelStockTakeAccuracy" runat="server">
-                <a href="InitStockTakeAccuracy">
-                    <i class="bi bi-circle"></i><span>Cancel Stock Take Accuracy</span>
-                </a>
-            </li>
-            <li id="LiBinCockPit" runat="server">
-                <a href="BinCockPit">
-                    <i class="bi bi-circle"></i><span>Counter Cockpit Allocation</span>
-                </a>
-            </li>
-            <li id="LiBinStockTake" runat="server">
-                <a href="BinStockTake">
-                    <i class="bi bi-circle"></i><span>Counter Stock Accuracy Process</span>
-                </a>
-            </li>
-            <li id="LiManagerBinCockPit" runat="server">
-                <a href="ManagerBinCockPit">
-                    <i class="bi bi-circle"></i><span>Manager CockPit Allocation</span>
-                </a>
-            </li>
-            <li id="LiManagerBinStockTake" runat="server">
-                <a href="ManagerBinStockTake">
-                    <i class="bi bi-circle"></i><span>Manager Stock Accuracy Process</span>
-                </a>
-            </li>
-             <li id="LiStockAccVariance" runat="server">
-                <a href="StockAccVariance">
-                    <i class="bi bi-circle"></i><span>Stock Accuracy Variance</span>
-                </a>
-            </li>
-          <li id="LiStockAccConfirm" runat="server">
-                <a href="StockAccConfirm">
-                    <i class="bi bi-circle"></i><span>Confirm Stock Accuracy</span>
-                </a>
-            </li>
-              
-             <li id="LiStockTakeReprint" runat="server">
-                <a href="StockAccReprint">
-                    <i class="bi bi-circle"></i><span>Stock Take Report Reprint</span>
-                </a>
-            </li>
-            </ul>
-         </li>
-    <li id="LiAdmin" class="nav-item" runat="server" visible="false">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-            <i class="bi bi-journal-text"></i><span>Admin</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-            <li id="LiCustomerCreation" runat="server">
-                <a href="CustomerSetup">
-                    <i class="bi bi-circle"></i><span>Customer Creation</span>
-                </a>
-            </li>
-            <li id="LiCustomerMaintenance" runat="server">
-                <a href="CustomerEdit">
-                    <i class="bi bi-circle"></i><span>Customer Maintenance</span>
-                </a>
-            </li>
-            <li id="LiInboundFeeSetup" runat="server">
-                <a href="InBoundFeeSetup">
-                    <i class="bi bi-circle"></i><span>Inbound Fee Setup</span>
-                </a>
-            </li>
-            <li id="LiTransportFeeSetup" runat="server">
-                <a href="TransportFeeSetup">
-                    <i class="bi bi-circle"></i><span>Transport Fee Setup</span>
-                </a>
-            </li>
-            <li id="LiDeliveryFeeSetup" runat="server">
-                <a href="DeliveryFeeSetup">
-                    <i class="bi bi-circle"></i><span>Delivery Fee Setup</span>
-                </a>
-            </li>
-            <li id="LiOutboundFeeSetup" runat="server">
-                <a href="OutBoundFee">
-                    <i class="bi bi-circle"></i><span>Outbound Fee Setup</span>
-                </a>
-            </li>
-            <li id="LiStorageFeeSetup" runat="server">
-                <a href="StorageFee">
-                    <i class="bi bi-circle"></i><span>Storage Fee Setup</span>
-                </a>
-            </li>
-           
-            <li id="LiBinCreation" runat="server">
-                <a href="BinCreate.aspx">
-                    <i class="bi bi-circle"></i><span>Bin Creation</span>
-                </a>
-            </li>
-             <li id="LiBinMaintain" runat="server">
-                <a href="BinMaintain.aspx">
-                    <i class="bi bi-circle"></i><span>Bin Maintenance</span>
-                </a>
-            </li>
-             <li id="LiUOPCreation" runat="server">
-                <a href="UOPCreate.aspx">
-                    <i class="bi bi-circle"></i><span>UOP Creation</span>
-                </a>
-            </li>
-             <li id="LiUOPMaintain" runat="server">
-                <a href="UOPMaintain.aspx">
-                    <i class="bi bi-circle"></i><span>UOP Maintenance</span>
-                </a>
-            </li>
-            <li id="LiReturnReason" runat="server">
-                <a href="ReturnReason.aspx">
-                    <i class="bi bi-circle"></i><span>Return Reason Creation</span>
-                </a>
-            </li>
-             <li id="LiReasonMaintain" runat="server">
-                <a href="ReturnReasonMaintain.aspx">
-                    <i class="bi bi-circle"></i><span>Return Reason Maintenance</span>
-                </a>
-            </li>
-            <li id="LiTransportCreation" runat="server">
-                <a href="Transport.aspx">
-                    <i class="bi bi-circle"></i><span>Transport Creation</span>
-                </a>
-            </li>
-            <li id="LiTransportMaintenance" runat="server">
-                <a href="TransportMaintain">
-                    <i class="bi bi-circle"></i><span>Transport Maintenance</span>
-                </a>
-            </li>
-            <li id="LiUserCreation" runat="server">
-                <a href="UserCreation.aspx">
-                    <i class="bi bi-circle"></i><span>User Creation</span>
-                </a>
-            </li>
-            <li id="LiUserMaintenance" runat="server">
-                <a href="UserMaintenance">
-                    <i class="bi bi-circle"></i><span>User Maintenance</span>
-                </a>
-            </li>
-            <li id="LiContainerAdjustment" runat="server">
-                <a href="HuAdj.aspx">
-                    <i class="bi bi-circle"></i><span>Container Adjustment</span>
-                </a>
-            </li>
-             <li id="LiUpdateContainer" runat="server">
-                <a href="UpdateContainer">
-                    <i class="bi bi-circle"></i><span>Update Container</span>
-                </a>
-            </li>
-              <li id="LiGRNReturn" runat="server">
-     <a href="ReverseGRN">
-         <i class="bi bi-circle"></i><span>GRN Return</span>
-     </a>
- </li>
-             <li id="LiReverseWarehouse" runat="server">
-     <a href="ReverseWarehouse">
-         <i class="bi bi-circle"></i><span>Binned Return</span>
-     </a>
- </li>
-                         <li id="LiPickupReturn" runat="server">
-    <a href="ReversePick">
-        <i class="bi bi-circle"></i><span>Pickup Return</span>
-    </a>
-</li>
-             <li id="LiGDNReturn" runat="server">
-                <a href="ReverseGDN">
-                    <i class="bi bi-circle"></i><span>GDN Return</span>
-                </a>
-            </li>
-            <li id="LiBarcodeRePrint" runat="server">
-        <a href="BarcodeRePrint">
-            <i class="bi bi-circle"></i>
-            <span>Re-Generate Barcode</span>
-        </a>
-    </li>
-            <li id="LiChangeContainerToAnotherCustomer" runat="server">
-                <a href="ContainerAdj">
-                    <i class="bi bi-circle"></i><span>Change Container To Another Customer</span>
-                </a>
-            </li>
-             <li id="LiAudit" runat="server">
-                <a href="AuditLogs">
-                    <i class="bi bi-circle"></i><span>AuditLogs</span>
-                </a>
-            </li>
-            <li id="LiMonthEndSetup" runat="server">
-                <a href="MonthEnd">
-                    <i class="bi bi-circle"></i><span>Month-End Setup</span>
-                </a>
-            </li>
-             <li id="LiUpdateMonthEndPwd" runat="server">
-                <a href="MonthEndPwd">
-                    <i class="bi bi-circle"></i><span>Update Month-End Password</span>
-                </a>
-            </li>
-             <li id="LiSupervisor" runat="server">
-                <a href="Supervisor">
-                    <i class="bi bi-circle"></i><span>Supervisor Setup</span>
-                </a>
-            </li>
-             <li id="LiStockPwd" runat="server">
-                <a href="StockPwd">
-                    <i class="bi bi-circle"></i><span>Stock Take Password Setup</span>
-                </a>
-            </li>
-             <li id="Li3" runat="server">
-                <a href="ReminderMails">
-                    <i class="bi bi-circle"></i><span>Contract Reminder Configuration</span>
-                </a>
-            </li>
-             <li id="LiMailNotification" runat="server">
-                <a href="MailsSetup">
-                    <i class="bi bi-circle"></i><span>Mail Notifications Setup</span>
-                </a>
-            </li>
+        <ul id="process-nav" class="nav-content collapse">
+            <li id="LiInboundProcess" runat="server"><a href="Inboundprocess"><i class="bi bi-circle"></i>Inbound</a></li>
+            <li id="LiWarehouseProcess" runat="server"><a href="Warehouseprocess"><i class="bi bi-circle"></i>Binning</a></li>
+            <li id="LiBinToBin" runat="server"><a href="BinToBin"><i class="bi bi-circle"></i>Bin To Bin</a></li>
+            <li id="LiPickingProcess" runat="server"><a href="PickingProcess"><i class="bi bi-circle"></i>Picking</a></li>
+            <li id="LiOutboundProcess" runat="server"><a href="Outboundprocess"><i class="bi bi-circle"></i>Outbound</a></li>
         </ul>
-    </li><!-- End Admin Nav -->
-</ul>
+    </li>
 
+    <!-- ================= REPORTS ================= -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#reports-nav" data-bs-toggle="collapse">
+            <i class="bi bi-bar-chart"></i><span>Reports</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+
+        <ul id="reports-nav" class="nav-content collapse">
+
+            <!-- Tracking -->
+         
+                    <li id="LiInvoiceReport" runat="server"><a href="InvoiceReport"><i class="bi bi-circle"></i>HU Details</a></li>
+                    <li id="LiDetailedReport" runat="server"><a href="DetailedReport"><i class="bi bi-circle"></i>HU Details Monthly</a></li>
+                    <li id="LiInvoiceSummaryReport" runat="server"><a href="InvoiceSummaryReport"><i class="bi bi-circle"></i>HU Summary</a></li>
+                    <li id="LiSummaryReport" runat="server"><a href="SummaryReport"><i class="bi bi-circle"></i>HU Summary Monthly</a></li>
+               
+            <li id="LiInboundReport" runat="server"><a href="InboundReport"><i class="bi bi-circle"></i>Inbound</a></li>
+            <li id="LiTransportReport" runat="server"><a href="TransportReport"><i class="bi bi-circle"></i>Transport</a></li>
+            <li id="LiDeliveryReport" runat="server"><a href="DeliveryReport"><i class="bi bi-circle"></i>Delivery</a></li>
+            <li id="LiBinnedReport" runat="server"><a href="BinnedReport"><i class="bi bi-circle"></i>Binned</a></li>
+            <li id="LiPickedReport" runat="server"><a href="PickedReport"><i class="bi bi-circle"></i>Picked</a></li>
+            <li id="LiOutboundReport" runat="server"><a href="OutboundReport"><i class="bi bi-circle"></i>Outbound</a></li>
+            <li id="LiStockOnHandReport" runat="server"><a href="StockOnHand"><i class="bi bi-circle"></i>Stock On Hand</a></li>
+            <li id="LiDispatchedReport" runat="server"><a href="DispatchedReport"><i class="bi bi-circle"></i>Dispatched</a></li>
+        </ul>
+    </li>
+    <li id="LiDeliveryNoteReprint" class="nav-item" runat="server">
+    <a class="nav-link collapsed" href="DeliveryNoteReprint">
+        <i class="bi bi-box-arrow-in-left"></i>
+        <span>Delivery Note Re print</span>
+    </a>
+        </li>
+    <!-- ================= EXCEPTIONS ================= -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#exception-nav" data-bs-toggle="collapse">
+            <i class="bi bi-exclamation-triangle"></i><span>Exceptions</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="exception-nav" class="nav-content collapse">
+            <li id="LiInboundException" runat="server"><a href="InboundException"><i class="bi bi-circle"></i>Inbound</a></li>
+            <li id="LiWarehousedException" runat="server"><a href="WarehousedException"><i class="bi bi-circle"></i>Binned</a></li>
+            <li id="LiPickedException" runat="server"><a href="PickedException"><i class="bi bi-circle"></i>Picked</a></li>
+        </ul>
+    </li>
+
+    <!-- ================= RETURNS ================= -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#returns-nav" data-bs-toggle="collapse">
+            <i class="bi bi-arrow-counterclockwise"></i><span>Returns</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="returns-nav" class="nav-content collapse">
+            <li id="LiGRNReport" runat="server"><a href="ReverseGRNReport"><i class="bi bi-circle"></i>GRN Return</a></li>
+            <li id="LiWarehouseReturnReport" runat="server"><a href="ReverseWarehouseReport"><i class="bi bi-circle"></i>Binned Return</a></li>
+            <li id="LiGDNReturnReport" runat="server"><a href="ReverseGDNReport"><i class="bi bi-circle"></i>GDN Return</a></li>
+            <li id="LiPickupReturnReport" runat="server"><a href="ReversePickupReport"><i class="bi bi-circle"></i>Pickup Return</a></li>
+        </ul>
+    </li>
+
+    <!-- ================= STOCK TAKE ================= -->
+    <!-- EXACT ORIGINAL -->
+    <li id="Li1" class="nav-item" runat="server">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav1" data-bs-toggle="collapse">
+            <i class="bi bi-journal-text"></i><span>Stock Take</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav1" class="nav-content collapse">
+            <li id="LiInitStock" runat="server"><a href="InitStockTake"><i class="bi bi-circle"></i>Initiate</a></li>
+            <li id="LiCounterCockPit" runat="server"><a href="CockPit"><i class="bi bi-circle"></i>Counter CockPit</a></li>
+            <li id="LiCounter" runat="server"><a href="StockTake"><i class="bi bi-circle"></i>Counter</a></li>
+            <li id="LiManagerCockPit" runat="server"><a href="ManagerCockPit"><i class="bi bi-circle"></i>Manager CockPit</a></li>
+            <li id="LiManager" runat="server"><a href="ManagerStockTake"><i class="bi bi-circle"></i>Manager</a></li>
+            <li id="Li5" runat="server"><a href="StockVariance"><i class="bi bi-circle"></i>Variance</a></li>
+            <li id="LiStockConfirm" runat="server"><a href="StockTakeConfirm"><i class="bi bi-circle"></i>Confirm</a></li>
+            <li id="LiStockAdj" runat="server"><a href="StockAdjReport"><i class="bi bi-circle"></i>Adjustment</a></li>
+        </ul>
+    </li>
+
+    <!-- ================= STOCK ACCURACY ================= -->
+    <!-- EXACT ORIGINAL -->
+    <li id="LiStockAccuracy" class="nav-item" runat="server">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav2" data-bs-toggle="collapse">
+            <i class="bi bi-journal-text"></i><span>Stock Accuracy</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav2" class="nav-content collapse">
+            <li id="LiInitStockTakeAccuracy" runat="server"><a href="InitStockTakeAccuracy"><i class="bi bi-circle"></i>Initiate</a></li>
+            <li id="LiCancelStockTakeAccuracy" runat="server"><a href="#"><i class="bi bi-circle"></i>Cancel</a></li>
+            <li id="LiBinCockPit" runat="server"><a href="BinCockPit"><i class="bi bi-circle"></i>Cockpit</a></li>
+            <li id="LiBinStockTake" runat="server"><a href="BinStockTake"><i class="bi bi-circle"></i>Process</a></li>
+            <li id="LiManagerBinCockPit" runat="server"><a href="ManagerBinCockPit"><i class="bi bi-circle"></i>Manager Cockpit</a></li>
+            <li id="LiManagerBinStockTake" runat="server"><a href="ManagerBinStockTake"><i class="bi bi-circle"></i>Manager Process</a></li>
+            <li id="LiStockAccVariance" runat="server"><a href="StockAccVariance"><i class="bi bi-circle"></i>Variance</a></li>
+            <li id="LiStockAccConfirm" runat="server"><a href="StockAccConfirm"><i class="bi bi-circle"></i>Confirm</a></li>
+            <li id="LiStockTakeReprint" runat="server"><a href="StockAccReprint"><i class="bi bi-circle"></i>Reprint</a></li>
+        </ul>
+    </li>
+
+    <!-- ================= ADMIN ================= -->
+    <!-- FULL ORIGINAL ITEMS (NOT REMOVED) -->
+ 
+
+        
+           <li id="LiAdmin" class="nav-item" runat="server" visible="false">
+
+    <a class="nav-link collapsed" data-bs-target="#admin-nav" data-bs-toggle="collapse">
+        <i class="bi bi-gear"></i><span>Admin</span>
+        <i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+
+    <ul id="admin-nav" class="nav-content collapse">
+
+        <!-- ================= CUSTOMER ================= -->
+        <li>
+            <a data-bs-target="#admin-customer" data-bs-toggle="collapse" class="collapsed">
+                <i class="bi bi-person"></i><span>Customer</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="admin-customer" class="nav-content collapse">
+                <li id="LiCustomerCreation" runat="server">
+                    <a href="CustomerSetup"><i class="bi bi-circle"></i>Customer Creation</a>
+                </li>
+                <li id="LiCustomerMaintenance" runat="server">
+                    <a href="CustomerEdit"><i class="bi bi-circle"></i>Customer Maintenance</a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- ================= FEE SETUP ================= -->
+        <li>
+            <a data-bs-target="#admin-fee" data-bs-toggle="collapse" class="collapsed">
+                <i class="bi bi-currency-exchange"></i><span>Fee Setup</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="admin-fee" class="nav-content collapse">
+                <li id="LiInboundFeeSetup" runat="server"><a href="InBoundFeeSetup"><i class="bi bi-circle"></i>Inbound Fee Setup</a></li>
+                <li id="LiTransportFeeSetup" runat="server"><a href="TransportFeeSetup"><i class="bi bi-circle"></i>Transport Fee Setup</a></li>
+                <li id="LiDeliveryFeeSetup" runat="server"><a href="DeliveryFeeSetup"><i class="bi bi-circle"></i>Delivery Fee Setup</a></li>
+                <li id="LiOutboundFeeSetup" runat="server"><a href="OutBoundFee"><i class="bi bi-circle"></i>Outbound Fee Setup</a></li>
+                <li id="LiStorageFeeSetup" runat="server"><a href="StorageFee"><i class="bi bi-circle"></i>Storage Fee Setup</a></li>
+            </ul>
+        </li>
+
+        <!-- ================= MASTER ================= -->
+        <li>
+            <a data-bs-target="#admin-master" data-bs-toggle="collapse" class="collapsed">
+                <i class="bi bi-diagram-2"></i><span>Master Setup</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="admin-master" class="nav-content collapse">
+                <li id="LiBinCreation" runat="server"><a href="BinCreate.aspx"><i class="bi bi-circle"></i>Bin Creation</a></li>
+                <li id="LiBinMaintain" runat="server"><a href="BinMaintain.aspx"><i class="bi bi-circle"></i>Bin Maintenance</a></li>
+                <li id="LiUOPCreation" runat="server"><a href="UOPCreate.aspx"><i class="bi bi-circle"></i>UOP Creation</a></li>
+                <li id="LiUOPMaintain" runat="server"><a href="UOPMaintain.aspx"><i class="bi bi-circle"></i>UOP Maintenance</a></li>
+                <li id="LiReturnReason" runat="server"><a href="ReturnReason.aspx"><i class="bi bi-circle"></i>Return Reason Creation</a></li>
+                <li id="LiReasonMaintain" runat="server"><a href="ReturnReasonMaintain.aspx"><i class="bi bi-circle"></i>Return Reason Maintenance</a></li>
+                <li id="LiTransportCreation" runat="server"><a href="Transport.aspx"><i class="bi bi-circle"></i>Transport Creation</a></li>
+                <li id="LiTransportMaintenance" runat="server"><a href="TransportMaintain"><i class="bi bi-circle"></i>Transport Maintenance</a></li>
+            </ul>
+        </li>
+
+        <!-- ================= RETURNS ================= -->
+        <li>
+            <a data-bs-target="#admin-returns" data-bs-toggle="collapse" class="collapsed">
+                <i class="bi bi-arrow-return-left"></i><span>Returns</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="admin-returns" class="nav-content collapse">
+                <li id="LiGRNReturn" runat="server"><a href="ReverseGRN"><i class="bi bi-circle"></i>GRN Return</a></li>
+                <li id="LiReverseWarehouse" runat="server"><a href="ReverseWarehouse"><i class="bi bi-circle"></i>Binned Return</a></li>
+                <li id="LiPickupReturn" runat="server"><a href="ReversePick"><i class="bi bi-circle"></i>Pickup Return</a></li>
+                <li id="LiGDNReturn" runat="server"><a href="ReverseGDN"><i class="bi bi-circle"></i>GDN Return</a></li>
+            </ul>
+        </li>
+
+        <!-- ================= CONTAINER ================= -->
+        <li>
+            <a data-bs-target="#admin-container" data-bs-toggle="collapse" class="collapsed">
+                <i class="bi bi-box"></i><span>Container</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="admin-container" class="nav-content collapse">
+                <li id="LiContainerAdjustment" runat="server"><a href="HuAdj.aspx"><i class="bi bi-circle"></i>Container Adjustment</a></li>
+                <li id="LiUpdateContainer" runat="server"><a href="UpdateContainer"><i class="bi bi-circle"></i>Update Container</a></li>
+                <li id="LiChangeContainerToAnotherCustomer" runat="server"><a href="ContainerAdj"><i class="bi bi-circle"></i>Change Container To Another Customer</a></li>
+                <li id="LiBarcodeRePrint" runat="server"><a href="BarcodeRePrint"><i class="bi bi-circle"></i>Re-Generate Barcode</a></li>
+            </ul>
+        </li>
+
+        <!-- ================= USER ================= -->
+        <li>
+            <a data-bs-target="#admin-user" data-bs-toggle="collapse" class="collapsed">
+                <i class="bi bi-people"></i><span>User & Security</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="admin-user" class="nav-content collapse">
+                <li id="LiUserCreation" runat="server"><a href="UserCreation.aspx"><i class="bi bi-circle"></i>User Creation</a></li>
+                <li id="LiUserMaintenance" runat="server"><a href="UserMaintenance"><i class="bi bi-circle"></i>User Maintenance</a></li>
+                <li id="LiAudit" runat="server"><a href="AuditLogs"><i class="bi bi-circle"></i>Audit Logs</a></li>
+            </ul>
+        </li>
+
+        <!-- ================= SYSTEM ================= -->
+        <li>
+            <a data-bs-target="#admin-system" data-bs-toggle="collapse" class="collapsed">
+                <i class="bi bi-sliders"></i><span>System</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="admin-system" class="nav-content collapse">
+                <li id="LiMonthEndSetup" runat="server"><a href="MonthEnd"><i class="bi bi-circle"></i>Month-End Setup</a></li>
+                <li id="LiUpdateMonthEndPwd" runat="server"><a href="MonthEndPwd"><i class="bi bi-circle"></i>Update Month-End Password</a></li>
+                <li id="LiSupervisor" runat="server"><a href="Supervisor"><i class="bi bi-circle"></i>Supervisor Setup</a></li>
+                <li id="LiStockPwd" runat="server"><a href="StockPwd"><i class="bi bi-circle"></i>Stock Take Password Setup</a></li>
+                <li id="Li3" runat="server"><a href="ReminderMails"><i class="bi bi-circle"></i>Contract Reminder Configuration</a></li>
+                <li id="LiMailNotification" runat="server"><a href="MailsSetup"><i class="bi bi-circle"></i>Mail Notifications Setup</a></li>
+            </ul>
+        </li>
+
+    </ul>
+
+</li>
+        
+ 
+
+</ul>
   </aside><!-- End Sidebar-->
  
 
