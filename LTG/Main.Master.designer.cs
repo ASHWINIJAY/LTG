@@ -258,6 +258,15 @@ namespace LTG
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiDeliveryNoteReprint;
 
         /// <summary>
+        /// LiReGenerateDN control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiReGenerateDN;
+
+        /// <summary>
         /// LiInboundException control.
         /// </summary>
         /// <remarks>

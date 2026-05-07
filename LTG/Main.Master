@@ -453,6 +453,12 @@
         <span>Delivery Note Re print</span>
     </a>
         </li>
+    <li id="LiReGenerateDN" class="nav-item" runat="server">
+    <a class="nav-link collapsed" href="ReGenerateDN">
+        <i class="bi bi-box-arrow-in-left"></i>
+        <span>Re-Generate Delivery Note</span>
+    </a>
+        </li>
     <!-- ================= EXCEPTIONS ================= -->
     <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#exception-nav" data-bs-toggle="collapse">
