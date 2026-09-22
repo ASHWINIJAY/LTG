@@ -106,7 +106,8 @@ namespace LTG
                 { "LiStockPwd", "StockPwd" },
                 { "LiBarcodeRePrint", "BarcodeRePrint" },
                 { "LiUOPCreation", "UOPCreation" },
-                { "LiUOPMaintain", "UOPMaintain" }
+                { "LiUOPMaintain", "UOPMaintain" },
+                { "LiKPIDashboard", "KPIDashboard" }
 
           
                 // Add more mappings as needed

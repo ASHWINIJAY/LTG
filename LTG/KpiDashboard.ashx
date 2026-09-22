@@ -1,0 +1,1 @@
+<%@ WebHandler Language="C#" CodeBehind="KpiDashboard.ashx.cs" Class="LTG.KpiDashboard" %>

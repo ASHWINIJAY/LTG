@@ -510,6 +510,15 @@ namespace LTG
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiAdmin;
 
         /// <summary>
+        /// LiKPIDashboard control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiKPIDashboard;
+
+        /// <summary>
         /// LiCustomerCreation control.
         /// </summary>
         /// <remarks>
@@ -742,6 +751,15 @@ namespace LTG
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiAudit;
+
+        /// <summary>
+        /// LiKpiTargetSetup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiKpiTargetSetup;
 
         /// <summary>
         /// LiMonthEndSetup control.

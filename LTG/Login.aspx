@@ -91,7 +91,15 @@
                         <asp:Button ID="btnLogin" runat="server" class="btn btn-primary w-100" OnClick="btnLogin_Click" Text="Login" />
 
                     </div>
-                   
+                   <div class="col-12 text-center">
+    <asp:LinkButton
+        ID="lnkForgotPassword"
+        runat="server"
+        Text="Forgot Password?"
+        OnClientClick="return confirm('Are you sure you want to reset your password?');"
+        OnClick="lnkForgotPassword_Click">
+    </asp:LinkButton>
+</div>
                   </form>
 
                 </div>

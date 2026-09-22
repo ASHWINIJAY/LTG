@@ -16,7 +16,12 @@ namespace LTG
         {
 
         }
-
+        protected void lnkForgotPassword_Click(
+    object sender,
+    EventArgs e)
+        {
+            Response.Redirect("ForgotPassword.aspx");
+        }
         protected void btnLogin_Click(object sender, EventArgs e)
         {
             string constr = ConfigurationManager.ConnectionStrings["LTGConn"].ConnectionString;
@@ -77,6 +82,12 @@ namespace LTG
 
                             // Add the cookie.
                             Response.Cookies.Add(firstName);
+                            KpiData.RecordLogin(
+                                Convert.ToInt32(dt.Rows[0]["UserId"]),
+                                dt.Rows[0]["Username"].ToString(),
+                                dt.Rows[0]["Roles"].ToString(),
+                                Request.UserHostAddress,
+                                Request.UserAgent);
                             Response.Redirect("Dashboard.aspx");
                         }
                         else

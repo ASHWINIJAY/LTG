@@ -57,6 +57,7 @@ namespace LTG
             int transporterMaintenance = CheckBoxTransporterMaintenance.Checked ? 1 : 0;
             int huTrackingReportsDetails = CheckBoxHUTrackingReportsDetails.Checked ? 1 : 0;
             int huTrackingReportsSummary = CheckBoxHUTrackingReportsSummary.Checked ? 1 : 0;
+            int kpiDashboard = CheckBoxKPIDashboard.Checked ? 1 : 0;
             int binMaintain = chkBinMaintain.Checked ? 1 : 0;
             int deliveryNote = chkDelivery.Checked ? 1 : 0;
             int detailMonth = chkDetailMonth.Checked ? 1 : 0;
@@ -139,6 +140,7 @@ ReverseWarehouse = @ReverseWarehouse,
                         TransporterMaintenance = @TransporterMaintenance,
                         HUTrackingReportsDetails = @HUTrackingReportsDetails,
                         HUTrackingReportsSummary = @HUTrackingReportsSummary,
+                        KPIDashboard = @KPIDashboard,
  BinMaintain = @BinMaintain,
 DeliveryNote = @DeliveryNote,
 DetailMonth = @DetailMonth,
@@ -170,7 +172,7 @@ BarcodeRePrint=@BarcodeRePrint ,DispatchedReport=@DispatchedReport
                         InboundException, WarehousedException, PickedException, BinToBin, 
                         ContainerAdjustment, ChangeContainerToAnotherCustomer, InboundFeeSetup, 
                         StorageFeeSetup, OutboundFeeSetup, BinCreation, CustomerCreation, 
-                        UserCreation, TransporterCreation, CustomerMaintenance, UserMaintenance, 
+                        UserCreation, TransporterCreation, CustomerMaintenance, UserMaintenance, KPIDashboard, 
                         TransporterMaintenance, HUTrackingReportsDetails, HUTrackingReportsSummary,BinMaintain,DeliveryNote,DetailMonth,SummaryMonth,InboundReport,
 BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,StockOnHand,UpdateContainer)
                     VALUES (@UOPCreation,@UOPMaintain,@MailNotification,@StockTakeReprint,@StockPwd,@ReverseWarehouseReport,@ReverseWarehouse,@DispatchedReport,@PickupReturnReport,@GRNReturnReport,@GRNReturn,@PickupReturn,@BarcodeRePrint,@ReturnReason,@ReasonMaintain,@StockRoles,@MonthEndSetup,@UpdateMonthEndPwd,@GDNReturn,@GDNReturnReport,
@@ -178,7 +180,7 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,StockOn
                         @InboundException, @WarehousedException, @PickedException, @BinToBin, 
                         @ContainerAdjustment, @ChangeContainerToAnotherCustomer, @InboundFeeSetup, 
                         @StorageFeeSetup, @OutboundFeeSetup, @BinCreation, @CustomerCreation, 
-                        @UserCreation, @TransporterCreation, @CustomerMaintenance, @UserMaintenance, 
+                        @UserCreation, @TransporterCreation, @CustomerMaintenance, @UserMaintenance, @KPIDashboard,
                         @TransporterMaintenance, @HUTrackingReportsDetails, @HUTrackingReportsSummary,@BinMaintain,@DeliveryNote,@DetailMonth,@SummaryMonth,@InboundReport,
 @BinnedReport,@PickedReport,@OutboundReport,@Audit,@Supervisor,@ReDeliveryNote,@StockOnHand,@UpdateContainer)";
                 }
@@ -210,6 +212,7 @@ BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,StockOn
                 cmd.Parameters.AddWithValue("@TransporterMaintenance", transporterMaintenance);
                 cmd.Parameters.AddWithValue("@HUTrackingReportsDetails", huTrackingReportsDetails);
                 cmd.Parameters.AddWithValue("@HUTrackingReportsSummary", huTrackingReportsSummary);
+                cmd.Parameters.AddWithValue("@KPIDashboard", kpiDashboard);
                 cmd.Parameters.AddWithValue("@BinMaintain", binMaintain);
                 cmd.Parameters.AddWithValue("@DeliveryNote", deliveryNote);
                 cmd.Parameters.AddWithValue("@DetailMonth", detailMonth);
@@ -281,6 +284,7 @@ StockTakeReprint,StockPwd,
             TransporterMaintenance,
             HUTrackingReportsDetails,
             HUTrackingReportsSummary,
+            KPIDashboard,
 BinMaintain,PickupReturnReport,GDNReturn,GDNReturnReport,
 DeliveryNote,DetailMonth,SummaryMonth,InboundReport,
 BinnedReport,PickedReport,OutboundReport,Audit,Supervisor,ReDeliveryNote,MonthEndSetup,UpdateMonthEndPwd,StockOnHand,UpdateContainer,StockRoles,ReturnReason,
@@ -322,6 +326,8 @@ ReasonMaintain,BarcodeRePrint,GRNReturn,PickupReturn,GRNReturnReport ,Dispatched
                     CheckBoxTransporterMaintenance.Checked = Convert.ToBoolean(userRow["TransporterMaintenance"]);
                     CheckBoxHUTrackingReportsDetails.Checked = Convert.ToBoolean(userRow["HUTrackingReportsDetails"]);
                     CheckBoxHUTrackingReportsSummary.Checked = Convert.ToBoolean(userRow["HUTrackingReportsSummary"]);
+                    if (userRow["KPIDashboard"] != DBNull.Value)
+                        CheckBoxKPIDashboard.Checked = Convert.ToBoolean(userRow["KPIDashboard"]);
                     if(userRow["BinMaintain"] != DBNull.Value)
                     chkBinMaintain.Checked = Convert.ToBoolean(userRow["BinMaintain"]);
                     if (userRow["OutboundReport"] != DBNull.Value)
@@ -483,6 +489,7 @@ ReasonMaintain,BarcodeRePrint,GRNReturn,PickupReturn,GRNReturnReport ,Dispatched
             // Apply the state to all other checkboxes in the "Reports" section
             CheckBoxHUTrackingReportsDetails.Checked = isChecked;
             CheckBoxHUTrackingReportsSummary.Checked = isChecked;
+            CheckBoxKPIDashboard.Checked = isChecked;
             chkGDNReturnReport.Checked = isChecked;
             chkGRNReturnReport.Checked = isChecked;
             chkBinReturnReport.Checked = isChecked;

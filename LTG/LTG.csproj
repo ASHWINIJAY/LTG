@@ -198,6 +198,8 @@
     <Content Include="AuditLogs.aspx" />
     <Content Include="BarCode.aspx" />
     <Content Include="BarcodeRePrint.aspx" />
+    <Content Include="ForgotPassword.aspx" />
+    <Content Include="ResetPassword.aspx" />
     <Content Include="UOPMaintain.aspx" />
     <Content Include="UOPCreate.aspx" />
     <Content Include="DeliveryDetailReport.aspx" />
@@ -676,6 +678,10 @@
     <Content Include="assets\vendor\tinymce\tinymce.js" />
     <Content Include="assets\vendor\tinymce\tinymce.min.js" />
     <Content Include="Login.aspx" />
+    <Content Include="KpiTargetSetup.aspx" />
+    <Content Include="KpiDashboard.ashx" />
+    <Content Include="LTG_KPI_Dashboard.html" />
+    <Content Include="Logout.ashx" />
     <Content Include="NiceAdmin\charts-apexcharts.html" />
     <Content Include="NiceAdmin\charts-chartjs.html" />
     <Content Include="NiceAdmin\charts-echarts.html" />
@@ -804,6 +810,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="KpiData.cs" />
+    <Compile Include="KpiDashboard.ashx.cs" />
+    <Compile Include="Logout.ashx.cs" />
+    <Compile Include="KpiTargetSetup.aspx.cs">
+      <DependentUpon>KpiTargetSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="KpiTargetSetup.aspx.designer.cs">
+      <DependentUpon>KpiTargetSetup.aspx</DependentUpon>
+    </Compile>
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -832,6 +848,20 @@
     </Compile>
     <Compile Include="BarcodeRePrint.aspx.designer.cs">
       <DependentUpon>BarcodeRePrint.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.designer.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResetPassword.aspx.cs">
+      <DependentUpon>ResetPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ResetPassword.aspx.designer.cs">
+      <DependentUpon>ResetPassword.aspx</DependentUpon>
     </Compile>
     <Compile Include="UOPMaintain.aspx.cs">
       <DependentUpon>UOPMaintain.aspx</DependentUpon>

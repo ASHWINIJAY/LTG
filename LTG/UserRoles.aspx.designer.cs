@@ -510,6 +510,14 @@ namespace LTG
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxHUTrackingReportsSummary;
 
         /// <summary>
+        /// CheckBoxKPIDashboard control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBoxKPIDashboard;
+
+        /// <summary>
         /// chkDetailMonth control.
         /// </summary>
         /// <remarks>

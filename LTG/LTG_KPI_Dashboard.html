@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LTG KPI Dashboard</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --primary: #173b65;
+      --primary-2: #24598f;
+      --good: #15803d;
+      --warn: #b45309;
+      --bad: #b91c1c;
+      --soft: #eef4fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 245px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: var(--primary);
+      color: #fff;
+      padding: 24px 18px;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      opacity: .75;
+      margin-bottom: 30px;
+    }
+
+    .nav a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      opacity: .82;
+    }
+
+    .nav a.active,
+    .nav a:hover {
+      background: rgba(255, 255, 255, .12);
+      opacity: 1;
+    }
+
+    .content {
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .badge {
+      background: var(--soft);
+      color: var(--primary);
+      border: 1px solid #cfdeee;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .filters {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .card .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .card .value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .card .small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.35fr .95fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .panel h2 {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .export-button {
+      border: 1px solid var(--primary-2);
+      border-radius: 6px;
+      background: var(--primary-2);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .export-button:hover {
+      background: var(--primary);
+    }
+
+    .panel .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .metric-row {
+      margin-bottom: 16px;
+    }
+
+    .metric-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .bar {
+      height: 10px;
+      background: #eef1f5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--primary-2);
+      border-radius: 999px;
+    }
+
+    .shift-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .shift-box {
+      background: var(--soft);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .shift-box strong {
+      display: block;
+      font-size: 24px;
+      margin: 8px 0 4px;
+    }
+
+    .scan-breakdown {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .scan-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px;
+      text-align: center;
+    }
+
+    .scan-item strong {
+      display: block;
+      font-size: 20px;
+      margin-top: 4px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 950px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .good {
+      background: #dcfce7;
+      color: var(--good);
+    }
+
+    .warn {
+      background: #fef3c7;
+      color: var(--warn);
+    }
+
+    .bad {
+      background: #fee2e2;
+      color: var(--bad);
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 1000px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .filters {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .content {
+        padding: 14px;
+      }
+
+      .header {
+        flex-direction: column;
+      }
+
+      .filters,
+      .cards,
+      .shift-grid,
+      .scan-breakdown {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">LTG</div>
+      <div class="brand-sub">Warehouse KPI Management</div>
+      <nav class="nav">
+        <a href="#" class="active">Dashboard</a>
+        <a href="Dashboard.aspx">Back to Main Menu</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="header">
+        <div>
+          <h1>LTG Project Dashboard</h1>
+          <p>Warehouse Employee KPI & Performance Monitoring</p>
+        </div>
+        <div class="badge">Management View</div>
+      </div>
+
+      <section class="filters">
+        <div>
+          <label>From Date</label>
+          <input id="fromDate" type="date" />
+        </div>
+        <div>
+          <label>Shift</label>
+          <select id="shift">
+            <option>All Shifts</option>
+            <option>Day Shift</option>
+            <option>Night Shift</option>
+          </select>
+        </div>
+        <div>
+          <label>Employee</label>
+          <select id="employee">
+            <option value="">All Employees</option>
+          </select>
+        </div>
+        <div>
+          <label>Activity</label>
+          <select id="activity">
+            <option>All Activities</option>
+            <option>Inbound</option>
+            <option>Warehouse</option>
+            <option>Outbound</option>
+          </select>
+        </div>
+        <div>
+          <label>To Date</label>
+          <input id="toDate" type="date" />
+        </div>
+      </section>
+
+      <section class="cards">
+        <div class="card">
+          <div class="label">Active Employees</div>
+          <div id="activeEmployees" class="value">-</div>
+          <div class="small">Day + Night shifts</div>
+        </div>
+        <div class="card">
+          <div class="label">Total Scans</div>
+          <div id="totalScans" class="value">-</div>
+          <div class="small">Inbound + Warehouse + Outbound</div>
+        </div>
+        <div class="card">
+          <div class="label">Average Active Hours</div>
+          <div id="averageActiveHours" class="value">-</div>
+          <div class="small">Calculated from login/logout</div>
+        </div>
+        <div class="card">
+          <div class="label">Average Scans / Hour</div>
+          <div id="averageScansPerHour" class="value">-</div>
+          <div class="small">Individual productivity KPI</div>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="panel">
+          <h2>Top Employee Performance</h2>
+          <div class="sub">Based on scans per active hour</div>
+
+          <div id="topEmployees"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Shift Comparison</h2>
+          <div class="sub">Current reporting period</div>
+
+          <div class="shift-grid">
+            <div class="shift-box">
+              <span>Day Shift</span>
+              <strong id="dayScans">-</strong>
+              <small>Total scans</small>
+            </div>
+            <div class="shift-box">
+              <span>Night Shift</span>
+              <strong id="nightScans">-</strong>
+              <small>Total scans</small>
+            </div>
+          </div>
+
+          <div class="scan-breakdown">
+            <div class="scan-item">
+              <span>Inbound</span>
+              <strong id="inboundScans">-</strong>
+            </div>
+            <div class="scan-item">
+              <span>Warehouse</span>
+              <strong id="warehouseScans">-</strong>
+            </div>
+            <div class="scan-item">
+              <span>Outbound</span>
+              <strong id="outboundScans">-</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-bottom:18px;">
+        <div class="panel-heading">
+          <h2>Employee KPI Summary</h2>
+          <button id="exportKpi" class="export-button" type="button">Export CSV</button>
+        </div>
+        <div class="sub">Individual performance by login/logout time and warehouse scan activity</div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Shift</th>
+                <th>Login</th>
+                <th>Logout</th>
+                <th>Active Hours</th>
+                <th>Inbound</th>
+                <th>Warehouse</th>
+                <th>Outbound</th>
+                <th>Total Scans</th>
+                <th>Scans / Hr</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="employeeRows"></tbody>
+          </table>
+        </div>
+
+        <div class="footer-note">
+          Suggested KPI formula: Total valid scans ÷ active working hours. Scan totals should be sourced from Inbound,
+          Warehouse and Outbound transaction tables.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const filters = document.querySelectorAll('#fromDate, #toDate, #shift, #employee, #activity');
+    const numberFormat = new Intl.NumberFormat();
+    let currentEmployees = [];
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value).replace(/[&<>'"]/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[character]));
+    }
+
+    function renderDashboard(data) {
+      currentEmployees = data.employees || [];
+      document.getElementById('activeEmployees').textContent = numberFormat.format(data.activeEmployees);
+      document.getElementById('totalScans').textContent = numberFormat.format(data.totalScans);
+      document.getElementById('averageActiveHours').textContent = data.averageActiveHours + 'h';
+      document.getElementById('averageScansPerHour').textContent = numberFormat.format(data.averageScansPerHour);
+      document.getElementById('dayScans').textContent = numberFormat.format(data.shiftComparison.day);
+      document.getElementById('nightScans').textContent = numberFormat.format(data.shiftComparison.night);
+      document.getElementById('inboundScans').textContent = numberFormat.format(data.activityBreakdown.inbound);
+      document.getElementById('warehouseScans').textContent = numberFormat.format(data.activityBreakdown.warehouse);
+      document.getElementById('outboundScans').textContent = numberFormat.format(data.activityBreakdown.outbound);
+
+      const maximum = data.topEmployees.length ? Math.max(data.topEmployees[0].scansPerHour, 1) : 1;
+      document.getElementById('topEmployees').innerHTML = data.topEmployees.slice(0, 5).map(item => `
+        <div class="metric-row">
+          <div class="metric-head"><span>${escapeHtml(item.employee)}</span><strong>${item.scansPerHour} scans/hr</strong></div>
+          <div class="bar"><span style="width:${Math.min(100, item.scansPerHour / maximum * 100)}%"></span></div>
+        </div>`).join('') || '<div class="footer-note">No scan activity for this period.</div>';
+
+      document.getElementById('employeeRows').innerHTML = data.employees.map(item => `
+        <tr>
+          <td>${escapeHtml(item.employee)}</td><td>${escapeHtml(item.shift)}</td>
+          <td>${escapeHtml(item.login)}</td><td>${escapeHtml(item.logout)}</td>
+          <td>${item.activeHours}</td><td>${numberFormat.format(item.inbound)}</td>
+          <td>${numberFormat.format(item.warehouse)}</td><td>${numberFormat.format(item.outbound)}</td>
+          <td>${numberFormat.format(item.totalScans)}</td><td>${item.scansPerHour}</td>
+          <td><span class="status ${item.status === 'Above Target' ? 'good' : item.status === 'On Track' ? 'warn' : 'bad'}">${escapeHtml(item.status)}</span></td>
+        </tr>`).join('') || '<tr><td colspan="11">No employee activity for this period.</td></tr>';
+
+      const employeeSelect = document.getElementById('employee');
+      const currentEmployee = employeeSelect.value;
+      employeeSelect.innerHTML = '<option value="">All Employees</option>' + data.employeeOptions.map(item =>
+        `<option value="${item.EmployeeId}">${escapeHtml(item.Name)}</option>`).join('');
+      employeeSelect.value = data.employeeOptions.some(item => String(item.EmployeeId) === currentEmployee) ? currentEmployee : '';
+    }
+
+    function csvValue(value) {
+      return '"' + String(value == null ? '' : value).replace(/"/g, '""') + '"';
+    }
+
+    function exportKpiSummary() {
+      const headers = ['Employee', 'Shift', 'Login', 'Logout', 'Active Hours', 'Inbound', 'Warehouse', 'Outbound', 'Total Scans', 'Scans / Hr', 'Status'];
+      const rows = currentEmployees.map(item => [
+        item.employee, item.shift, item.login, item.logout, item.activeHours,
+        item.inbound, item.warehouse, item.outbound, item.totalScans,
+        item.scansPerHour, item.status
+      ]);
+      const csv = [headers, ...rows].map(row => row.map(csvValue).join(',')).join('\r\n');
+      const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'employee-kpi-summary-' + document.getElementById('fromDate').value + '-to-' + document.getElementById('toDate').value + '.csv';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function loadDashboard() {
+      const fromDate = document.getElementById('fromDate');
+      const toDate = document.getElementById('toDate');
+      if (fromDate.value > toDate.value) {
+        toDate.value = fromDate.value;
+      }
+      const query = new URLSearchParams({
+        fromDate: fromDate.value,
+        toDate: toDate.value,
+        shift: document.getElementById('shift').value,
+        activity: document.getElementById('activity').value,
+        employee: document.getElementById('employee').value
+      });
+      const response = await fetch('KpiDashboard.ashx?' + query.toString(), { credentials: 'same-origin' });
+      if (response.status === 401) { window.location.href = 'Login'; return; }
+      if (!response.ok) throw new Error('Dashboard request failed');
+      renderDashboard(await response.json());
+    }
+
+    filters.forEach(el => el.addEventListener('change', () => loadDashboard().catch(console.error)));
+    document.getElementById('exportKpi').addEventListener('click', exportKpiSummary);
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById('fromDate').value = today;
+    document.getElementById('toDate').value = today;
+    loadDashboard().catch(error => {
+      document.getElementById('employeeRows').innerHTML = '<tr><td colspan="11">Unable to load dashboard data.</td></tr>';
+      console.error(error);
+    });
+  </script>
+</body>
+
+</html>

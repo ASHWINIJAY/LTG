@@ -24,6 +24,7 @@
                            <asp:ListItem Text="Stock Take Confirm Notification" Value="2"></asp:ListItem>
                            <asp:ListItem Text="DeliveryNote Notification" Value="3"></asp:ListItem>
                           <asp:ListItem Text="DeliveryNote - Reminder Notification" Value="4"></asp:ListItem>
+                           <asp:ListItem Text="Forgot Password Notification" Value="5"></asp:ListItem>
                         </asp:DropDownList>
                     </div>
                     <div class="col-12">
